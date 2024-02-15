@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- 959154758023-tu1liisoua39ocfh2dbtqvevuoe1kl8t.apps.googleusercontent.com -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="959154758023-tu1liisoua39ocfh2dbtqvevuoe1kl8t.apps.googleusercontent.com">
+    <title>Document</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+      *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+      }
+      body{
+        min-height: 100vh;
+        width: 100%;
+        background: #f8f9f9;
+      }
+      .container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        max-width: 430px;
+        width: 100%;
+        background: #fff;
+        border-radius: 7px;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+      }
+      .container .registration{
+        display: none;
+      }
+      #check:checked ~ .registration{
+        display: block;
+      }
+      #check:checked ~ .login{
+        display: none;
+      }
+      #check{
+        display: none;
+      }
+      .container .form{
+        padding: 2rem;
+      }
+      .form header{
+        font-size: 2rem;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+       .form input{
+         height: 60px;
+         width: 100%;
+         padding: 0 15px;
+         font-size: 17px;
+         margin-bottom: 1.3rem;
+         border: 1px solid #ddd;
+         border-radius: 6px;
+         outline: none;
+       }
+       .form input:focus{
+         box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+       }
+      .form a{
+        font-size: 12px;
+        color: #088178;
+        text-decoration: none;
+      }
+      .form a:hover{
+        text-decoration: underline;
+      }
+      .form input.button{
+        color: #fff;
+        background: #088178;
+        font-size: 1.2rem;
+        font-weight: 500;
+        letter-spacing: 1px;
+        margin-top: 1.7rem;
+        cursor: pointer;
+        transition: 0.4s;
+      }
+      .form input.button:hover{
+        background: #088178;
+      }
+      .signup{
+        font-size: 17px;
+        text-align: center;
+      }
+      .signup label{
+        color: #088178;
+        cursor: pointer;
+      }
+      .signup label:hover{
+        text-decoration: underline;
+      }
+       
+      
+       </style>
+       
+</head>
+<body>
+    
+ <div class="container">
+    <input type="checkbox" id="check">
+    <div class="login form">
+      <header>Login</header>
+      <form action="/verifyLogin" id="form" method="post">
+        
+       
+        <input type="email" id="email" placeholder="Enter your email" name="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" required title="Please Check your Email Address">
+        <input type="password" id="password" placeholder="Enter your password"   name="password" pattern=".{8,}" required title="Please Check your Password">
+        <a class="forget" href="">Forgot password?</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/signup">New user? Register here</a>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <h3 class="text-center text-danger" id="loginErrorMessage"><%=locals.errmessage ? errmessage : ''%></h3>
+        <h3 class="text-center text-success" id="loginSuccessMessage"><%=locals.successMessage ? successMessage : ''%></h3>
+        <h3 class="text-center text-success" id="bannedMessage"><%=locals.bannedMessage ? bannedMessage : ''%></h3>
+        <input type="submit" class="button" value="Login">
+      </form>
+
+ </div>
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ 
+
+ <script>
+  
+  setInterval(()=>{
+    document.getElementById('loginErrorMessage').innerText = "";
+    document.getElementById('loginSuccessMessage').innerText = "";
+  
+  },100)
+
+
+  // Check if the success message exists, then display SweetAlert
+  const successMessage = document.getElementById('loginSuccessMessage').innerText;
+  const errMessage = document.getElementById('loginErrorMessage').innerText;
+  const bannedMessage = document.getElementById('bannedMessage').innerText;
+
+  if (successMessage.trim() !== '') {
+    Swal.fire({
+      icon: 'success',
+      title: 'Registeration Successful!',
+      text: successMessage,
+    });
+  }
+
+  if (bannedMessage.trim() !== '') {
+    Swal.fire({
+      title: "Your account is banned ",
+  width: 600,
+  padding: "3em",
+  color: "#716add",
+  background: "#fff url(/images/trees.png)",
+  backdrop: `
+    rgba(0,0,123,0.4)
+    url("/images/nyan-cat.gif")
+    left top
+    no-repeat
+  `,
+      text: bannedMessage,
+    });
+    
+  }
+//   Swal.fire({
+  
+// });
+
+  if (errMessage.trim() !== '') {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      title: 'Password Incorrect!',
+      footer: '<a href="#">Why do I have this issue?</a>'
+    });
+  }
+
+  setInterval(()=>{
+    document.getElementById('loginErrorMessage').innerText = ""
+    // document.getElementById('loginSuccessMessage').innerText = ""
+  },3000)
+
+  
+</script>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+   <script src="index.js"> </script>
+   
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+ 
+
+    <script>
+      // Function to display Toastr notification on page load
+      function displayToastrOnLoad() {
+        toastr.success('<img src="/public/happ.gif" alt="Crying Emoji" style="width: 35px; height: 35px;"> Page loaded', 'successfull', {
+                closeButton: true,  // Show close button 
+                progressBar: true,  // Show progress bar
+                positionClass: 'toast-top-right',  // Position the notification at the top-right corner
+                timeOut: 5000,  // Duration before the notification automatically closes (in milliseconds)
+                extendedTimeOut: 2000,  // Additional duration if the user hovers over the notification (in milliseconds)
+                preventDuplicates: true,  // Prevent duplicate notifications
+                // You can add more options here as needed
+            })
+      }
+
+      // Attach the displayToastrOnLoad function to the window.onload event
+      window.onload = displayToastrOnLoad;
+  </script>
+    <script>
+
+  </script>
+</body>
+</html>
+ 
+
+
+
