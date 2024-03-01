@@ -835,7 +835,10 @@
 
 
 <script>
-    function increase(pId) {
+function increase(pId) {
+    const quantityElement = document.getElementById('quantity_' + pId);
+    const currentQuantity = parseInt(quantityElement.textContent);
+    if (currentQuantity >= 1) {
         fetch('/updateCart', {
             method: 'POST',
             headers: {
@@ -849,19 +852,10 @@
         .then(response => {
             if (response.ok) {
                 // Increment the quantity displayed on the page
-                const quantityElement = document.getElementById('quantity_' + pId);
-                // const quantityElement = document.getElementById('quantity_' + pId);
-                quantityElement.textContent = parseInt(quantityElement.textContent) + 1;
+                quantityElement.textContent = currentQuantity + 1;
 
                 // Update the subtotal
-                const subtotalElement = document.getElementById('subtotal_' + pId);
-                const salePrice = document.getElementById('saleprice_' + pId);
-                // console.log(salePrice * quantityElement.textContent)
-                let saleP = parseFloat(salePrice.textContent.replace('$', ''));
-                console.log(parseFloat(salePrice.textContent.replace('$', '')) )
-                document.getElementById('subtotal_' + pId).innerText =saleP* parseInt(quantityElement.textContent);
-                // const price = parseFloat(subtotalElement.textContent.replace('$', ''));
-                // subtotalElement.textContent = '$' + (price + parseFloat(price / parseInt(quantityElement.textContent)));
+                updateSubtotal(pId);
             } else {
                 console.error('Failed to update cart');
             }
@@ -869,9 +863,16 @@
         .catch(error => {
             console.error('Error:', error);
         });
+    } else {
+        // Quantity is less than 1, do nothing or display a message
+        console.log('Quantity is already 0 or less, cannot increase further.');
     }
+}
 
-    function decrease(pId) {
+function decrease(pId) {
+    const quantityElement = document.getElementById('quantity_' + pId);
+    const currentQuantity = parseInt(quantityElement.textContent);
+    if (currentQuantity > 1) {
         fetch('/updateCart', {
             method: 'POST',
             headers: {
@@ -885,16 +886,10 @@
         .then(response => {
             if (response.ok) {
                 // Decrement the quantity displayed on the page
-                const quantityElement = document.getElementById('quantity_' + pId);
-                const currentQuantity = parseInt(quantityElement.textContent);
-                if (currentQuantity > 1) {
-                    quantityElement.textContent = currentQuantity - 1;
+                quantityElement.textContent = currentQuantity - 1;
 
-                    // Update the subtotal
-                    const subtotalElement = document.getElementById('subtotal_' + pId);
-                    const price = parseFloat(subtotalElement.textContent.replace('$', ''));
-                    subtotalElement.textContent = '$' + (price - parseFloat(price / currentQuantity));
-                }
+                // Update the subtotal
+                updateSubtotal(pId);
             } else {
                 console.error('Failed to update cart');
             }
@@ -902,7 +897,12 @@
         .catch(error => {
             console.error('Error:', error);
         });
+    } else {
+        // Quantity is 1, do nothing or display a message
+        console.log('Cannot decrease further. Quantity is already 1.');
     }
+}
+
 </script>
     <script src="public/assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="public/assets/js/vendor/jquery-3.6.0.min.js"></script>

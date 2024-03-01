@@ -16,7 +16,7 @@ const loadHome = async (req, res) => {
     try {
         let userId = req.session.user;
         
-        console.log(userId, "user");w
+        console.log(userId, "user");
         let search = req.query.query || ""; 
 
         const productData = await Product.aggregate([
