@@ -27,10 +27,13 @@ const productslist = async(req,res)=>{
         const productData = await Product.find({
             $and:[{
             Bookname: { $regex: new RegExp(search, "i") } },
-                // { is_Active: true }
-
+            
+             
+        
             ],
         }).populate('Categories');
+        console.log(productData)
+        productData.sort((a, b) => new Date(a.CreatedOn) - new Date(b.CreatedOn));
         res.render('productslist',{product:productData,search:search})
     }catch(error){
 console.log(error);
@@ -64,8 +67,9 @@ const addCategories = async(req,res)=>{
         
             
            })
-           
+          
            const categoryData = await categories.save()
+           res.redirect('/admin/loadCategories')
 
     }catch(error){
         console.log(error.message)
@@ -78,7 +82,7 @@ const blockCategories = async (req,res)=>{
         const catid= req.query.catid
         console.log(catid)
     
-        const blockedCategory = await Category.findByIdAndUpdate(catid, {is_Active:false }, { new: true }); // why new true
+        const blockedCategory = await Category.findByIdAndUpdate(catid, {is_Active:false }, { new: true }); // why new true its used for geting a  return value 
         // res.render('addcategories');
 res.redirect('/admin/loadCategories');
     } catch (error) {

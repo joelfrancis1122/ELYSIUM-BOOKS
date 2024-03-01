@@ -3,15 +3,16 @@ const mongoose = require('mongoose')
 const productSchema=mongoose.Schema({
     Bookname:{type:String,required:true},
     Description:{type:String,required:true},
-    Categories:{type:ObjectId,ref:'Category'},
+    Categories:{type:ObjectId,ref:'Category',unique:true},
     Regularprice:{type:Number,required:true},
     saleprice:{type:Number,required:true},
+    stock:{type:Number,required:true},
     Images:{type:Array,required:true},
-    is_Active:{type:Boolean,default:true}
+    is_Active:{type:Boolean,default:true},
+    CreatedOn:{type:Date,default:Date.now}
+
    
 })
 
 
 module.exports = mongoose.model('Product',productSchema);
-
-

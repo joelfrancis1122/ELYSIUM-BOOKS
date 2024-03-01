@@ -15,28 +15,21 @@ const loadaddproduct = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 }
-
-// Bookname:req.body.Bookname,
-// Description:req.body.Description,
-// Categories:req.body.Categories,
-// Regularprice:req.body.Regularprice,
-// Images:req.body.Images
-
 const addProduct= async(req,res)=>{
     try {
         console.log("s");
         console.log(req.files);
         const images = req.files.map(file => file.filename);
         
-           const {Bookname,Description,Categories,Regularprice,saleprice}=req.body
+           const {Bookname,Description,Categories,Regularprice,stock,saleprice}=req.body
            const product = new Product({
             Bookname:Bookname,
             Description:Description,
             Categories:Categories,
             Regularprice:Regularprice,
+            stock:stock,
             saleprice:saleprice,
             Images:images
-            
            })
            
            const productData = await product.save()
@@ -59,7 +52,9 @@ const loadeditProduct = async(req,res)=>{
         const id= req.query.id
         req.session.editProductId = id;
         const product = await Product.findById(id)
-        res.render('editproduct',{product})
+        const categories = await Category.find(); // Assuming you're fetching categories from the database
+
+        res.render('editproduct',{product,categories})
         
     }catch(error){
         console.log(error);
@@ -73,12 +68,15 @@ const editProduct = async (req,res)=>{
               const Bookname = req.body.Bookname;
               const Description = req.body.Description;
               const Regularprice = req.body.Regularprice;
+              const saleprice = req.body.saleprice;
+              const stock = req.body.stock;
 
             const editProduct = await Product.findOne({_id:req.session.editProductId})
             editProduct.Bookname = Bookname
             editProduct.Description = Description;
             editProduct.Regularprice = Regularprice;
-
+            editProduct.saleprice = saleprice;
+            editProduct.stock = stock;
 
             if(req.files){
                 const images = req.files.map(file => file.filename);

@@ -202,22 +202,17 @@
                                         <div class="mb-4">
                                             <label class="form-label">Description</label>
                                             <textarea name="Description" placeholder="Type here" class="form-control"></textarea>
-
                                         </div>
                                         <div class="mb-4">
-                                            
                                             <label class="form-label">Categories</label>
                                             <select class="form-select" name="Categories">
                                                 <% for(let i = 0 ; i < categories.length ; i++) { %>
-                                                
                                                     <option value="<%=categories[i]._id%>"><%=categories[i].categoryName%></option>
                                                 <% } %>
                                             </select>
-
                                         </div>
-                                    </div> <!-- col.// -->
-
-                                </div> <!-- row.// -->
+                                    </div>
+                                </div>
                                 <hr class="mb-4 mt-0">
                                 <div class="row">
                                     <div class="col-md-3">
@@ -238,11 +233,20 @@
                                             <input type="text" name="saleprice"placeholder="$00.0" class="form-control">
                                         </div>
                                     </div> 
-                                </div> <!-- row.// -->
+                                    <div class="col-md-3">
+                                        <h6>4. Stock</h6>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <div class="mb-4">
+                                            <label class="form-label">Stock</label>
+                                            <input type="text" name="stock"placeholder="0" class="form-control">
+                                        </div>
+                                    </div> 
+                                </div> 
                                 <hr class="mb-4 mt-0">
                                 <div class="row">
                                    
-                                </div> <!-- row.// -->
+                                </div> 
                                 <hr class="mb-4 mt-0">
                                 <div class="row">
                                     <div class="col-md-3">
@@ -253,8 +257,8 @@
                                             <label class="form-label">Images</label>
                                             <input class="form-control" name="Images"type="file" multiple>
                                         </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- .row end// -->
+                                    </div> 
+                                </div> 
                             </div>
                         </div>
                     </div>
@@ -278,6 +282,93 @@
             </div>
         </footer>
     </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+ 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form[action='/admin/addProduct']");
+            const regularPriceInput = form.querySelector("input[name='Regularprice']");
+            const salePriceInput = form.querySelector("input[name='saleprice']");
+    
+            form.addEventListener("submit", function(event) {
+                const regularPrice = parseFloat(regularPriceInput.value);
+                const salePrice = parseFloat(salePriceInput.value);
+    
+                if (salePrice > regularPrice) {
+                    event.preventDefault(); // Prevent form submission
+                    toastr.error("Regular price must be less than or equal to sale price."); // Display toastr error message
+                }
+            });
+        });
+    </script>
+    
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const form = document.querySelector("form[action='/admin/addProduct']");
+          form.addEventListener("submit", function(event) {
+            const inputs = form.querySelectorAll("input[type='text'], textarea"); // Select text inputs and textareas
+      
+            let isValid = true;
+      
+            inputs.forEach(function(input) {
+              const trimmedValue = input.value.trim();
+              if (trimmedValue === "") {
+                isValid = false;
+                return;
+              }
+            });
+      
+            if (!isValid) {
+              event.preventDefault(); // Prevent form submission
+              toastr.warning("Please fill out all fields."); // Display an alert message
+            }
+          });
+        });
+      </script>
+
+      
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const form = document.querySelector("form[action='/admin/addProduct']");
+          form.addEventListener("submit", function(event) {
+            const regularPriceInput = form.querySelector("input[name='Regularprice']");
+            const salePriceInput = form.querySelector("input[name='saleprice']");
+            const stockInput = form.querySelector("input[name='stock']");
+      
+            // Regular expression to match only numbers
+            const regex = /^\d+$/;
+      
+            if (!regex.test(regularPriceInput.value) || !regex.test(salePriceInput.value) || !regex.test(stockInput.value)) {
+              event.preventDefault(); // Prevent form submission
+              toastr.warning("Please enter valid numbers in Regular price, Sale price, and Stock fields."); // Display an alert message
+            }
+          });
+        });
+      </script>
+     
+ 
+
+
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const form = document.querySelector("form[action='/admin/addProduct']");
+          form.addEventListener("submit", function(event) {
+            const imagesInput = form.querySelector("input[name='Images']");
+      
+            // Check if at least one image is selected
+            if (imagesInput.files.length === 0) {
+              event.preventDefault(); // Prevent form submission
+              toastr.warning("Please select at least one image."); // Display an alert message
+            }
+          });
+        });
+      </script>
+      
+      
+  
     <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/public/admin-assets/js/vendors/select2.min.js"></script>

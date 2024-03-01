@@ -320,21 +320,12 @@
                     <label class="form-label" name=" Description"
                       >Description</label
                     >
-                    <input
-                      type="text"
-                      placeholder="Type here"
-                      name="Description"
-                      class="form-control"
-                      id="product_name"
-                    />
-
-                    <!-- <textarea placeholder="Type here" class="form-control"></textarea> -->
+                    <textarea placeholder="Type here" name="Description" class="form-control"></textarea>
                   </div>
                   <div class="d-grid">
                     <button class="btn btn-primary" type="submit">
                       Create category
                     </button>
-                    <!-- <button class="btn btn-md rounded font-sm hover-up" type="submit">Post</button> -->
                   </div>
                 </form>
               </div>
@@ -380,19 +371,32 @@
                         <td>
                           <% if (categories[i].is_Active) { %>
                           <a
-                            href="/admin/blockCategories?catid=<%=categories[i]._id%>"
+                            href="#"
+                            onclick="confirmBlock('<%= categories[i]._id %>')"
                             class="btn btn-sm font-sm btn-light rounded"
+                            style="
+                            background-color: rgb(255, 0, 0);
+                            transition: background-color 0.3s;
+                          "   
+                          
                           >
                             <i class="material-icons md-delete_forever"></i>
-                            Block
+                          <b> Block</b> 
+
                           </a>
                           <% } else { %>
                           <a
-                            href="/admin/unblockCategories?catid=<%=categories[i]._id%>"
+                            href="#"
+                            onclick="confirmUnBlock('<%= categories[i]._id %>')"
                             class="btn btn-sm font-sm btn-light rounded"
+                            style="
+                            background-color: #088178;
+                            transition: background-color 0.3s;
+                          "
                           >
                             <i class="material-icons md-delete_forever"></i>
                             Unblock
+
                           </a>
                           <% } %>
                         </td>
@@ -426,6 +430,71 @@
         </div>
       </footer>
     </main>
+
+    <script>
+      function confirmBlock(categoryId) {
+          Swal.fire({
+              title: 'Are you sure?',
+              text: "You are about to block this category!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#d33',
+              cancelButtonColor: '#3085d6',
+              confirmButtonText: 'Yes, block it!'
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // If user clicks "Yes", redirect to the blockCategories route
+                  window.location.href = `/admin/blockCategories?catid=${categoryId}`;
+              }
+          });
+      }
+  </script>
+  <script>
+    function confirmUnBlock(categoryId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You are about to Unblock this category!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Unblock it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If user clicks "Yes", redirect to the blockCategories route
+                window.location.href = `/admin/UnblockCategories?catid=${categoryId}`;
+            }
+        });
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const form = document.querySelector("form[action='/admin/addCategories']");
+      const categoryNameInput = form.querySelector("input[name='categoryName']");
+
+      form.addEventListener("submit", function(event) {
+          const inputValue = categoryNameInput.value.trim(); // Trim whitespace from the input value
+
+          if (inputValue === "") {
+              event.preventDefault(); // Prevent form submission
+              toastr.warning("Category name cannot be empty."); // Display toastr warning message
+          } else if (!inputValue.replace(/\s/g, '').length) {
+              event.preventDefault(); // Prevent form submission
+              toastr.warning("Category name cannot contain only spaces."); // Display toastr warning message
+          }
+      });
+  });
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/public/admin-assets/js/vendors/select2.min.js"></script>

@@ -248,53 +248,20 @@
                                             <input type="text" name="saleprice" value="<%=product.saleprice%>"placeholder="$00.0" class="form-control">
                                         </div>
                                     </div> 
-                                </div> <!-- row.// -->
-                                <hr class="mb-4 mt-0">
-                                <div class="row">
-                                    <!-- <div class="col-md-3">
-                                        <h6>3. Category</h6>
+                                    <div class="col-md-3">
+                                        <h6>4. Stock</h6>
                                     </div>
                                     <div class="col-md-9">
                                         <div class="mb-4">
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" checked="" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Clothes </span>
-                                            </label>
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Electronics </span>
-                                            </label>
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Sports </span>
-                                            </label>
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Automobiles </span>
-                                            </label>
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Home interior </span>
-                                            </label>
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Smartphones </span>
-                                            </label>
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Books </span>
-                                            </label>
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Kids item </span>
-                                            </label>
-                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="mycategory" type="radio">
-                                                <span class="form-check-label"> Others </span>
-                                            </label>
+                                            <label class="form-label">Stock</label>
+                                            <input type="text" name="stock"  value="<%=product.stock%>"placeholder="0" class="form-control">
                                         </div>
-                                    </div> col.// -->
+                                    </div>  
                                 </div> <!-- row.// -->
+                                <hr class="mb-4 mt-0">
+                                <div class="row">
+                                   
+                                </div>
                                 <hr class="mb-4 mt-0">
                                 <div class="row">
                                     <div class="col-md-3">
@@ -303,7 +270,14 @@
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Images</label>
-                                            <input class="form-control" name="Images"type="file" multiple>
+                                             <% if (product.Images && product.Images.length > 0) { %>
+                                                     <ul>
+                                                         <% product.Images.forEach(image => { %>
+                                                                <li><%= image %></li>
+                                                                             <% }); %>
+                                                        </ul>
+                                                  <% } %>
+                                            <input class="form-control" name="Images"  value="<%=product.Images%>" type="file" multiple>
                                         </div>
                                     </div> <!-- col.// -->
                                 </div> <!-- .row end// -->
@@ -330,6 +304,70 @@
             </div>
         </footer>
     </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+ 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form[action='/admin/editProduct']");
+            
+            form.addEventListener("submit", function(event) {
+                const inputs = form.querySelectorAll("input[type='text'], textarea");
+                let isValid = true;
+          
+                inputs.forEach(function(input) {
+                    const trimmedValue = input.value.trim();
+                    if (trimmedValue === "") {
+                        isValid = false;
+                        return;
+                    }
+                });
+          
+                if (!isValid) {
+                    event.preventDefault();
+                    toastr.warning("Please fill out all fields.");
+                }
+    
+                const regularPriceInput = form.querySelector("input[name='Regularprice']");
+                const salePriceInput = form.querySelector("input[name='saleprice']");
+                const stockInput = form.querySelector("input[name='stock']");
+                const regex = /^\d+$/;
+          
+                if (!regex.test(regularPriceInput.value) || !regex.test(salePriceInput.value) || !regex.test(stockInput.value)) {
+                    event.preventDefault();
+                    toastr.warning("Please enter valid numbers in Regular price, Sale price, and Stock fields.");
+                }
+    
+                const imagesInput = form.querySelector("input[name='Images']");
+                if (imagesInput.files.length === 0) {
+                    event.preventDefault();
+                    toastr.warning("Please select at least one image.");
+                }
+            });
+        });
+    </script>
+  
+   
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.querySelector("form[action='/admin/editProduct']");
+        const regularPriceInput = form.querySelector("input[name='Regularprice']");
+        const salePriceInput = form.querySelector("input[name='saleprice']");
+
+        form.addEventListener("submit", function(event) {
+            const regularPrice = parseFloat(regularPriceInput.value);
+            const salePrice = parseFloat(salePriceInput.value);
+
+            if (salePrice > regularPrice) {
+                event.preventDefault(); // Prevent form submission
+                toastr.error("Regular price must be less than or equal to sale price."); // Display toastr error message
+            }
+        });
+    });
+</script>
+
+    
     <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/public/admin-assets/js/vendors/select2.min.js"></script>

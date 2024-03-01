@@ -28,7 +28,12 @@ user_Route.get('/getOtp',Auth.isLogout,userControllers.getOtp)
 user_Route.post('/verifyOtp',Auth.isLogout,userControllers.verifyOtp)
 user_Route.post('/verifyLogin',Auth.isLogout,userControllers.verifyLogin)
 user_Route.get('/shop-product',Auth.isLogin,userControllers.shopProduct)
-
+user_Route.get('/addToCart',Auth.isLogin,userControllers.addToCart)
+user_Route.get('/loadShop',Auth.isLogin,userControllers.loadShop)
+user_Route.get("/cart",Auth.isLogin,userControllers.getCart)
+user_Route.post("/updateCart",Auth.isLogin,userControllers.updateCart)
+user_Route.get("/loadProfile",Auth.isLogin,userControllers.loadProfile)
+user_Route.get("/loadCheckOut",Auth.isLogin,userControllers.loadCheckOut)
 
 
 

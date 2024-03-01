@@ -24,6 +24,7 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(nocache());
 
 app.use(express.urlencoded({ extended: true })); 
+app.use(express.json())
 app.set("view engine", "ejs");
 
 app.use(
@@ -37,6 +38,8 @@ app.use(
 
 app.use("/", user_Route);
 app.use("/admin", admin_Route);
+
+
 
 
 // app.use("/admin", admin_Route);
