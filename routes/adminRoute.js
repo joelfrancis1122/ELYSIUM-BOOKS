@@ -45,6 +45,7 @@ admin_Route.post('/addCategories',Auth.isLogin,adminController.addCategories)
 admin_Route.get('/blockCategories',Auth.isLogin,adminController.blockCategories)
 admin_Route.get('/unblockCategories',Auth.isLogin,adminController.unblockCategories)
 admin_Route.get('/loaduserlist',Auth.isLogin,adminController.loaduserlist)
+admin_Route.get('/loadOrders',Auth.isLogin,adminController.loadOrders)
 
 admin_Route.get('/logout',Auth.isLogin,adminController.loadLogout)
 

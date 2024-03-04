@@ -24,7 +24,7 @@
     <!-- Include Magic Zoom JavaScript -->
     <!-- <script src="path/to/magiczoom.js"></script> -->
 
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- magic zoom cdn  -->
     <link rel="stylesheet" href="/public/assets/magiczoomplus/magiczoomplus.css">
     <script src="/public/assets/magiczoomplus/magiczoomplus.js"></script>
@@ -1364,7 +1364,9 @@
                                                 <li><a href="#">XXL</a></li>
                                             </ul>
                                         </div> -->
-                      <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+
+                                        
+                      <!-- <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                       <div class="detail-extralink">
                         <div class="detail-qty border radius">
                           <a href="#" class="qty-down"
@@ -1374,29 +1376,23 @@
                           <a href="#" class="qty-up"
                             ><i class="fi-rs-angle-small-up"></i
                           ></a>
-                        </div>
-                        <div class="product-extra-link2">
-                         
-                          <button
-                            type="submit"
-                            class="button button-add-to-cart"
-                          >
-                            Add to cart
-                          </button>
-                          <a
+                        </div> -->
+                      
+                          <a href="/addToCart?id=<%=product._id%>" class="button button-add-to-cart" style="color: rgb(255, 255, 255);">
+                            Add to cart   <i class="fa-solid fa-cart-shopping fa-shake"></i>
+                          </a>
+                          <!-- <a 
                             aria-label="Add To Wishlist"
                             class="action-btn hover-up"
-                            href="/addToCart?id=<%=product[i]._id%>"
+                            href="/addToCart?id=<%=product._id%>"
                             ><i class="fi-rs-heart"></i
-                          ></a>
-
-                          <a
+                          ></a> -->
+                          <!-- <a
                             aria-label="Compare"
                             class="action-btn hover-up"
                             href="shop-compare.html"
                             ><i class="fi-rs-shuffle"></i
-                          ></a>
-                        </div>
+                          ></a> -->
                       </div>
                       <ul class="product-meta font-xs color-grey mt-50">
                         <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>

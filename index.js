@@ -38,7 +38,9 @@ app.use(
 
 app.use("/", user_Route);
 app.use("/admin", admin_Route);
-
+app.use('*',(req,res)=>{
+res.render('users/404')
+ })
 
 
 

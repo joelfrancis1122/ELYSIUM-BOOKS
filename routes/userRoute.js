@@ -11,7 +11,6 @@ user_Route.set('views','./views/users')
 // user_Route.use(Auth.preventUserAccessForAdmin)
 
 
-
 //--------------------------------------------------
 
 user_Route.get('/',Auth.isLogout,userControllers.loadlogin)
@@ -32,8 +31,12 @@ user_Route.get('/addToCart',Auth.isLogin,userControllers.addToCart)
 user_Route.get('/loadShop',Auth.isLogin,userControllers.loadShop)
 user_Route.get("/cart",Auth.isLogin,userControllers.getCart)
 user_Route.post("/updateCart",Auth.isLogin,userControllers.updateCart)
+user_Route.post("/removeItem",Auth.isLogin,userControllers.removeItem)
+
 user_Route.get("/loadProfile",Auth.isLogin,userControllers.loadProfile)
-user_Route.get("/loadCheckOut",Auth.isLogin,userControllers.loadCheckOut)
+user_Route.get("/loadCheckOut",Auth.isLogin,userControllers.isCartEmpty,userControllers.loadCheckOut)
+user_Route.get("/placeOrder",Auth.isLogin,userControllers.placeOrder)
+
 
 
 

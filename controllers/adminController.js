@@ -159,6 +159,13 @@ const unblockUser = async (req,res)=>{
     }
 }
 
+const loadOrders = async (req,res)=>{
+    try {
+        res.render("Orders")
+    } catch (error) {
+        console.log(error.message)  
+    }
+}
 
 const loadLogout = async (req, res) => {
     try {
@@ -169,6 +176,25 @@ const loadLogout = async (req, res) => {
 
     }
 }
+
+
+
+
+// const ToggleblockUser = async (req,res)=>{
+//     try{
+//         const id= req.query.id
+    
+//         const user = await User.findById(id); // why new true
+//         user.is_Active=!user.is_Active
+//         await user.save
+//         res.redirect('/admin/loaduserlist');
+
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).send('Internal Server Error');
+//     }
+// }
+
 
 module.exports = {
     dashboardLoad,
@@ -181,5 +207,7 @@ module.exports = {
     loaduserlist,
     loadLogout,
     blockUser,
-    unblockUser
+    unblockUser,
+    loadOrders,
+    // ToggleblockUser
 }
