@@ -6,8 +6,8 @@ const nocache = require('nocache');
 
 
 
-const user_Route=require('./routes/userRoute')  
-const admin_Route = require('./routes/adminRoute')     
+const userRoute=require('./routes/userRoute')  
+const adminRoute = require('./routes/adminRoute')     
 
 const express = require('express')
 const app = express();
@@ -36,15 +36,14 @@ app.use(
   })
 );
 
-app.use("/", user_Route);
-app.use("/admin", admin_Route);
+app.use("/", userRoute);
+app.use("/admin", adminRoute);
 app.use('*',(req,res)=>{
 res.render('users/404')
  })
 
 
 
-// app.use("/admin", admin_Route);
 
 
 

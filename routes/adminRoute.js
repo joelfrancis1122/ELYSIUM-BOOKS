@@ -1,12 +1,12 @@
 const express= require('express')
-const admin_Route = express()
+const adminRoute = express()
 const multer = require('multer')
 const path  = require('path')
 
-admin_Route.set('view engine','ejs')
-admin_Route.set('views','./views/admin')
+adminRoute.set('view engine','ejs')
+adminRoute.set('views','./views/admin')
 
-const adminController = require('../controllers/adminController')
+const adminControllers = require('../controllers/adminController')
 const productControllers = require('../controllers/productController')
 const Auth = require('../middlewares/adminAuth')
 
@@ -24,32 +24,36 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage:storage})
 
-// admin_Route.use(Auth.preventAdminAccessForUser)
 
-admin_Route.get('/dashboard',Auth.isLogin,adminController.dashboardLoad)
-admin_Route.get('/productslist',Auth.isLogin,adminController.productslist)
+adminRoute.get('/dashboard',Auth.isLogin,adminControllers.dashboardLoad)
+adminRoute.get('/productslist',Auth.isLogin,adminControllers.productslist)
 
-admin_Route.get('/loadaddproduct',Auth.isLogin,productControllers.loadaddproduct)
-admin_Route.post('/addProduct',Auth.isLogin,upload.array('Images',5),productControllers.addProduct)
+adminRoute.get('/loadaddproduct',Auth.isLogin,productControllers.loadaddproduct)
+adminRoute.post('/addProduct',Auth.isLogin,upload.array('Images',5),productControllers.addProduct)
 
 
-admin_Route.get('/loadeditProduct',Auth.isLogin,productControllers.loadeditProduct)
-admin_Route.post('/editProduct',Auth.isLogin,upload.array('Images',5),productControllers.editProduct)
+adminRoute.get('/loadeditProduct',Auth.isLogin,productControllers.loadeditProduct)
+adminRoute.post('/editProduct',Auth.isLogin,upload.array('Images',5),productControllers.editProduct)
 
-admin_Route.get('/blockProduct',Auth.isLogin,productControllers.blockProduct)
-admin_Route.get('/blockuser',Auth.isLogin,adminController.blockUser)
-admin_Route.get('/unblockProduct',Auth.isLogin,productControllers.unblockProduct)
-admin_Route.get('/unblockuser',Auth.isLogin,adminController.unblockUser)
-admin_Route.get('/loadCategories',Auth.isLogin,adminController.loadCategories)
-admin_Route.post('/addCategories',Auth.isLogin,adminController.addCategories)
-admin_Route.get('/blockCategories',Auth.isLogin,adminController.blockCategories)
-admin_Route.get('/unblockCategories',Auth.isLogin,adminController.unblockCategories)
-admin_Route.get('/loaduserlist',Auth.isLogin,adminController.loaduserlist)
-admin_Route.get('/loadOrders',Auth.isLogin,adminController.loadOrders)
+adminRoute.get('/ToggleblockProduct',Auth.isLogin,productControllers.ToggleblockProduct)
+adminRoute.get('/ToggleblockUser',Auth.isLogin,adminControllers.ToggleblockUser)
+adminRoute.get('/ToggleblockCategories',Auth.isLogin,adminControllers.ToggleblockCategories)
 
-admin_Route.get('/logout',Auth.isLogin,adminController.loadLogout)
 
-// admin_route.post('/addproduct',auth.isLogin,productController.insertProduct);
+adminRoute.get('/loadCategories',Auth.isLogin,adminControllers.loadCategories)
+adminRoute.post('/addCategories',Auth.isLogin,adminControllers.addCategories)
 
-module.exports=admin_Route
+
+adminRoute.get('/loaduserlist',Auth.isLogin,adminControllers.loaduserlist)
+adminRoute.get('/loadOrders',Auth.isLogin,adminControllers.loadOrders)
+adminRoute.get('/loadOrderDetails',Auth.isLogin,adminControllers.loadOrderDetails)
+adminRoute.get('/loadCoupon',Auth.isLogin,adminControllers.loadCoupon)
+
+
+
+adminRoute.get('/logout',Auth.isLogin,adminControllers.loadLogout)
+
+// adminRoute.post('/addproduct',auth.isLogin,productController.insertProduct);
+
+module.exports=adminRoute
 

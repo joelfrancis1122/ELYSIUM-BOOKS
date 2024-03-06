@@ -35,6 +35,22 @@ const isLogout = async (req, res, next) => {
     }
 }
 
+
+const isBlocked = async(req,res,next)=>{
+    try {
+        const user =await User.findById(req.session.userId);
+        if(user.is_active==1){
+            res.redirect('/logout');
+        }else{
+            next()
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
 const preventUserAccessForAdmin = (req, res, next) => {
     if (req.session.admin) {
         res.redirect('/admin/home'); // Redirect to admin dashboard if admin is logged in
@@ -48,5 +64,6 @@ const preventUserAccessForAdmin = (req, res, next) => {
 module.exports ={
     isLogin,
     isLogout,
-    preventUserAccessForAdmin
+    preventUserAccessForAdmin,
+    isBlocked
 }

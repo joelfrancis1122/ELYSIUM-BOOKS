@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
       * {
@@ -207,8 +209,19 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <%if(locals.emailExists){%>
+<script>
+   Swal.fire({
+            icon: 'warning',
+            title: 'Email already exists!',
+   })
+</script>
+      <%}%>
+
     <script>
       window.onload = () => {
+        console.log('inside');
+   
         let res = document.getElementById("loginErrorMessage").innerText;
         if (res) {
           Swal.fire({
@@ -219,7 +232,19 @@
           });
         }
       };
+    
     </script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+ 
+  
+</script>
+
+  
+</script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link

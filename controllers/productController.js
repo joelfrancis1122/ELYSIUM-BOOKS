@@ -1,7 +1,4 @@
-
-const session = require('express-session')
 const Product = require('../models/productModel')
-
 const Category = require('../models/categoryModel')
 
 
@@ -98,39 +95,16 @@ const editProduct = async (req,res)=>{
 }
 
 
-const blockProduct = async (req,res)=>{
+
+const ToggleblockProduct = async (req,res)=>{
     try{
         const id= req.query.id
-    
-        const blockedProduct = await Product.findByIdAndUpdate(id, {is_Active:false }, { new: true }); // why new true
-        // console.log(blockedProduct==true);
+        const product = await Product.findOne({_id:id}); 
+        product. is_Active=!product. is_Active
+        await product.save()
         res.redirect('/admin/productslist');
-        // if (blockedProduct) {
-        // } else {
-        //  res.status(404).send('Product not found.');
-        // }
-
     } catch (error) {
         console.log(error);
-        return res.status(500).send('Internal Server Error');
-    }
-}
-
-const unblockProduct = async (req,res)=>{
-    try{
-        const id= req.query.id
-    
-        const unblockProduct = await Product.findByIdAndUpdate(id, {is_Active:true }, { new: true }); // why new true
-        // console.log(blockedProduct==true);
-        res.redirect('/admin/productslist');
-        // if (blockedProduct) {
-        // } else {
-        //  res.status(404).send('Product not found.');
-        // }
-
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send('Internal Server Error');
     }
 }
 
@@ -139,8 +113,7 @@ module.exports = {
     loadaddproduct,
     addProduct,
     loadeditProduct,
-    blockProduct,
-    unblockProduct,
+    ToggleblockProduct,
     editProduct
 
 }

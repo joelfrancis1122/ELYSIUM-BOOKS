@@ -1,11 +1,10 @@
 
-const session = require('express-session')
+const User = require('../models/userModel')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
 const Cart = require('../models/cartModel')
 
-
-const User = require('../models/userModel')
+const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
 
 
@@ -71,42 +70,42 @@ const loadlogin = async (req, res) => {
     }
 }
 
+
 const verifyLogin = async (req, res) => {
     try {
-        const { email, password } = req.body
-        const userData = await User.findOne({ email: email })
+        const { email, password } = req.body;
+        const userData = await User.findOne({ email: email });
+        
         if (userData) {
-            if (password === userData.password) {
+            const passwordMatch = await bcrypt.compare(password, userData.password);
+            if (passwordMatch) {
                 if (userData.is_active == true) {
-
                     if (userData.is_admin === true) {
                         req.session.admin = userData._id;
-                        console.log("hai0000000");
                         res.redirect("/admin/dashboard");
                     } else {
                         req.session.user = userData._id;
-
                         res.redirect("/home");
                     }
                 } else {
-                    res.render("login", { bannedMessage: "user banned" });
-
+                    res.render("login", { bannedMessage: "User is banned" });
                 }
             } else {
-                res.render("login", { errmessage: "." });
+                res.render("login", { errmessage: "Incorrect email or password" });
             }
+        } else {
+            res.render("login", { errmessage: "User not found" });
         }
-
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-}
+};
 
 
 const signup = async (req, res) => {
     try {
 
-        res.render('registeration')
+        res.render('registeration',{ emailExists: false})
 
     } catch (error) {
         console.log(error)
@@ -119,10 +118,11 @@ const verifySignup = async (req, res) => {
     try {
 
         console.log("hai");
+
         const matchEmail = await User.findOne({ email: req.body.email })
         if (matchEmail) {
-            // toastr.error('Email already exists', 'Error')
-            return res.redirect('/signup')
+
+            return res.render('registeration', { emailExists: true });
         }
         if (req.body.password == req.body.cpassword) {
 
@@ -133,12 +133,11 @@ const verifySignup = async (req, res) => {
                 password: req.body.password,
                 mobile: req.body.mobile
             }
-            // console.log(datafromRegister)
+
 
             req.session.data = datafromRegister
 
-            // console.log("session Data:", req.session.data)
-            //    res.render('otp')
+         
             res.redirect("/getOtp")
 
         }
@@ -205,36 +204,36 @@ const getOtp = async (req, res) => {
 
 const verifyOtp = async (req, res) => {
     try {
-        // const otp = req.body.otp     changed code
         if (req.session.otp === req.body.otp) {
             const { email, name, mobile, password } = req.session.data
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            console.log(hashedPassword,"hashed password confirmed !!!!!!!!!!!!!!")
             const user = new User({
                 name: name,
                 email: email,
                 mobile: mobile,
-                password: password
-
-
+                password: hashedPassword
+            
             })
 
-            const userData = await user.save()
 
+
+
+            const userData = await user.save()
             if (userData) {
                 req.session.user = userData._id;
-
                 res.redirect("/home")
-                // res.rend("login", { successMessage: " Registered Succesfully !!" });
             }
         } else {
             res.render("registeration", { errmessage: "." })
         }
-
-
     } catch (error) {
         console.log(error)
     }
 }
 
+  
 
 const shopProduct = async (req, res) => {
     try {
@@ -251,124 +250,15 @@ const shopProduct = async (req, res) => {
 }
 
 
-const getCart= async(req,res)=>{
-    try {
-
-        const userId= req.session.user
-        const cartData= await Cart.findOne({userId:userId}).populate('product.productId')
+const loadProfile = async (req,res)=>{
+    try{
+        let userId = req.session.user;
         const userData = await User.findOne({ _id: userId });
-        res.render("cart",{cartData,name:userData.name})
-        
-    } catch (error) {
-        console.log(error.message)
-        
-    }
+        res.render('account',{name:userData.name,email:userData.email})
+}catch(error){
+    console.log(error)    
 }
-
-
-const addToCart = async (req, res) => {
-    try {
-        const productId = req.query.id;
-        const userId = req.session.user; 
-        if (!userId) {
-            return res.status(401).send('Unauthorized');
-        }
-
-        let cart = await Cart.findOne({ userId });
-
-        if (!cart) {
-            cart = new Cart({ userId, product: [] });
-        }
-
-        const existingProductIndex = cart.product.findIndex(item => item.productId.toString() === productId);
-
-        if (existingProductIndex !== -1) {
-            cart.product[existingProductIndex].quantity += 1;
-        } else {
-            cart.product.push({ productId, quantity: 1 });
-        }
-
-        await cart.save();
-
-        res.redirect('/cart'); 
-    } catch (error) {
-        console.log('Error adding product to cart:', error);
-        res.status(500).send('Internal Server Error');
-    }
-};
-
-const updateCart = async (req, res) => {
-    try {
-        console.log('update cart------------------')
-        console.log("Product Id :",req.body)
-        const  {productId, quantity}  = req.body;
-        const  userId  = req.session.user; 
-        let cart = await Cart.findOne({ userId });
-
-        if (!cart) {
-            cart = new Cart({ userId, product: [] });
-        }
-
-        const productIndex = cart.product.findIndex(item => item.productId.toString() === productId);
-        console.log(req.body,"this is productId--_")
-        console.log(productId,"this is productId--_")
-        console.log(quantity,"this is quantity-")
-        if (productIndex !== -1) {
-            if (quantity > 0) {
-                cart.product[productIndex].quantity += quantity;
-            } else if (quantity < 0 && cart.product[productIndex].quantity + quantity > 0) {
-                cart.product[productIndex].quantity += quantity;
-            } else {
-                cart.product.splice(productIndex, 1);
-            }
-        } else if (quantity > 0) {
-            cart.product.push({ productId, quantity });
-            console.log(quantity,"quantity")
-        }
-
-        await cart.save();
-        const quantityData  = {
-
-            quantity:quantity
-        }
-        res.status(200).json({ quantityData });
-    } catch (error) {
-        console.log(error.message);
-        res.sendStatus(500); 
-    }
 }
-
-const removeItem = async(req,res)=>{
-    try {
-        const {productId} = req.body;
-        console.log(productId,"odiyan")
-        const userId = req.session.user;
-        let cart = await Cart.findOne({ userId });
-        if (!cart) {
-          console.log("cart not found")
-        }   
-        // Find the index of the product
-        const productIndex = cart.product.findIndex(item => item.productId.toString() === productId);
-console.log(productIndex,"product index kitty.............................")
-        if (productIndex !== -1) {
-            //  product   remove it
-            cart.product.splice(productIndex, 1);
-         const updateCart = await cart.save();
-            console.log(updateCart,"after deleted odi")
-            return res.status(200).send('Product removed from the cart');
-        } else {
-            console.log("Joel francis")
-            return res.status(404).send('Product not found in the cart');
-        }
-    } catch (error) {
-        console.error(error.message);
-        // Send an error response
-        res.status(500).send('Internal Server Error');
-    }
-};
-
-
-
 
 
 
@@ -420,71 +310,7 @@ const loadShop = async (req, res) => {
 }
 
 
-const loadProfile = async (req,res)=>{
-    try{
-        let userId = req.session.user;
-        const userData = await User.findOne({ _id: userId });
-        res.render('account',{name:userData.name})
-}catch(error){
-    console.log(error)    
-}
-}
 
-
-const isCartEmpty = async (req, res, next) => {
-    try {
-        const userId = req.session.user; 
-        const cart = await Cart.findOne({ userId });
-
-        if (!cart || cart.product.length === 0) {
-            res.redirect('/home')
-        } else{
-            next()
-        }
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-};
-
-const loadCheckOut = async(req,res)=>{
-    try{
-
-        let userId = req.session.user;
-        const cart = await Cart.findOne({ userId });
-        const userData = await User.findOne({ _id: userId });
-        const cartData= await Cart.findOne({userId:userId}).populate('product.productId')
-        res.render('checkout',{name:userData.name,cartData})
-    }catch(error){
-        console.log(error)
-    }
-}                                                                                               
-
-
-const placeOrder = async (req, res) => {
-    try {
-        const userId = req.session.user; 
-        const cart = await Cart.findOne({ userId });
-        if (!cart) {
-            console.log("Cart not found")
-        }
-        
-
-        cart.product = [];
-        await cart.save();
-
-
-        // const ord = new ord({
-          
-        //    })
-
-
-        res.redirect('/home');
-    } catch (error) {
-        console.error(error);
-    }
-};
 
 
 
@@ -519,15 +345,10 @@ module.exports = {
     verifyOtp,
     verifyLogin,
     shopProduct,
-    addToCart,
-    loadShop,
-    getCart,
-    updateCart,
-    removeItem,
     loadProfile,
-    loadCheckOut,
-    isCartEmpty,
-    placeOrder
+    loadShop,
+
+
 }
 
 

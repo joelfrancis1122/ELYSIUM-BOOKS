@@ -1,4 +1,3 @@
-const session = require('express-session')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
 const User = require('../models/userModel')
@@ -56,35 +55,34 @@ const loadCategories = async(req,res)=>{
     }
 }
 
-const addCategories = async(req,res)=>{
-    try{
-        console.log("s");
-        
-           const {categoryName,Description}=req.body
-           const categories = new Category({
-            categoryName:categoryName,
-            Description:Description,
-        
-            
-           })
-          
-           const categoryData = await categories.save()
-           res.redirect('/admin/loadCategories')
+const addCategories = async (req, res) => {
+    try {
+        const { categoryName, Description } = req.body;
+        const catData = await Category.find()
+        const existingCategory = await Category.findOne({ categoryName: { $regex: new RegExp('^' + categoryName + '$', 'i') } });
+        if (existingCategory) {
+            return res.render('addcategories', { categoriesExists: true ,categories : catData}); // Pass flag to indicate category exists
+        }
+        // Category name is unique, proceed to save
+        const categories = new Category({
+            categoryName: categoryName,
+            Description: Description,
+        });
 
-    }catch(error){
-        console.log(error.message)
+        const categoryData = await categories.save();
+        res.redirect('/admin/loadCategories');
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Server Error');
     }
-}
+};
 
 
 const blockCategories = async (req,res)=>{
     try{
         const catid= req.query.catid
-        console.log(catid)
-    
         const blockedCategory = await Category.findByIdAndUpdate(catid, {is_Active:false }, { new: true }); // why new true its used for geting a  return value 
-        // res.render('addcategories');
-res.redirect('/admin/loadCategories');
+        res.redirect('/admin/loadCategories');
     } catch (error) {
         console.log(error);
         return res.status(500).send('Internal Server Error');
@@ -94,22 +92,27 @@ res.redirect('/admin/loadCategories');
 const unblockCategories = async (req,res)=>{
     try{
         const catid= req.query.catid
-        console.log(catid)
-    
-        const unblockCategory = await Category.findByIdAndUpdate(catid, {is_Active:true }, { new: true }) // why new true
-        // console.log(blockedProduct==true);
-        // res.render('addcategories');
-        // if (blockedProduct) {
-        // } else {
-        //  res.status(404).send('Product not found.');
-        // }
+        const unblockCategory = await Category.findByIdAndUpdate(catid, {is_Active:true }, { new: true }) 
         res.redirect('/admin/loadCategories',);
-
     } catch (error) {
         console.log(error);
         return res.status(500).send('Internal Server Error');
     }
 }
+
+const ToggleblockCategories = async (req,res)=>{
+    try{
+        const catid= req.query.catid
+        const categories = await Category.findOne({_id:catid}); 
+        categories. is_Active=!categories. is_Active
+        await categories.save()
+        res.redirect('/admin/loadCategories');
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 
 const loaduserlist = async (req, res) => {
     try {
@@ -122,48 +125,52 @@ const loaduserlist = async (req, res) => {
     }
 }
 
-const blockUser = async (req,res)=>{
+
+
+
+
+const ToggleblockUser = async (req,res)=>{
     try{
         const id= req.query.id
-    
-        const blockedUser = await User.findByIdAndUpdate(id, {is_active:false }, { new: true }); // why new true
-        // console.log(blockedProduct==true);
+        const user = await User.findOne({_id:id}); // why new true
+        user.is_active=!user.is_active
+        await user.save()
         res.redirect('/admin/loaduserlist');
-        // if (blockedProduct) {
-        // } else {
-        //  res.status(404).send('Product not found.');
-        // }
-
     } catch (error) {
         console.log(error);
-        return res.status(500).send('Internal Server Error');
     }
 }
 
 
-const unblockUser = async (req,res)=>{
-    try{
-        const id= req.query.id
-    
-        const unblockUser = await User.findByIdAndUpdate(id, {is_active:true }, { new: true }); // why new true
-        // console.log(blockedProduct==true);
-        res.redirect('/admin/loaduserlist');
-        // if (blockedProduct) {
-        // } else {
-        //  res.status(404).send('Product not found.');
-        // }
 
-    } catch (error) {
-        console.log(error);
-        return res.status(500).send('Internal Server Error');
-    }
-}
 
 const loadOrders = async (req,res)=>{
     try {
-        res.render("Orders")
+        res.render("orderList")
     } catch (error) {
         console.log(error.message)  
+    }
+}
+
+
+
+const loadOrderDetails = async (req,res)=>{
+    try {
+        res.render("ordersdetail")
+    } catch (error) {
+        console.log(error.message)  
+    }
+}
+
+
+
+
+const loadCoupon = async (req, res) => {
+    try {
+        res.render('Coupon')
+    } catch (error) {
+        console.log(error)
+
     }
 }
 
@@ -180,21 +187,6 @@ const loadLogout = async (req, res) => {
 
 
 
-// const ToggleblockUser = async (req,res)=>{
-//     try{
-//         const id= req.query.id
-    
-//         const user = await User.findById(id); // why new true
-//         user.is_Active=!user.is_Active
-//         await user.save
-//         res.redirect('/admin/loaduserlist');
-
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).send('Internal Server Error');
-//     }
-// }
-
 
 module.exports = {
     dashboardLoad,
@@ -206,8 +198,9 @@ module.exports = {
     unblockCategories,
     loaduserlist,
     loadLogout,
-    blockUser,
-    unblockUser,
+    ToggleblockCategories,
     loadOrders,
-    // ToggleblockUser
+    loadOrderDetails,
+    ToggleblockUser,
+    loadCoupon,
 }

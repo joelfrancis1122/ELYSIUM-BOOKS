@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+  <head>
+    <meta charset="utf-8" />
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:title" content="" />
+    <meta property="og:type" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
+    <!-- Favicon -->
+    <link
+      rel="shortcut icon"
+      type="image/x-icon"
+      href="/public/admin-assets/imgs/theme/favicon.svg"
+    />
+    <!-- Template CSS -->
+    <link
+      href="/public/admin-assets/css/main.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <div class="screen-overlay"></div>
+    <%-include('../partials/adminAside')-%>
+    <main class="main-wrap">
+      <%-include('../partials/adminHeader')-%>
+      <section class="content-main">
+        <div class="content-header">
+          <div>
+            <h2 class="content-title card-title">Coupon</h2>
+            <p>Give offeres use copons</p>
+          </div>
+          <div>
+            <input
+              type="text"
+              placeholder="Search Categories"
+              class="form-control bg-white"
+            />
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-3">
+                <form method="post" action="/admin/addCategories">
+                
+
+
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label"
+                      >Category Name</label
+                    >
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      name="categoryName"
+                      class="form-control"
+                      id="product_name"
+                    />
+                  </div>
+
+
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label"
+                      >Coupon Id</label
+                    >
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      name="categoryName"
+                      class="form-control"
+                      id="product_name"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label"
+                      >Minimum Purchase</label
+                    >
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      name="categoryName"
+                      class="form-control"
+                      id="product_name"
+                    />
+                  </div>
+
+
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label"
+                      >Discount Amount</label
+                    >
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      name="categoryName"
+                      class="form-control"
+                      id="product_name"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label"
+                      >Maximum Uses</label
+                    >
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      name="categoryName"
+                      class="form-control"
+                      id="product_name"
+                    />
+                  </div>
+                  
+                  <div class="mb-4">
+                    <label for="product_name" class="form-label"
+                      >Expiration Date</label
+                    >
+                    <input
+                      type="text"
+                      placeholder="Type here"
+                      name="categoryName"
+                      class="form-control"
+                      id="product_name"
+                    />
+                  </div>
+                  <div class="d-grid">
+                    <button class="btn btn-primary" type="submit">
+                      Create category
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div class="col-md-9">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th class="text-center">
+                          <div class="form-check"></div>
+                        </th>
+                        <th>ID</th>
+                        <th>Category name</th>
+                        <th>Description</th>
+
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr>
+                        <td class="text-center">
+                          <div class="form-check"></div>
+                        </td>
+                        <td> 1 </td>
+                        <td><b>d</b></td>
+                        <td><b>d</b></td>
+
+                        <td>
+                          <span class="badge rounded-pill alert-success"
+                            >Active</span
+                          >
+                          <span class="badge rounded-pill alert-danger"
+                            >Blocked</span
+                          >
+                        </td>
+                        <td>
+                          <a
+                            href="#"
+                            onclick="confirmBlock('#')"
+                            class="btn btn-sm font-sm btn-light rounded"
+                            style="
+                            background-color: rgb(255, 0, 0);
+                            transition: background-color 0.3s;
+                          "   
+                          
+                          >
+                            <i class="material-icons md-delete_forever"></i>
+                          <b> Block</b> 
+
+                          </a>
+                          <a
+                            href="#"
+                            onclick="confirmUnBlock('#')"
+                            class="btn btn-sm font-sm btn-light rounded"
+                            style="
+                            background-color: #088178;
+                            transition: background-color 0.3s;
+                          "
+                          >
+                            <i class="material-icons md-delete_forever"></i>
+                            Unblock
+
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- .col// -->
+            </div>
+            <!-- .row // -->
+          </div>
+          <!-- card body .// -->
+        </div>
+        <!-- card .// -->
+      </section>
+      <!-- content-main end// -->
+      <footer class="main-footer font-xs">
+        <div class="row pb-30 pt-15">
+          <div class="col-sm-6">
+            <script>
+              document.write(new Date().getFullYear());
+            </script>
+            ©, Evara - HTML Ecommerce Template .
+          </div>
+          <div class="col-sm-6">
+            <div class="text-sm-end">All rights reserved</div>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/select2.min.js"></script>
+    <script src="/public/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/public/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script
+      src="/public/admin-assets/js/main.js"
+      type="text/javascript"
+    ></script>
+
+
+
+
+            
+  </body>
+
+  <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+</html>

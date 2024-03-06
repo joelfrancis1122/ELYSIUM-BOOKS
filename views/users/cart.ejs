@@ -599,11 +599,11 @@
                                                 <td class="price" data-title="Price"><span id="saleprice_<%= cartData.product[i].productId.id %>">$<%= cartData.product[i].productId.saleprice %></span></td>
                                                 <td class="text-center" data-title="Stock">
                                                     <button class="qty-btn qty-down" onclick="decrease('<%= cartData.product[i].productId.id %>')">
-                                                        <i class="fa-solid fa-minus fa-flip fa-flip-both"></i>
+                                                        <i class="fa-solid fa-minus"></i>
                                                     </button>
                                                     <span class="qty-val" id="quantity_<%= cartData.product[i].productId.id %>"><%= cartData.product[i].quantity %></span>
                                                     <button class="qty-btn qty-up" onclick="increase('<%= cartData.product[i].productId.id %>')">
-                                                        <i class="fa-solid fa-plus fa-flip fa-flip-both"></i>
+                                                        <i class="fa-solid fa-plus"></i>
                                                     </button>
                                                 </td>
                                                 <td class="text-right" data-title="Cart">

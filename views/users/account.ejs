@@ -17,6 +17,14 @@
     <link rel="shortcut icon" type="image/x-icon" href="/public/assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/public/assets/css/maind134.css?v=3.4">
+    <style>
+        #email:hover,
+        #password:hover {
+          border-color: #6c757d; /* Change border color on hover */
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow on hover */
+          transform: scale(1.02); /* Scale up the input field on hover */
+        }
+      </style>
 </head>
 
 <body>
@@ -326,11 +334,17 @@
                                     <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                                         <div class="card">
                                             <div class="card-header">
-                                                <h5 class="mb-0">Hello Rosie! </h5>
+                                                <h5 class="mb-0">Hello <%=name%>! </h5>
                                             </div>
                                             <div class="card-body">
                                                 <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details.</a></p>
                                             </div>
+                                            <input type="email" id="email" value="<%= name %>" readonly style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
+                                            <input type="email" id="password" value="<%= email %>" readonly style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
+                                            
+                                            
+                                            
+
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">

@@ -1,46 +1,45 @@
 const express= require('express')
-const user_Route = express()
+const userRoute = express()
 
 const userControllers = require('../controllers/userController')
+const cartControllers = require('../controllers/cartController')
 const Auth = require('../middlewares/userAuth')
 
 
 
-user_Route.set('view engine','ejs')
-user_Route.set('views','./views/users')
-// user_Route.use(Auth.preventUserAccessForAdmin)
+userRoute.set('view engine','ejs')
+userRoute.set('views','./views/users')
+// userRoute.use(Auth.preventUserAccessForAdmin)
 
 
 //--------------------------------------------------
 
-user_Route.get('/',Auth.isLogout,userControllers.loadlogin)
-user_Route.get('/home',Auth.isLogin,userControllers.loadHome)
-user_Route.get('/logout',Auth.isLogin,userControllers.loadLogout)
+userRoute.get('/',Auth.isLogout,userControllers.loadlogin)
+userRoute.get('/home',Auth.isLogin,userControllers.loadHome)
+userRoute.get('/logout',Auth.isLogin,userControllers.loadLogout)
 
-user_Route.get('/login',Auth.isLogout,userControllers.loadlogin)
+userRoute.get('/login',Auth.isLogout,userControllers.loadlogin)
 
-user_Route.get('/signup',Auth.isLogout,userControllers.signup)
-user_Route.post('/verifySignup',Auth.isLogout,userControllers.verifySignup)
+userRoute.get('/signup',Auth.isLogout,userControllers.signup)
+userRoute.post('/verifySignup',Auth.isLogout,userControllers.verifySignup)
 
 
-user_Route.get('/getOtp',Auth.isLogout,userControllers.getOtp)
-user_Route.post('/verifyOtp',Auth.isLogout,userControllers.verifyOtp)
-user_Route.post('/verifyLogin',Auth.isLogout,userControllers.verifyLogin)
-user_Route.get('/shop-product',Auth.isLogin,userControllers.shopProduct)
-user_Route.get('/addToCart',Auth.isLogin,userControllers.addToCart)
-user_Route.get('/loadShop',Auth.isLogin,userControllers.loadShop)
-user_Route.get("/cart",Auth.isLogin,userControllers.getCart)
-user_Route.post("/updateCart",Auth.isLogin,userControllers.updateCart)
-user_Route.post("/removeItem",Auth.isLogin,userControllers.removeItem)
-
-user_Route.get("/loadProfile",Auth.isLogin,userControllers.loadProfile)
-user_Route.get("/loadCheckOut",Auth.isLogin,userControllers.isCartEmpty,userControllers.loadCheckOut)
-user_Route.get("/placeOrder",Auth.isLogin,userControllers.placeOrder)
+userRoute.get('/getOtp',Auth.isLogout,userControllers.getOtp)
+userRoute.post('/verifyOtp',Auth.isLogout,userControllers.verifyOtp)
+userRoute.post('/verifyLogin',Auth.isLogout,userControllers.verifyLogin)
+userRoute.get('/shop-product',Auth.isLogin,userControllers.shopProduct)
+userRoute.get("/loadProfile",Auth.isLogin,userControllers.loadProfile)
+userRoute.get('/loadShop',Auth.isLogin,userControllers.loadShop)
 
 
 
 
-
+userRoute.get("/cart",Auth.isLogin,cartControllers.getCart)
+userRoute.get('/addToCart',Auth.isLogin,cartControllers.addToCart)
+userRoute.post("/updateCart",Auth.isLogin,cartControllers.updateCart)
+userRoute.post("/removeItem",Auth.isLogin,cartControllers.removeItem)
+userRoute.get("/loadCheckOut",Auth.isLogin,cartControllers.isCartEmpty,cartControllers.loadCheckOut)
+userRoute.get("/placeOrder",Auth.isLogin,cartControllers.placeOrder)
 
 
 
@@ -60,4 +59,9 @@ user_Route.get("/placeOrder",Auth.isLogin,userControllers.placeOrder)
 
 
 
-module.exports=user_Route
+
+
+
+
+
+module.exports=userRoute
