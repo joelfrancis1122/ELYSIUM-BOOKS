@@ -3,6 +3,7 @@
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:11:15 GMT -->
+
 <head>
     <meta charset="utf-8">
     <title>Evara - eCommerce HTML Template</title>
@@ -20,11 +21,22 @@
     <style>
         #email:hover,
         #password:hover {
-          border-color: #6c757d; /* Change border color on hover */
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow on hover */
-          transform: scale(1.02); /* Scale up the input field on hover */
+            border-color: #6c757d;
+            /* Change border color on hover */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /* Add box shadow on hover */
+            transform: scale(1.02);
+            /* Scale up the input field on hover */
         }
-      </style>
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+            integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -36,7 +48,7 @@
                         <div class="header-info">
                             <ul>
                                 <li><i class="fi-rs-smartphone"></i> <a href="#">(+01) - 2345 - 6789</a></li>
-                                <li><i class="fi-rs-marker"></i><a  href="page-contact.html">Our location</a></li>
+                                <li><i class="fi-rs-marker"></i><a href="page-contact.html">Our location</a></li>
                             </ul>
                         </div>
                     </div>
@@ -44,9 +56,11 @@
                         <div class="text-center">
                             <div id="news-flash" class="d-inline-block">
                                 <ul>
-                                    <li>Get great devices up to 50% off <a href="shop-grid-right.html">View details</a></li>
+                                    <li>Get great devices up to 50% off <a href="shop-grid-right.html">View details</a>
+                                    </li>
                                     <li>Supper Value Deals - Save more with coupons</li>
-                                    <li>Trendy 25silver jewelry, save up 35% off today <a href="shop-grid-right.html">Shop now</a></li>
+                                    <li>Trendy 25silver jewelry, save up 35% off today <a
+                                            href="shop-grid-right.html">Shop now</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -55,23 +69,36 @@
                         <div class="header-info header-info-right">
                             <ul>
                                 <li>
-                                    <a class="language-dropdown-active" href="#"> <i class="fi-rs-world"></i> English <i class="fi-rs-angle-small-down"></i></a>
+                                    <a class="language-dropdown-active" href="#"> <i class="fi-rs-world"></i> English <i
+                                            class="fi-rs-angle-small-down"></i></a>
                                     <ul class="language-dropdown">
-                                        <li><a href="#"><img src="/public/assets/imgs/theme/flag-fr.png" alt="">Français</a></li>
-                                        <li><a href="#"><img src="/public/assets/imgs/theme/flag-dt.png" alt="">Deutsch</a></li>
-                                        <li><a href="#"><img src="/public/assets/imgs/theme/flag-ru.png" alt="">Pусский</a></li>
+                                        <li><a href="#"><img src="/public/assets/imgs/theme/flag-fr.png"
+                                                    alt="">Français</a></li>
+                                        <li><a href="#"><img src="/public/assets/imgs/theme/flag-dt.png"
+                                                    alt="">Deutsch</a></li>
+                                        <li><a href="#"><img src="/public/assets/imgs/theme/flag-ru.png"
+                                                    alt="">Pусский</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown nav-item">
-                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"><span><%=name%></span></a>
+                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                                        aria-expanded="false"><span>
+                                            <%=name%>
+                                        </span></a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-perm_identity"></i>Edit Profile</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-settings"></i>Account Settings</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-receipt"></i>Billing</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-help_outline"></i>Help center</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                                        <a class="dropdown-item text-danger" href="/logout"><i
+                                                class="material-icons md-exit_to_app"></i>Logout</a>
                                     </div>
                                 </li>
                             </ul>
@@ -86,20 +113,21 @@
                     <div class="logo logo-width-1">
                         <a href="index.html"><img src="/public/assets/imgs/theme/logo.svg" alt="logo"></a>
                     </div>
-                    <div class="main-menu main-menu-grow main-menu-padding-1 main-menu-lh-1 main-menu-mrg-1 hm3-menu-padding d-none d-lg-block hover-boder">
+                    <div
+                        class="main-menu main-menu-grow main-menu-padding-1 main-menu-lh-1 main-menu-mrg-1 hm3-menu-padding d-none d-lg-block hover-boder">
                         <nav>
                             <ul>
                                 <li><a class="active" href="/home">Home</i></a>
-                                
+
                                 </li>
                                 <li><a href="/loadShop">Shop</i></a>
-                                   
+
                                 </li>
                                 <li class="position-static"><a href="#">Mega</i></a>
-                                    
+
                                 </li>
                                 <li><a href="blog-category-grid.html">Blog</i></a>
-                                    
+
                                 </li>
                                 <li><a href="#">Pages</i></a>
 
@@ -132,7 +160,8 @@
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
                                 <a href="shop-wishlist.html">
-                                    <img class="svgInject" alt="Evara" src="/public/assets/imgs/theme/icons/icon-heart.svg">
+                                    <img class="svgInject" alt="Evara"
+                                        src="/public/assets/imgs/theme/icons/icon-heart.svg">
                                     <span class="pro-count blue">4</span>
                                 </a>
                             </div>
@@ -141,7 +170,7 @@
                                     <img alt="Evara" src="/public/assets/imgs/theme/icons/icon-cart.svg">
                                     <span class="pro-count blue">2</span>
                                 </a>
-                            
+
                             </div>
                             <div class="header-action-icon d-block d-lg-none">
                                 <div class="burger-icon">
@@ -183,14 +212,20 @@
                         </a>
                         <div class="categori-dropdown-wrap categori-dropdown-active-small">
                             <ul>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a></li>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a></li>
-                                <li> <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Cellphones</a></li>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer & Office</a></li>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer Electronics</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a>
+                                </li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a>
+                                </li>
+                                <li> <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Cellphones</a>
+                                </li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer &
+                                        Office</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer
+                                        Electronics</a></li>
                                 <li><a href="shop-grid-right.html"><i class="evara-font-home"></i>Home & Garden</a></li>
                                 <li><a href="shop-grid-right.html"><i class="evara-font-high-heels"></i>Shoes</a></li>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother & Kids</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother &
+                                        Kids</a></li>
                                 <li><a href="shop-grid-right.html"><i class="evara-font-kite"></i>Outdoor fun</a></li>
                             </ul>
                         </div>
@@ -206,14 +241,16 @@
                                     <li><a href="index-4.html">Home 4</a></li>
                                 </ul>
                             </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="shop-grid-right.html">shop</a>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                    href="shop-grid-right.html">shop</a>
                                 <ul class="dropdown">
                                     <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
                                     <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
                                     <li><a href="shop-list-right.html">Shop List – Right Sidebar</a></li>
                                     <li><a href="shop-list-left.html">Shop List – Left Sidebar</a></li>
                                     <li><a href="shop-fullwidth.html">Shop - Wide</a></li>
-                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Single Product</a>
+                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                            href="#">Single Product</a>
                                         <ul class="dropdown">
                                             <li><a href="shop-product-right.html">Product – Right Sidebar</a></li>
                                             <li><a href="shop-product-left.html">Product – Left Sidebar</a></li>
@@ -227,16 +264,19 @@
                                     <li><a href="shop-compare.html">Shop – Compare</a></li>
                                 </ul>
                             </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Mega menu</a>
-                          
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Mega
+                                    menu</a>
+
                             </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="blog-category-fullwidth.html">Blog</a>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                    href="blog-category-fullwidth.html">Blog</a>
                                 <ul class="dropdown">
                                     <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
                                     <li><a href="blog-category-list.html">Blog Category List</a></li>
                                     <li><a href="blog-category-big.html">Blog Category Big</a></li>
                                     <li><a href="blog-category-fullwidth.html">Blog Category Wide</a></li>
-                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Single Product Layout</a>
+                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                            href="#">Single Product Layout</a>
                                         <ul class="dropdown">
                                             <li><a href="blog-post-left.html">Left Sidebar</a></li>
                                             <li><a href="blog-post-right.html">Right Sidebar</a></li>
@@ -271,7 +311,7 @@
                 </div>
                 <div class="mobile-header-info-wrap mobile-header-border">
                     <div class="single-mobile-header-info mt-30">
-                        <a  href="page-contact.html"> Our location </a>
+                        <a href="page-contact.html"> Our location </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="page-login-register.html">Log In / Sign Up </a>
@@ -309,41 +349,55 @@
                                 <div class="dashboard-menu">
                                     <ul class="nav flex-column" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="false"><i class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
+                                            <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab"
+                                                href="#dashboard" role="tab" aria-controls="dashboard"
+                                                aria-selected="false"><i
+                                                    class="fi-rs-settings-sliders mr-10"></i>Dashboard</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false"><i class="fi-rs-shopping-bag mr-10"></i>Orders</a>
+                                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders"
+                                                role="tab" aria-controls="orders" aria-selected="false"><i
+                                                    class="fi-rs-shopping-bag mr-10"></i>Orders</a>
                                         </li>
                                         <!-- <li class="nav-item"> -->
-                                            <!-- <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a> -->
+                                        <!-- <a class="nav-link" id="track-orders-tab" data-bs-toggle="tab" href="#track-orders" role="tab" aria-controls="track-orders" aria-selected="false"><i class="fi-rs-shopping-cart-check mr-10"></i>Track Your Order</a> -->
                                         <!-- </li> -->
                                         <li class="nav-item">
-                                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address" role="tab" aria-controls="address" aria-selected="true"><i class="fi-rs-marker mr-10"></i>My Address</a>
+                                            <a class="nav-link" id="address-tab" data-bs-toggle="tab" href="#address"
+                                                role="tab" aria-controls="address" aria-selected="true"><i
+                                                    class="fi-rs-marker mr-10"></i>My Address</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab" href="#account-detail" role="tab" aria-controls="account-detail" aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
+                                            <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab"
+                                                href="#account-detail" role="tab" aria-controls="account-detail"
+                                                aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="page-login-register.html"><i class="fi-rs-sign-out mr-10"></i>Logout</a>
+                                            <a class="nav-link" href="page-login-register.html"><i
+                                                    class="fi-rs-sign-out mr-10"></i>Logout</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="col-md-8">
                                 <div class="tab-content dashboard-content">
-                                    <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                                    <div class="tab-pane fade active show" id="dashboard" role="tabpanel"
+                                        aria-labelledby="dashboard-tab">
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5 class="mb-0">Hello <%=name%>! </h5>
                                             </div>
                                             <div class="card-body">
-                                                <p>From your account dashboard. you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a> and <a href="#">edit your password and account details.</a></p>
+                                                <p>From your account dashboard. you can easily check &amp; view your <a
+                                                        href="#">recent orders</a>, manage your <a href="#">shipping and
+                                                        billing addresses</a> and <a href="#">edit your password and
+                                                        account details.</a></p>
                                             </div>
-                                            <input type="email" id="email" value="<%= name %>" readonly style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
-                                            <input type="email" id="password" value="<%= email %>" readonly style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
-                                            
-                                            
-                                            
+                                            <input type="email" id="email" value="<%= name %>" readonly
+                                                style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
+                                            <input type="email" id="password" value="<%= email %>" readonly
+                                                style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
+
 
                                         </div>
                                     </div>
@@ -355,178 +409,229 @@
 
                                             <div class="card-body">
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped table-hover">
-                                                        <thead class="table-dark">
-                                                            <tr>
-                                                                <th>Order</th>
-                                                                <th>Payment Method</th>
-                                                                <th>Order Status</th>
-                                                                <th>Payment Status</th>
-                                                                <th>Date</th>
-                                                                <th>Total</th>
-                                                                <th>Actions</th>
-                                                                <th>Details</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>#1357</td>
-                                                                <td>Cash on Delivery</td>
-                                                                <td><span class="badge bg-success">Order Placed</span></td>
-                                                                <td><span class="badge bg-warning text-dark">Processing</span></td>
-                                                                <td>March 45, 2020</td>
-                                                                <td>$125.00</td>
-                                                                <td><button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Cancel</button></td>
-                                                                <td><a href="#" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>#1357</td>
-                                                                <td>Cash on Delivery</td>
-                                                                <td><span class="badge bg-success">Shipped</span></td>
-                                                                <td><span class="badge bg-warning text-dark">Processing</span></td>
+                                                    <table class="table table-striped table-hover" style="margin: 0;">
+                                                        <% if(orders && orders.length> 0 ){ %>
 
-                                                                <td>March 45, 2020</td>
-                                                                <td>$125.00</td>
-                                                                <td><button class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Cancel</button></td>
-                                                                <td><a href="#" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>#1357</td>
-                                                                <td>Cash on Delivery</td>
-                                                                <td><span class="badge bg-info">Delivered</span></td>
-                                                                <td><span class="badge bg-warning text-dark">Processing</span></td>
-                                                                <td>March 45, 2020</td>
-                                                                <td>$125.00</td>
-                                                                <td><button class="btn btn-warning btn-sm"><i class="fas fa-undo"></i> Return</button></td>
-                                                                <td><a href="#" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>#1357</td>
-                                                                <td>Cash on Delivery</td>
-                                                                <td><span class="badge bg-dark">Returned</span></td>
-                                                                <td><span class="badge bg-warning text-dark">Processing</span></td>
+                                                            <thead class="table-dark">
+                                                                <tr>
+                                                                    <th style="padding: 10px;">Order</th>
+                                                                    <th style="padding: 10px;">Payment Method</th>
+                                                                    <th style="padding: 10px;">Order Status</th>
+                                                                    <th style="padding: 10px;">Payment Status</th>
+                                                                    <th style="padding: 10px;">Date</th>
+                                                                    <th style="padding: 10px;">Total</th>
+                                                                    <th style="padding: 10px;">Actions</th>
+                                                                    <th style="padding: 10px;">Details</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% orders.forEach(order=> { %>
+                                                                    <tr>
+                                                                        <td style="padding: 10px;">
+                                                                            <%= order.orderId %>
+                                                                        </td>
+                                                                        <td style="padding: 10px;">
+                                                                            <p>
+                                                                                <%= order.paymentMethod %>
+                                                                            </p>
+                                                                        </td>
+                                                                        <td style="padding: 10px;"><span
+                                                                                class="badge bg-info">
+                                                                                <%= order.orderStatus%>
+                                                                            </span></td>
+                                                                        <td style="padding: 10px;"><span
+                                                                                class="badge bg-warning text-dark">
+                                                                                <%= order.paymentStatus%>
+                                                                            </span></td>
+                                                                        <td style="padding: 10px;">
+                                                                            <%= order.orderDate.toLocaleString() %>
+                                                                        </td>
+                                                                        <td style="padding: 10px;">
+                                                                            <%= order.totalAmount %>
+                                                                        </td>
+                                                                        <td style="padding: 10px;">
+                                                                            <% if (order.orderStatus==='Order Placed' ||
+                                                                                order.orderStatus==='Pending' ) { %>
+                                                                                <a class="btn btn-warning btn-sm cancel-order"
+                                                                                    href="/orderCancel?id=<%=order._id%>"
+                                                                                    data-order-id="<%= order._id %>"><i
+                                                                                        class="fas fa-times"></i>
+                                                                                    Cancel</a>
+                                                                                <% } else if
+                                                                                    (order.orderStatus==='Delivered' ) {
+                                                                                    %>
 
-                                                                <td>March 45, 2020</td>
-                                                                <td>$125.00</td>
-                                                                <td><button class="btn btn-secondary btn-sm"><i class="fas fa-check"></i> Returned</button></td>
-                                                                <td><a href="#" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>#1357</td>
-                                                                <td>Cash on Delivery</td>
-                                                                <td><span class="badge bg-dark">Cancelled</span></td>
-                                                                <td><span class="badge bg-warning text-dark">Processing</span></td>
-
-                                                                <td>March 45, 2020</td>
-                                                                <td>$125.00</td>
-                                                                <td><button class="btn btn-secondary btn-sm"><i class="fas fa-check"></i> Cancelled</button></td>
-                                                                <td><a href="#" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> View</a></td>
-                                                            </tr>
-                                                        </tbody>
+                                                                                    <a class="btn btn-primary btn-sm return-order"
+                                                                                        href="/orderReturn?id=<%=order._id%>"
+                                                                                        data-order-id="<%= order._id %>"><i
+                                                                                            class="fas fa-undo"></i>
+                                                                                        Return</a>
+                                                                                    <% } %>
+                                                                        </td>
+                                                                        <td style="padding: 10px;"><a
+                                                                                href="/orderDetail"
+                                                                                class="btn btn-primary btn-sm view-order"
+                                                                                data-order-id="<%= order._id %>"><i
+                                                                                    class="fas fa-eye"></i> View</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <% }); %>
+                                                                        <% } else { %>
+                                                                            <tr>
+                                                                                <td colspan="8">
+                                                                                    <h3>No orders</h3>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <% } %>
+                                                            </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                            
+
 
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="track-orders" role="tabpanel" aria-labelledby="track-orders-tab">
+                                    <div class="tab-pane fade" id="track-orders" role="tabpanel"
+                                        aria-labelledby="track-orders-tab">
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5 class="mb-0">Orders tracking</h5>
                                             </div>
                                             <div class="card-body contact-from-area">
-                                                <p>To track your order please enter your OrderID in the box below and press "Track" button. This was given to you on your receipt and in the confirmation email you should have received.</p>
+                                                <p>To track your order please enter your OrderID in the box below and
+                                                    press "Track" button. This was given to you on your receipt and in
+                                                    the confirmation email you should have received.</p>
                                                 <div class="row">
                                                     <div class="col-lg-8">
-                                                        <form class="contact-form-style mt-30 mb-50" action="#" method="post">
+                                                        <form class="contact-form-style mt-30 mb-50" action="#"
+                                                            method="post">
                                                             <div class="input-style mb-20">
                                                                 <label>Order ID</label>
-                                                                <input name="order-id" placeholder="Found in your order confirmation email" type="text" class="square">
+                                                                <input name="order-id"
+                                                                    placeholder="Found in your order confirmation email"
+                                                                    type="text" class="square">
                                                             </div>
                                                             <div class="input-style mb-20">
                                                                 <label>Billing email</label>
-                                                                <input name="billing-email" placeholder="Email you used during checkout" type="email" class="square">
+                                                                <input name="billing-email"
+                                                                    placeholder="Email you used during checkout"
+                                                                    type="email" class="square">
                                                             </div>
-                                                            <button class="submit submit-auto-width" type="submit">Track</button>
+                                                            <button class="submit submit-auto-width"
+                                                                type="submit">Track</button>
                                                         </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="address" role="tabpanel" aria-labelledby="address-tab">
+
+
+                                    <div class="tab-pane fade" id="address" role="tabpanel"
+                                        aria-labelledby="address-tab">
                                         <div class="row">
+
+
                                             <div class="col-lg-6">
-                                                <div class="card mb-3 mb-lg-0">
+                                                <div class="card mb-4 mb-lg-0">
                                                     <div class="card-header">
-                                                        <h5 class="mb-0">Billing Address</h5>
+                                                        <h5 class="mb-0">My Address</h5>
                                                     </div>
                                                     <div class="card-body">
-                                                        <address>3522 Interstate<br> 75 Business Spur,<br> Sault Ste. <br>Marie, MI 49783</address>
-                                                        <p>New York</p>
-                                                        <a href="#" class="btn-small">Edit</a>
+                                                        <% if (addresses && addresses.length> 0) { %>
+                                                            <% addresses.forEach((address, index)=> { %>
+                                                                <div id="address_<%= address._id %>">
+                                                                    <address>
+                                                                        Name: <%= address.name %> <br>
+                                                                            Housename: <%= address.houseName %><br>
+                                                                                City: <%= address.city %>,<br>
+                                                                                    State: <%= address.state %>. <br>
+                                                                                        Pincode: <%= address.pinCode %>
+                                                                    </address>
+                                                                    <a onclick="removeAddress('<%= address._id %>')"> <i
+                                                                            class="fa-solid fa-trash fa-xl"></i></a>
+                                                                    </a>
+                                                                    <hr>
+                                                                </div>
+                                                                <% }); %>
+                                                                    <% } else { %>
+                                                                        <p>No address found.</p>
+                                                                        <% } %>
+                                                                            <a href="#" class="btn btn-primary btn-lg"
+                                                                                id="toggleAddressForm">Add Address</a>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
-                                                <div class="card">
+                                            <div class="col-lg-6" id="addressFormContainer" style="display: none;">
+                                                <div class="card mb-4 mb-lg-0">
                                                     <div class="card-header">
-                                                        <h5 class="mb-0">Shipping Address</h5>
+                                                        <h5 class="mb-0">Add New Address</h5>
                                                     </div>
                                                     <div class="card-body">
-                                                        <address>4299 Express Lane<br>
-                                                            Sarasota, <br>FL 34249 USA <br>Phone: 1.941.227.4444</address>
-                                                        <p>Sarasota</p>
-                                                        <a href="#" class="btn-small">Edit</a>
+                                                        <form action="/addAddress" method="post">
+                                                            <div class="mb-3">
+                                                                <label for="inputAddress"
+                                                                    class="form-label">Name</label>
+                                                                <input type="text" class="form-control form-control-lg"
+                                                                    name="name" id="inputAddress">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputCity" class="form-label">mobile</label>
+                                                                <input type="text" maxlength="10"
+                                                                    class="form-control form-control-lg" name="mobile"
+                                                                    id="inputCity">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputState" class="form-label">House
+                                                                    name</label>
+                                                                <input type="text" class="form-control form-control-lg"
+                                                                    name="houseName" id="inputState">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputZip" class="form-label">City</label>
+                                                                <input type="text" class="form-control form-control-lg"
+                                                                    name="city" id="inputZip">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputZip" class="form-label">State</label>
+                                                                <input type="text" class="form-control form-control-lg"
+                                                                    name="state" id="inputZip">
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="inputZip" class="form-label">Pincode</label>
+                                                                <input type="text" class="form-control form-control-lg"
+                                                                    name="pinCode" id="inputZip">
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary btn-lg">Save
+                                                                Address</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                                    <div class="tab-pane fade" id="account-detail" role="tabpanel"
+                                        aria-labelledby="account-detail-tab">
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5>Account Details</h5>
+                                                <p>change username and password</p>
                                             </div>
                                             <div class="card-body">
-                                                <p>Already have an account? <a href="page-login-register.html">Log in instead!</a></p>
-                                                <form method="post" name="enq">
-                                                    <div class="row">
-                                                        <div class="form-group col-md-6">
-                                                            <label>First Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="name" type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label>Last Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="phone">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Display Name <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="dname" type="text">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Email Address <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="email" type="email">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Current Password <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="password" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>New Password <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="npassword" type="password">
-                                                        </div>
-                                                        <div class="form-group col-md-12">
-                                                            <label>Confirm Password <span class="required">*</span></label>
-                                                            <input required="" class="form-control square" name="cpassword" type="password">
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <button type="submit" class="btn btn-fill-out submit" name="submit" value="Submit">Save</button>
-                                                        </div>
-                                                    </div>
+                                                <form id="profileEditForm" action="profileEdit" method="post">
+                                                    <label for="name">Name:</label>
+                                                    <input type="text" id="name" name="name" value="<%= name %>">
+                                                    <label for="email">Email:</label>
+                                                    <input type="email" id="email" name="email" value="<%= email %>">
+                                                    <hr>
+                                                    <label for="password">
+                                                        <h4>Enter Your Original Password to Confirm:</h4>
+                                                    </label>
+                                                    <input type="password" id="password" name="password" required>
+                                                    <button type="submit">Update</button>
                                                 </form>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -548,7 +653,8 @@
                                 <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
                             </div>
                             <div class="col my-4 my-md-0 des">
-                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
+                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first
+                                        shopping.</strong></h5>
                             </div>
                         </div>
                     </div>
@@ -619,13 +725,16 @@
                             <div class="col-md-8 col-lg-12">
                                 <p class="wow fadeIn animated">From App Store or Google Play</p>
                                 <div class="download-app wow fadeIn animated">
-                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active" src="/public/assets/imgs/theme/app-store.jpg" alt=""></a>
-                                    <a href="#" class="hover-up"><img src="/public/assets/imgs/theme/google-play.jpg" alt=""></a>
+                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active"
+                                            src="/public/assets/imgs/theme/app-store.jpg" alt=""></a>
+                                    <a href="#" class="hover-up"><img src="/public/assets/imgs/theme/google-play.jpg"
+                                            alt=""></a>
                                 </div>
                             </div>
                             <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
                                 <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
-                                <img class="wow fadeIn animated" src="/public/assets/imgs/theme/payment-method.png" alt="">
+                                <img class="wow fadeIn animated" src="/public/assets/imgs/theme/payment-method.png"
+                                    alt="">
                             </div>
                         </div>
                     </div>
@@ -638,11 +747,13 @@
                     <div class="footer-bottom"></div>
                 </div>
                 <div class="col-lg-6">
-                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong
+                            class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
                 </div>
                 <div class="col-lg-6">
                     <p class="text-lg-end text-start font-sm text-muted mb-0">
-                        Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights reserved
+                        Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights
+                        reserved
                     </p>
                 </div>
             </div>
@@ -663,7 +774,98 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const addressFormContainer = document.getElementById("addressFormContainer");
+            const toggleAddressForm = document.getElementById("toggleAddressForm");
+
+            // Remove the item from local storage when the page is loaded
+            localStorage.removeItem("isAddressFormShown");
+
+            // Toggle the address form visibility when clicking the "Add Address" button
+            toggleAddressForm.addEventListener("click", function (event) {
+                event.preventDefault();
+                if (addressFormContainer.style.display === "none") {
+                    addressFormContainer.style.display = "block";
+                    // Store the state in local storage
+                    localStorage.setItem("isAddressFormShown", "true");
+                } else {
+                    addressFormContainer.style.display = "none";
+                    // Remove the state from local storage
+                    localStorage.removeItem("isAddressFormShown");
+                }
+            });
+        });
+    </script>
+    <script>
+        function removeAddress(addressId) {
+            fetch('/removeAddress', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ addressId })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the address from the DOM
+                        const addressElement = document.getElementById('address_' + addressId);
+                        addressElement.parentNode.removeChild(addressElement);
+                        console.log('Address removed successfully');
+                    } else {
+                        console.error('Failed to remove address');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+
+
+<script>
+    const profileEdit = async (event) => {
+        event.preventDefault(); // Prevent form submission
+        const formData = new FormData(document.getElementById('profileEditForm')); // Get form data
+        const body = Object.fromEntries(formData); // Convert form data to object
+
+        try {
+            const response = await fetch('/profileEdit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+
+            if (!data.success) {
+                toastr.error(data.message);
+            } else {
+                toastr.success(data.message);
+                setTimeout(()=>{
+                window.location.reload()
+                    
+                },1500)
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    document.getElementById('profileEditForm').addEventListener('submit', profileEdit);
+</script>
+
+
     <!-- Vendor JS-->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="/public/assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="/public/assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="/public/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
@@ -689,4 +891,5 @@
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:11:15 GMT -->
+
 </html>

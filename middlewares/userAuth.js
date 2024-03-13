@@ -1,3 +1,4 @@
+const User = require('../models/userModel')
 const isLogin = async (req, res, next)=>{
     try {
         if (req.session.user) {
@@ -38,11 +39,12 @@ const isLogout = async (req, res, next) => {
 
 const isBlocked = async(req,res,next)=>{
     try {
-        const user =await User.findById(req.session.userId);
-        if(user.is_active==1){
-            res.redirect('/logout');
-        }else{
+        const user =await User.findById(req.session.user);
+        if(user.is_active){
             next()
+        }else{
+            console.log("User blovked")
+            res.redirect('/logout');
         }
     } catch (error) {
         console.log(error.message);

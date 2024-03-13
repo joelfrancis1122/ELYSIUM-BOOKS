@@ -33,7 +33,11 @@
                                 </ul>
                             </li>
                             <li class="dropdown nav-item">
-                                <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"><span><%=name%></span></a>
+                                <% if(!name){ %>
+                                    <a href="/login"><span>Login</span></a>
+                                    <% } else { %>
+                                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"><span><%=name%></span></a>
+                                <% } %>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                                     <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
                                     <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
@@ -61,6 +65,7 @@
                 <div class="header-right">
                     <div class="search-style-2">
                         <form action="/loadShop" class="premium-search-form">
+                            
                             <input type="text" name="query"   value="<%=search%>" placeholder="Search for items...">
                             <button type="submit"></button>
                         </form>

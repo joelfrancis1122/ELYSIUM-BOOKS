@@ -3,6 +3,7 @@
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:10:07 GMT -->
+
 <head>
     <meta charset="utf-8">
     <title>Evara - eCommerce HTML Template</title>
@@ -18,36 +19,42 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="public/assets/css/maind134.css?v=3.4">
     <style>
-.detail-qty {
-    display: flex;
-    align-items: center;
-}
+        .detail-qty {
+            display: flex;
+            align-items: center;
+        }
 
-.qty-btn {
-    width: 30px;
-    height: 30px;
-    background-color: #046963; /* Green background */
-    color: #ffffff; /* White text color */
-    border: none; /* No border */
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s ease; /* Smooth transition on hover */
-    border-radius: 7px;
-}
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            background-color: #046963;
+            /* Green background */
+            color: #ffffff;
+            /* White text color */
+            border: none;
+            /* No border */
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            /* Smooth transition on hover */
+            border-radius: 7px;
+        }
 
-.qty-btn:hover {
-    background-color: #03423e; /* Darker green background on hover */
-}
+        .qty-btn:hover {
+            background-color: #03423e;
+            /* Darker green background on hover */
+        }
 
-.qty-val {
-    margin: 0 10px; /* Add some space between the quantity value and the buttons */
-}
-
-
+        .qty-val {
+            margin: 0 10px;
+            /* Add some space between the quantity value and the buttons */
+        }
     </style>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -59,7 +66,7 @@
                         <div class="header-info">
                             <ul>
                                 <li><i class="fi-rs-smartphone"></i> <a href="#">(+01) - 2345 - 6789</a></li>
-                                <li><i class="fi-rs-marker"></i><a  href="page-contact.html">Our location</a></li>
+                                <li><i class="fi-rs-marker"></i><a href="page-contact.html">Our location</a></li>
                             </ul>
                         </div>
                     </div>
@@ -67,9 +74,11 @@
                         <div class="text-center">
                             <div id="news-flash" class="d-inline-block">
                                 <ul>
-                                    <li>Get great devices up to 50% off <a href="shop-grid-right.html">View details</a></li>
+                                    <li>Get great devices up to 50% off <a href="shop-grid-right.html">View details</a>
+                                    </li>
                                     <li>Supper Value Deals - Save more with coupons</li>
-                                    <li>Trendy 25silver jewelry, save up 35% off today <a href="shop-grid-right.html">Shop now</a></li>
+                                    <li>Trendy 25silver jewelry, save up 35% off today <a
+                                            href="shop-grid-right.html">Shop now</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -78,23 +87,36 @@
                         <div class="header-info header-info-right">
                             <ul>
                                 <li>
-                                    <a class="language-dropdown-active" href="#"> <i class="fi-rs-world"></i> English <i class="fi-rs-angle-small-down"></i></a>
+                                    <a class="language-dropdown-active" href="#"> <i class="fi-rs-world"></i> English <i
+                                            class="fi-rs-angle-small-down"></i></a>
                                     <ul class="language-dropdown">
-                                        <li><a href="#"><img src="public/assets/imgs/theme/flag-fr.png" alt="">Français</a></li>
-                                        <li><a href="#"><img src="public/assets/imgs/theme/flag-dt.png" alt="">Deutsch</a></li>
-                                        <li><a href="#"><img src="public/assets/imgs/theme/flag-ru.png" alt="">Pусский</a></li>
+                                        <li><a href="#"><img src="public/assets/imgs/theme/flag-fr.png"
+                                                    alt="">Français</a></li>
+                                        <li><a href="#"><img src="public/assets/imgs/theme/flag-dt.png"
+                                                    alt="">Deutsch</a></li>
+                                        <li><a href="#"><img src="public/assets/imgs/theme/flag-ru.png"
+                                                    alt="">Pусский</a></li>
                                     </ul>
                                 </li>
                                 <li class="dropdown nav-item">
-                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"><span><%=name%></span></a>
+                                    <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount"
+                                        aria-expanded="false"><span>
+                                            <%=name%>
+                                        </span></a>
                                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                                        <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-perm_identity"></i>Edit Profile</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-settings"></i>Account Settings</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-account_balance_wallet"></i>Wallet</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-receipt"></i>Billing</a>
+                                        <a class="dropdown-item" href="#"><i
+                                                class="material-icons md-help_outline"></i>Help center</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                                        <a class="dropdown-item text-danger" href="/logout"><i
+                                                class="material-icons md-exit_to_app"></i>Logout</a>
                                     </div>
                                 </li>
                             </ul>
@@ -132,7 +154,8 @@
                             <div class="header-action-2">
                                 <div class="header-action-icon-2">
                                     <a href="shop-wishlist.html">
-                                        <img class="svgInject" alt="Evara" src="public/assets/imgs/theme/icons/icon-heart.svg">
+                                        <img class="svgInject" alt="Evara"
+                                            src="public/assets/imgs/theme/icons/icon-heart.svg">
                                         <span class="pro-count blue">4</span>
                                     </a>
                                 </div>
@@ -141,7 +164,7 @@
                                         <img alt="Evara" src="public/assets/imgs/theme/icons/icon-cart.svg">
                                         <span class="pro-count blue">2</span>
                                     </a>
-                                
+
                                 </div>
                             </div>
                         </div>
@@ -163,42 +186,61 @@
                             <div class="categori-dropdown-wrap categori-dropdown-active-large">
                                 <ul>
                                     <li class="has-children">
-                                        <a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a>
+                                        <a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's
+                                            Clothing</a>
                                         <div class="dropdown-menu">
                                             <ul class="mega-menu d-lg-flex">
                                                 <li class="mega-menu-col col-lg-7">
                                                     <ul class="d-lg-flex">
                                                         <li class="mega-menu-col col-lg-6">
                                                             <ul>
-                                                                <li><span class="submenu-title">Hot & Trending</span></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Dresses</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Blouses & Shirts</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Hoodies & Sweatshirts</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Women's Sets</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Suits & Blazers</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Bodysuits</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Tanks & Camis</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Coats & Jackets</a></li>
+                                                                <li><span class="submenu-title">Hot & Trending</span>
+                                                                </li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Dresses</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Blouses & Shirts</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Hoodies & Sweatshirts</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Women's Sets</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Suits & Blazers</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Bodysuits</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Tanks & Camis</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Coats & Jackets</a></li>
                                                             </ul>
                                                         </li>
                                                         <li class="mega-menu-col col-lg-6">
                                                             <ul>
                                                                 <li><span class="submenu-title">Bottoms</span></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Leggings</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Skirts</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Shorts</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Jeans</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Pants & Capris</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Bikini Sets</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Cover-Ups</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Swimwear</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Leggings</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Skirts</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Shorts</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Jeans</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Pants & Capris</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Bikini Sets</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Cover-Ups</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Swimwear</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
                                                 </li>
                                                 <li class="mega-menu-col col-lg-5">
                                                     <div class="header-banner2">
-                                                        <img src="public/assets/imgs/banner/menu-banner-2.jpg" alt="menu_banner1">
+                                                        <img src="public/assets/imgs/banner/menu-banner-2.jpg"
+                                                            alt="menu_banner1">
                                                         <div class="banne_info">
                                                             <h6>10% Off</h6>
                                                             <h4>New Arrival</h4>
@@ -206,7 +248,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="header-banner2">
-                                                        <img src="public/assets/imgs/banner/menu-banner-3.jpg" alt="menu_banner2">
+                                                        <img src="public/assets/imgs/banner/menu-banner-3.jpg"
+                                                            alt="menu_banner2">
                                                         <div class="banne_info">
                                                             <h6>15% Off</h6>
                                                             <h4>Hot Deals</h4>
@@ -218,41 +261,60 @@
                                         </div>
                                     </li>
                                     <li class="has-children">
-                                        <a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a>
+                                        <a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's
+                                            Clothing</a>
                                         <div class="dropdown-menu">
                                             <ul class="mega-menu d-lg-flex">
                                                 <li class="mega-menu-col col-lg-7">
                                                     <ul class="d-lg-flex">
                                                         <li class="mega-menu-col col-lg-6">
                                                             <ul>
-                                                                <li><span class="submenu-title">Jackets & Coats</span></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Down Jackets</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Jackets</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Parkas</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Faux Leather Coats</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Trench</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Wool & Blends</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Vests & Waistcoats</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Leather Coats</a></li>
+                                                                <li><span class="submenu-title">Jackets & Coats</span>
+                                                                </li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Down Jackets</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Jackets</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Parkas</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Faux Leather Coats</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Trench</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Wool & Blends</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Vests & Waistcoats</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Leather Coats</a></li>
                                                             </ul>
                                                         </li>
                                                         <li class="mega-menu-col col-lg-6">
                                                             <ul>
-                                                                <li><span class="submenu-title">Suits & Blazers</span></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Blazers</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Suit Jackets</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Suit Pants</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Suits</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Vests</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Tailor-made Suits</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Cover-Ups</a></li>
+                                                                <li><span class="submenu-title">Suits & Blazers</span>
+                                                                </li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Blazers</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Suit Jackets</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Suit Pants</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Suits</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Vests</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Tailor-made Suits</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Cover-Ups</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
                                                 </li>
                                                 <li class="mega-menu-col col-lg-5">
                                                     <div class="header-banner2">
-                                                        <img src="public/assets/imgs/banner/menu-banner-4.jpg" alt="menu_banner1">
+                                                        <img src="public/assets/imgs/banner/menu-banner-4.jpg"
+                                                            alt="menu_banner1">
                                                         <div class="banne_info">
                                                             <h6>10% Off</h6>
                                                             <h4>New Arrival</h4>
@@ -264,42 +326,61 @@
                                         </div>
                                     </li>
                                     <li class="has-children">
-                                        <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Cellphones</a>
+                                        <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i>
+                                            Cellphones</a>
                                         <div class="dropdown-menu">
                                             <ul class="mega-menu d-lg-flex">
                                                 <li class="mega-menu-col col-lg-7">
                                                     <ul class="d-lg-flex">
                                                         <li class="mega-menu-col col-lg-6">
                                                             <ul>
-                                                                <li><span class="submenu-title">Hot & Trending</span></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Cellphones</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">iPhones</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Refurbished Phones</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Mobile Phone</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Mobile Phone Parts</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Phone Bags & Cases</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Communication Equipments</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Walkie Talkie</a></li>
+                                                                <li><span class="submenu-title">Hot & Trending</span>
+                                                                </li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Cellphones</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">iPhones</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Refurbished Phones</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Mobile Phone</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Mobile Phone Parts</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Phone Bags & Cases</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Communication Equipments</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Walkie Talkie</a></li>
                                                             </ul>
                                                         </li>
                                                         <li class="mega-menu-col col-lg-6">
                                                             <ul>
                                                                 <li><span class="submenu-title">Accessories</span></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Screen Protectors</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Wire Chargers</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Wireless Chargers</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Car Chargers</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Power Bank</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Armbands</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Dust Plug</a></li>
-                                                                <li><a class="dropdown-item nav-link nav_item" href="#">Signal Boosters</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Screen Protectors</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Wire Chargers</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Wireless Chargers</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Car Chargers</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Power Bank</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Armbands</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Dust Plug</a></li>
+                                                                <li><a class="dropdown-item nav-link nav_item"
+                                                                        href="#">Signal Boosters</a></li>
                                                             </ul>
                                                         </li>
                                                     </ul>
                                                 </li>
                                                 <li class="mega-menu-col col-lg-5">
                                                     <div class="header-banner2">
-                                                        <img src="public/assets/imgs/banner/menu-banner-5.jpg" alt="menu_banner1">
+                                                        <img src="public/assets/imgs/banner/menu-banner-5.jpg"
+                                                            alt="menu_banner1">
                                                         <div class="banne_info">
                                                             <h6>10% Off</h6>
                                                             <h4>New Arrival</h4>
@@ -307,7 +388,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="header-banner2">
-                                                        <img src="public/assets/imgs/banner/menu-banner-6.jpg" alt="menu_banner2">
+                                                        <img src="public/assets/imgs/banner/menu-banner-6.jpg"
+                                                            alt="menu_banner2">
                                                         <div class="banne_info">
                                                             <h6>15% Off</h6>
                                                             <h4>Hot Deals</h4>
@@ -318,15 +400,22 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer & Office</a></li>
-                                    <li><a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer Electronics</a></li>
-                                    <li><a href="shop-grid-right.html"><i class="evara-font-diamond"></i>Jewelry & Accessories</a></li>
-                                    <li><a href="shop-grid-right.html"><i class="evara-font-home"></i>Home & Garden</a></li>
-                                    <li><a href="shop-grid-right.html"><i class="evara-font-high-heels"></i>Shoes</a></li>
-                                    <li><a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother & Kids</a></li>
-                                    <li><a href="shop-grid-right.html"><i class="evara-font-kite"></i>Outdoor fun</a></li>
+                                    <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer &
+                                            Office</a></li>
+                                    <li><a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer
+                                            Electronics</a></li>
+                                    <li><a href="shop-grid-right.html"><i class="evara-font-diamond"></i>Jewelry &
+                                            Accessories</a></li>
+                                    <li><a href="shop-grid-right.html"><i class="evara-font-home"></i>Home & Garden</a>
+                                    </li>
+                                    <li><a href="shop-grid-right.html"><i class="evara-font-high-heels"></i>Shoes</a>
+                                    </li>
+                                    <li><a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother &
+                                            Kids</a></li>
+                                    <li><a href="shop-grid-right.html"><i class="evara-font-kite"></i>Outdoor fun</a>
+                                    </li>
                                     <li>
-                                      
+
                                     </li>
                                 </ul>
                                 <div class="more_categories">Show more...</div>
@@ -336,20 +425,20 @@
                             <nav>
                                 <ul>
                                     <li><a class="active" href="/home">Home </i></a>
-                                       
+
                                     </li>
                                     <li>
                                         <a href="/loadProfile">Profile</a>
                                     </li>
                                     <li><a href="/loadShop">Shop </i></a>
-                                      
+
                                     </li>
-                                    
+
                                     <li><a href="blog-category-grid.html">Blog </i></a>
-                                        
+
                                     </li>
                                     <li><a href="#">Pages </i></a>
-                                       
+
                                     </li>
                                     <li>
                                         <a href="page-contact.html">Contact</a>
@@ -361,7 +450,8 @@
                     <div class="hotline d-none d-lg-block">
                         <p><i class="fi-rs-headset"></i><span>Hotline</span> 1900 - 888 </p>
                     </div>
-                    <p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%</p>
+                    <p class="mobile-promotion">Happy <span class="text-brand">Mother's Day</span>. Big Sale Up to 40%
+                    </p>
                     <div class="header-action-right d-block d-lg-none">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
@@ -379,7 +469,8 @@
                                     <ul>
                                         <li>
                                             <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Evara" src="public/assets/imgs/shop/thumbnail-3.jpg"></a>
+                                                <a href="shop-product-right.html"><img alt="Evara"
+                                                        src="public/assets/imgs/shop/thumbnail-3.jpg"></a>
                                             </div>
                                             <div class="shopping-cart-title">
                                                 <h4><a href="shop-product-right.html">Plain Striola Shirts</a></h4>
@@ -391,7 +482,8 @@
                                         </li>
                                         <li>
                                             <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Evara" src="public/assets/imgs/shop/thumbnail-4.jpg"></a>
+                                                <a href="shop-product-right.html"><img alt="Evara"
+                                                        src="public/assets/imgs/shop/thumbnail-4.jpg"></a>
                                             </div>
                                             <div class="shopping-cart-title">
                                                 <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
@@ -453,14 +545,20 @@
                         </a>
                         <div class="categori-dropdown-wrap categori-dropdown-active-small">
                             <ul>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a></li>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a></li>
-                                <li> <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Cellphones</a></li>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer & Office</a></li>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer Electronics</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a>
+                                </li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a>
+                                </li>
+                                <li> <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Cellphones</a>
+                                </li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer &
+                                        Office</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer
+                                        Electronics</a></li>
                                 <li><a href="shop-grid-right.html"><i class="evara-font-home"></i>Home & Garden</a></li>
                                 <li><a href="shop-grid-right.html"><i class="evara-font-high-heels"></i>Shoes</a></li>
-                                <li><a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother & Kids</a></li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother &
+                                        Kids</a></li>
                                 <li><a href="shop-grid-right.html"><i class="evara-font-kite"></i>Outdoor fun</a></li>
                             </ul>
                         </div>
@@ -476,14 +574,16 @@
                                     <li><a href="index-4.html">Home 4</a></li>
                                 </ul>
                             </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="shop-grid-right.html">shop</a>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                    href="shop-grid-right.html">shop</a>
                                 <ul class="dropdown">
                                     <li><a href="shop-grid-right.html">Shop Grid – Right Sidebar</a></li>
                                     <li><a href="shop-grid-left.html">Shop Grid – Left Sidebar</a></li>
                                     <li><a href="shop-list-right.html">Shop List – Right Sidebar</a></li>
                                     <li><a href="shop-list-left.html">Shop List – Left Sidebar</a></li>
                                     <li><a href="shop-fullwidth.html">Shop - Wide</a></li>
-                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Single Product</a>
+                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                            href="#">Single Product</a>
                                         <ul class="dropdown">
                                             <li><a href="shop-product-right.html">Product – Right Sidebar</a></li>
                                             <li><a href="shop-product-left.html">Product – Left Sidebar</a></li>
@@ -497,16 +597,19 @@
                                     <li><a href="shop-compare.html">Shop – Compare</a></li>
                                 </ul>
                             </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Mega menu</a>
-                               
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Mega
+                                    menu</a>
+
                             </li>
-                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="blog-category-fullwidth.html">Blog</a>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                    href="blog-category-fullwidth.html">Blog</a>
                                 <ul class="dropdown">
                                     <li><a href="blog-category-grid.html">Blog Category Grid</a></li>
                                     <li><a href="blog-category-list.html">Blog Category List</a></li>
                                     <li><a href="blog-category-big.html">Blog Category Big</a></li>
                                     <li><a href="blog-category-fullwidth.html">Blog Category Wide</a></li>
-                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Single Product Layout</a>
+                                    <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                            href="#">Single Product Layout</a>
                                         <ul class="dropdown">
                                             <li><a href="blog-post-left.html">Left Sidebar</a></li>
                                             <li><a href="blog-post-right.html">Right Sidebar</a></li>
@@ -541,7 +644,7 @@
                 </div>
                 <div class="mobile-header-info-wrap mobile-header-border">
                     <div class="single-mobile-header-info mt-30">
-                        <a  href="page-contact.html"> Our location </a>
+                        <a href="page-contact.html"> Our location </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="page-login-register.html">Log In / Sign Up </a>
@@ -590,71 +693,103 @@
                                     <% if(locals.cartData) { %>
                                         <% for(let i=0; i < cartData.product.length; i++) { %>
                                             <tr>
+
                                                 <td class="image product-thumbnail">
-                                                    <img src="/public/uploads/<%= cartData.product[i].productId.Images[0] %>" alt="#">
+                                                    <img src="/public/uploads/<%= cartData.product[i].productId.Images[0] %>"
+                                                        alt="#">
                                                 </td>
                                                 <td class="product-des product-name">
-                                                    <h5 class="product-name"><a href="shop-product-right.html"><%= cartData.product[i].productId.Bookname %></a></h5>
+                                                    <h5 class="product-name"><a href="shop-product-right.html">
+                                                            <%= cartData.product[i].productId.Bookname %>
+                                                        </a></h5>
                                                 </td>
-                                                <td class="price" data-title="Price"><span id="saleprice_<%= cartData.product[i].productId.id %>">$<%= cartData.product[i].productId.saleprice %></span></td>
+                                                <td class="price" data-title="Price" style="display: none;">
+                                                    <span id="stock_<%= cartData.product[i].productId.id %>">
+                                                        <%= cartData.product[i].productId.stock%>
+                                                    </span>
+                                                </td>
+                                                <td class="price" data-title="Price"><span
+                                                        id="saleprice_<%= cartData.product[i].productId.id %>">$<%=
+                                                            cartData.product[i].productId.saleprice %></span></td>
                                                 <td class="text-center" data-title="Stock">
-                                                    <button class="qty-btn qty-down" onclick="decrease('<%= cartData.product[i].productId.id %>')">
+                                                    <button class="qty-btn qty-down"
+                                                        onclick="decrease('<%= cartData.product[i].productId.id %>')">
                                                         <i class="fa-solid fa-minus"></i>
                                                     </button>
-                                                    <span class="qty-val" id="quantity_<%= cartData.product[i].productId.id %>"><%= cartData.product[i].quantity %></span>
-                                                    <button class="qty-btn qty-up" onclick="increase('<%= cartData.product[i].productId.id %>')">
+
+                                                    <span class="qty-val"
+                                                        id="quantity_<%= cartData.product[i].productId.id %>">
+                                                        <%= cartData.product[i].quantity %>
+                                                    </span>
+                                                    <button class="qty-btn qty-up"
+                                                        onclick="increase('<%= cartData.product[i].productId.id %>')">
                                                         <i class="fa-solid fa-plus"></i>
                                                     </button>
                                                 </td>
                                                 <td class="text-right" data-title="Cart">
-                                                    <span id="subtotal_<%= cartData.product[i].productId.id %>">$<%= cartData.product[i].productId.saleprice * cartData.product[i].quantity %></span>
+                                                    <span id="subtotal_<%= cartData.product[i].productId.id %>">$<%=
+                                                            cartData.product[i].productId.saleprice *
+                                                            cartData.product[i].quantity %></span>
+                                                </td>
+                                                <td class="price" data-title="Price" style="display: none;">
+                                                    <span id="stock_<%= cartData.product[i].productId.id %>">
+                                                        <%= cartData.product[i].productId.stock%>
+                                                    </span>
                                                 </td>
                                                 <td class="action" data-title="Remove">
-                                                    <a class="text-muted" onclick="removeItem('<%= cartData.product[i].productId.id %>')">
+                                                    <a class="text-muted"
+                                                        onclick="removeItem('<%= cartData.product[i].productId.id %>')">
                                                         <i class="fa-solid fa-trash fa-xl"></i>
                                                     </a>
                                                 </td>
                                             </tr>
-                                        <% } %>
+                                            <% } %>
+                                                <% } %>
+
+                                                    <% if(locals.cartData && cartData.product.length> 0) { %>
+                                                        <% for(let i=0; i < cartData.product.length; i++) { %>
+                                                            <!-- Your cart item display code here -->
+                                                            <% } %>
+                                                                <% } else { %>
+                                                                    <tr>
+                                                                        <td colspan="6" class="text-center">Your cart is
+                                                                            empty</td>
+                                                                    </tr>
+                                                                    <% } %>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="cart-action text-end">
+
+                            <a href="/loadShop" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue
+                                Shopping</a>
+                            <% if(locals.cartData && cartData.product.length> 0) { %>
+                                <a href="/loadCheckOut" class="btn "><i class="fi-rs-box-alt mr-10"></i> Proceed To
+                                    CheckOut</a>
+                                <% } else { %>
+                                    <button class="btn" onclick="showEmptyCartMessage()">Proceed To CheckOut</button>
                                     <% } %>
 
-                                    <% if(locals.cartData && cartData.product.length > 0) { %>
-                                        <% for(let i=0; i < cartData.product.length; i++) { %>
-                                            <!-- Your cart item display code here -->
-                                        <% } %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="6" class="text-center">Your cart is empty</td>
-                                        </tr>
-                                    <% } %>
-                                    
-                                    </tbody>
-                                    </table>
-                                    </div>
-                                    <div class="cart-action text-end">
-                                       
-                                    <a href="/loadShop" class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
-                                    <% if(locals.cartData && cartData.product.length > 0) { %>
-                                        <a href="/loadCheckOut" class="btn "><i class="fi-rs-box-alt mr-10"></i> Proceed To CheckOut</a>
-                                    <% } else { %>
-                                        <button class="btn" onclick="showEmptyCartMessage()">Proceed To CheckOut</button>
-                                    <% } %>
-                                    
-                                    <script>
-                                        function showEmptyCartMessage() {
-                                            toastr.error('Your cart is empty');
-                                        }
-                                    </script>
-                                    
+                                        <script>
+                                            function showEmptyCartMessage() {
+                                                toastr.error('Your cart is empty');
+                                            }
+                                        </script>
 
-                        
-                        <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
+                                        <hr>
+                                        <div class="total-section">
+                                            <h3>Total Price: $<span id="totalPrice"></span></h3>
+                                        </div>
+                                        <hr>
+                                        <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i>
+                                        </div>
 
 
 
+                        </div>
                     </div>
                 </div>
-            </div>
         </section>
     </main>
     <footer class="main">
@@ -668,7 +803,8 @@
                                 <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
                             </div>
                             <div class="col my-4 my-md-0 des">
-                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first shopping.</strong></h5>
+                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first
+                                        shopping.</strong></h5>
                             </div>
                         </div>
                     </div>
@@ -739,13 +875,16 @@
                             <div class="col-md-8 col-lg-12">
                                 <p class="wow fadeIn animated">From App Store or Google Play</p>
                                 <div class="download-app wow fadeIn animated">
-                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active" src="public/assets/imgs/theme/app-store.jpg" alt=""></a>
-                                    <a href="#" class="hover-up"><img src="public/assets/imgs/theme/google-play.jpg" alt=""></a>
+                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active"
+                                            src="public/assets/imgs/theme/app-store.jpg" alt=""></a>
+                                    <a href="#" class="hover-up"><img src="public/assets/imgs/theme/google-play.jpg"
+                                            alt=""></a>
                                 </div>
                             </div>
                             <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
                                 <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
-                                <img class="wow fadeIn animated" src="public/assets/imgs/theme/payment-method.png" alt="">
+                                <img class="wow fadeIn animated" src="public/assets/imgs/theme/payment-method.png"
+                                    alt="">
                             </div>
                         </div>
                     </div>
@@ -758,11 +897,13 @@
                     <div class="footer-bottom"></div>
                 </div>
                 <div class="col-lg-6">
-                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong
+                            class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
                 </div>
                 <div class="col-lg-6">
                     <p class="text-lg-end text-start font-sm text-muted mb-0">
-                        Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights reserved
+                        Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights
+                        reserved
                     </p>
                 </div>
             </div>
@@ -791,7 +932,7 @@
             var currentQuantity = parseInt(quantitySpan.textContent);
             quantitySpan.textContent = currentQuantity + 1;
         }
-    
+
         // Function to decrease quantity
         function decreaseQuantity(button) {
             var quantitySpan = button.nextElementSibling;
@@ -803,103 +944,176 @@
     </script>
 
 
-<script>
-function increase(pId) {
-    const quantityElement = document.getElementById('quantity_' + pId);
-    const currentQuantity = parseInt(quantityElement.textContent);
-    if (currentQuantity >= 1) {
-        fetch('/updateCart', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                productId: pId,
-                quantity: 1 // Increase by 1
-            })
-        })
-        .then(response => {
-            if (response.ok) {
-                // Increment the quantity displayed on the page
-                quantityElement.textContent = currentQuantity + 1;
+    <script>
+        // function increase(pId) {
+        //     const quantityElement = document.getElementById('quantity_' + pId);
+        //     const currentQuantity = parseInt(quantityElement.textContent);
+        //     if (currentQuantity >= 1) {
+        //         fetch('/updateCart', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({
+        //                 productId: pId,
+        //                 quantity: 1 // Increase by 1
+        //             })
+        //         })
+        //             .then(response => {
+        //                 if (response.ok) {
+        //                     // Increment the quantity displayed on the page
+        //                     quantityElement.textContent = currentQuantity + 1;
 
-                // Update the subtotal
-                const subtotalElement = document.getElementById('subtotal_' + pId);
-                const salePrice = document.getElementById('saleprice_' + pId);
-                // console.log(salePrice * quantityElement.textContent)
-                let saleP = parseFloat(salePrice.textContent.replace('$', ''));
-                console.log(parseFloat(salePrice.textContent.replace('$', '')) )
-                document.getElementById('subtotal_' + pId).innerText =saleP* parseInt(quantityElement.textContent);
-                // const price = parseFloat(subtotalElement.textContent.replace('$', ''));
-                // subtotalElement.textContent = '$' + (price + parseFloat(price / parseInt(quantityElement.textContent)));
+        //                     // Update the subtotal
+        //                     const subtotalElement = document.getElementById('subtotal_' + pId);
+        //                     const salePrice = document.getElementById('saleprice_' + pId);
+        //                     // console.log(salePrice * quantityElement.textContent)
+        //                     let saleP = parseFloat(salePrice.textContent.replace('$', ''));
+        //                     console.log(parseFloat(salePrice.textContent.replace('$', '')))
+        //                     document.getElementById('subtotal_' + pId).innerText = saleP * parseInt(quantityElement.textContent);
+        //                     // const price = parseFloat(subtotalElement.textContent.replace('$', ''));
+        //                     // subtotalElement.textContent = '$' + (price + parseFloat(price / parseInt(quantityElement.textContent)));
+        //                     updateTotalPrice();
+        //                 } else {
+        //                     console.error('Failed to update cart');
+        //                 }
+        //             })
+        //             .catch(error => {
+        //                 console.error('Error:', error);
+        //             });
+        //     } else {
+        //         // Quantity is less than 1, do nothing or display a message
+        //         console.log('Quantity is already 0 or less, cannot increase further.');
+        //     }
+        // }
+
+        function decrease(pId) {
+            const quantityElement = document.getElementById('quantity_' + pId);
+            const currentQuantity = parseInt(quantityElement.textContent);
+            if (currentQuantity > 1) {
+                fetch('/updateCart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productId: pId,
+                        quantity: -1 // Decrease by 1
+                    })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // Decrement the quantity displayed on the page
+                            quantityElement.textContent = currentQuantity - 1;
+
+                            // Update the subtotal
+                            const subtotalElement = document.getElementById('subtotal_' + pId);
+                            const salePrice = document.getElementById('saleprice_' + pId);
+                            // console.log(salePrice * quantityElement.textContent)
+                            let saleP = parseFloat(salePrice.textContent.replace('$', ''));
+                            console.log(parseFloat(salePrice.textContent.replace('$', '')))
+                            document.getElementById('subtotal_' + pId).innerText = saleP * parseInt(quantityElement.textContent);
+                            // const price = parseFloat(subtotalElement.textContent.replace('$', ''));
+                            // subtotalElement.textContent = '$' + (price + parseFloat(price / parseInt(quantityElement.textContent)));
+                            updateTotalPrice();
+                        } else {
+                            console.error('Failed to update cart');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
             } else {
-                console.error('Failed to update cart');
+                // Quantity is 1, do nothing or display a message
+                console.log('Cannot decrease further. Quantity is already 1.');
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    } else {
-        // Quantity is less than 1, do nothing or display a message
-        console.log('Quantity is already 0 or less, cannot increase further.');
-    }
-}
-
-function decrease(pId) {
-    const quantityElement = document.getElementById('quantity_' + pId);
-    const currentQuantity = parseInt(quantityElement.textContent);
-    if (currentQuantity > 1) {
-        fetch('/updateCart', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                productId: pId,
-                quantity: -1 // Decrease by 1
+        }
+        function removeItem(productId) {
+            fetch('/removeItem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId })
             })
-        })
-        .then(response => {
-            if (response.ok) {
-                // Decrement the quantity displayed on the page
-                quantityElement.textContent = currentQuantity - 1;
+                .then(response => {
+                    if (response.ok) {
+                        // Product removed successfully, you can update the UI if needed
+                        updateTotalPrice();
+                        window.location.href = '/cart'
+                        console.log('Product removed successfully');
 
-                // Update the subtotal
-                const subtotalElement = document.getElementById('subtotal_' + pId);
-                const salePrice = document.getElementById('saleprice_' + pId);
-                // console.log(salePrice * quantityElement.textContent)
-                let saleP = parseFloat(salePrice.textContent.replace('$', ''));
-                console.log(parseFloat(salePrice.textContent.replace('$', '')) )
-                document.getElementById('subtotal_' + pId).innerText =saleP* parseInt(quantityElement.textContent);
-                // const price = parseFloat(subtotalElement.textContent.replace('$', ''));
-                // subtotalElement.textContent = '$' + (price + parseFloat(price / parseInt(quantityElement.textContent)));
-            } else {
-                console.error('Failed to update cart');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    } else {
-        // Quantity is 1, do nothing or display a message
-        console.log('Cannot decrease further. Quantity is already 1.');
+                    } else {
+                        console.error('Failed to remove product');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+
+    </script>
+    <script>
+        // Function to calculate total price
+        function calculateTotalPrice() {
+            let totalPrice = 0;
+            const subtotalElements = document.querySelectorAll('[id^="subtotal_"]');
+            subtotalElements.forEach(subtotalElement => {
+                totalPrice += parseFloat(subtotalElement.textContent.replace('$', ''));
+            });
+            return totalPrice.toFixed(2); // Convert to fixed decimal places
+        }
+
+        // Function to update total price display
+        function updateTotalPrice() {
+            const totalPriceElement = document.getElementById('totalPrice');
+            totalPriceElement.textContent = calculateTotalPrice();
+
+        }
+
+        // Call updateTotalPrice() initially to display the total price
+        updateTotalPrice();
+    </script>
+
+
+
+    <script>
+   function increase(productId) {
+    const quantityElement = document.getElementById(`quantity_${productId}`);
+    const currentQuantity = parseInt(quantityElement.textContent);
+    const stockElement = document.getElementById(`stock_${productId}`);
+    const stock = parseInt(stockElement.textContent);
+
+    if (currentQuantity >= stock) {
+        toastr.error("Sorry, the maximum stock limit exceeded.");
+        return; // Exit the function early if stock limit exceeded
     }
-}
-function removeItem(productId) {
-    fetch('/removeItem', {
+
+    fetch('/updateCart', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ productId })
+        body: JSON.stringify({
+            productId: productId,
+            quantity: 1 // Increase by 1
+        })
     })
     .then(response => {
         if (response.ok) {
-            // Product removed successfully, you can update the UI if needed
-            window.location.href='/cart'
-            console.log('Product removed successfully');
+            // Increment the quantity displayed on the page
+            quantityElement.textContent = currentQuantity + 1;
+
+            // Update the subtotal
+            const salePrice = document.getElementById(`saleprice_${productId}`).textContent;
+            const subtotalElement = document.getElementById(`subtotal_${productId}`);
+            const saleP = parseFloat(salePrice.replace('$', ''));
+            subtotalElement.textContent = `$${saleP * (currentQuantity + 1)}`;
+
+            updateTotalPrice();
         } else {
-            console.error('Failed to remove product');
+            console.error('Failed to update cart');
         }
     })
     .catch(error => {
@@ -908,10 +1122,11 @@ function removeItem(productId) {
 }
 
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
- 
+
     <script src="public/assets/js/vendor/modernizr-3.6.0.min.js"></script>
     <script src="public/assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="public/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
@@ -937,4 +1152,5 @@ function removeItem(productId) {
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:10:07 GMT -->
+
 </html>

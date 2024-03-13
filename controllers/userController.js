@@ -2,8 +2,8 @@
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
-const Cart = require('../models/cartModel')
-
+const Address = require('../models/addressModel')
+const Orders = require('../models/orderModel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
 
@@ -11,24 +11,74 @@ const nodemailer = require('nodemailer')
 
 
 
-const loadHome = async (req, res) => {
+const loadGuest = async (req, res) => {
     try {
-        let userId = req.session.user;
-        
-        console.log(userId, "user");
-        let search = req.query.query || ""; 
+
+        let search = req.query.query || "";
 
         const productData = await Product.aggregate([
-            {$match: { 
+            {
+                $match: {
                     is_Active: true,
-                    Bookname: { $regex: new RegExp(search, "i") } }
+                    Bookname: { $regex: new RegExp(search, "i") }
+                }
             },
             {
                 $lookup: {
                     from: 'categories',
                     localField: 'Categories',
                     foreignField: '_id',
-                    as: 'Categories'}
+                    as: 'Categories'
+                }
+            },
+            {
+                $unwind: '$Categories'
+            },
+            {
+                $match: { 'Categories.is_Active': true }
+            }
+        ]);
+        res.render('home', { name: null, search: null, product: productData, search: search }); // Passing name as null since no user is logged in
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const loadlogin = async (req, res) => {
+    try {
+        res.render('login')
+    } catch (error) {
+        console.log(error)
+
+    }
+}
+
+
+
+
+const loadHome = async (req, res) => {
+    try {
+        let userId = req.session.user;
+
+        console.log(userId, "user");
+        let search = req.query.query || "";
+
+        const productData = await Product.aggregate([
+            {
+                $match: {
+                    is_Active: true,
+                    Bookname: { $regex: new RegExp(search, "i") }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'categories',
+                    localField: 'Categories',
+                    foreignField: '_id',
+                    as: 'Categories'
+                }
             },
             {
                 $unwind: '$Categories'
@@ -61,21 +111,13 @@ const loadLogout = async (req, res) => {
 }
 
 
-const loadlogin = async (req, res) => {
-    try {
-        res.render('login')
-    } catch (error) {
-        console.log(error)
-
-    }
-}
 
 
 const verifyLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
         const userData = await User.findOne({ email: email });
-        
+
         if (userData) {
             const passwordMatch = await bcrypt.compare(password, userData.password);
             if (passwordMatch) {
@@ -105,7 +147,7 @@ const verifyLogin = async (req, res) => {
 const signup = async (req, res) => {
     try {
 
-        res.render('registeration',{ emailExists: false})
+        res.render('registeration', { emailExists: false })
 
     } catch (error) {
         console.log(error)
@@ -137,7 +179,7 @@ const verifySignup = async (req, res) => {
 
             req.session.data = datafromRegister
 
-         
+
             res.redirect("/getOtp")
 
         }
@@ -154,16 +196,11 @@ const verifySignup = async (req, res) => {
 
 
 const getOtp = async (req, res) => {
-
-
-
     try {
-
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
                 user: 'joelfrancis422@gmail.com',
-
                 pass: 'apqo dnri yzpa gvcg'
             }
         });
@@ -208,13 +245,13 @@ const verifyOtp = async (req, res) => {
             const { email, name, mobile, password } = req.session.data
             const hashedPassword = await bcrypt.hash(password, 10);
 
-            console.log(hashedPassword,"hashed password confirmed !!!!!!!!!!!!!!")
+            console.log(hashedPassword, "hashed password confirmed !!!!!!!!!!!!!!")
             const user = new User({
                 name: name,
                 email: email,
                 mobile: mobile,
                 password: hashedPassword
-            
+
             })
 
 
@@ -233,7 +270,7 @@ const verifyOtp = async (req, res) => {
     }
 }
 
-  
+
 
 const shopProduct = async (req, res) => {
     try {
@@ -241,7 +278,7 @@ const shopProduct = async (req, res) => {
         let userId = req.session.user;
         const productData = await Product.findOne({ _id: productId }).populate('Categories');
         const userData = await User.findOne({ _id: userId });
-        res.render('singleproduct', { product: productData ,name:userData.name})
+        res.render('singleproduct', { product: productData, name: userData.name })
 
     } catch (error) {
         console.log(error)
@@ -249,64 +286,359 @@ const shopProduct = async (req, res) => {
     }
 }
 
-
-const loadProfile = async (req,res)=>{
-    try{
-        let userId = req.session.user;
+const loadProfile = async (req, res) => {
+    try {
+        const userId = req.session.user;
         const userData = await User.findOne({ _id: userId });
-        res.render('account',{name:userData.name,email:userData.email})
-}catch(error){
-    console.log(error)    
-}
-}
+        const Order = await Orders.find({ userId: userId }).populate('userId');
+        const addressData = await Address.find({ userId: userId });
 
-
+        res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order });
+    } catch (error) {
+        console.log(error);
+        res.redirect('/'); // Redirect to home or any other page in case of error
+    }
+}
 
 const loadShop = async (req, res) => {
     try {
         const categories = await Category.find();
         const userId = req.session.user;
-        const search = req.query.query || ""; 
+        const search = req.query.query || "";
 
         const userData = await User.findOne({ _id: userId });
         const regex = new RegExp(search, 'i');
 
-       if(req.query.filter){
-        let products
-       if(req.query.filter == 'low-high'){
-            products = await Product.find({is_Active:true}).sort({ saleprice: 1 });
-       } else if(req.query.filter == 'high-low'){
-         products = await Product.find({is_Active:true}).sort({ saleprice: -1 });
+        if (req.query.filter) {
+            let products
+            if (req.query.filter == 'low-high') {
+                products = await Product.find({ is_Active: true }).sort({ saleprice: 1 });
+            } else if (req.query.filter == 'high-low') {
+                products = await Product.find({ is_Active: true }).sort({ saleprice: -1 });
 
-       }
-       res.render('shop', { product: products, categories, name: userData.name ,search: search});
-       } else {
-        const products = await Product.aggregate([
-            {$match: { 
-                    is_Active: true,
-                    Bookname: { $regex: new RegExp(search, "i") } }
-            },
-            {
-                $lookup: {
-                    from: 'categories',
-                    localField: 'Categories',
-                    foreignField: '_id',
-                    as: 'Categories'}
-            },
-            {
-                $unwind: '$Categories'
-            },
-            {
-                $match: { 'Categories.is_Active': true }
             }
-        ]);
+            res.render('shop', { product: products, categories, name: userData.name, search: search });
+        } else {
+            const products = await Product.aggregate([
+                {
+                    $match: {
+                        is_Active: true,
+                        Bookname: { $regex: new RegExp(search, "i") }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'categories',
+                        localField: 'Categories',
+                        foreignField: '_id',
+                        as: 'Categories'
+                    }
+                },
+                {
+                    $unwind: '$Categories'
+                },
+                {
+                    $match: { 'Categories.is_Active': true }
+                }
+            ]);
 
-        res.render('shop', { product: products, categories, name: userData.name ,search: search});
-       }
+            res.render('shop', { product: products, categories, name: userData.name, search: search });
+        }
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
-    } 
+    }
+}
+
+
+
+
+
+
+const profileEdit = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        console.log("body ", req.body)
+        const userId = req.session.user;
+        const user = await User.findOne({ _id: userId });
+        if (!user) {
+            console.error('User not found');
+            res.redirect('/loadProfile');
+        }
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        console.log('passsword match :', passwordMatch)
+        if (passwordMatch) {
+            const updated = await User.updateOne({ _id: userId }, { $set: { name, email } });
+            console.log(updated)
+           res.json({success:true, message: 'Profile updated sucesfully !' });
+
+            // res.redirect('/loadProfile');
+        } else {
+            console.log("///////////toastr////////////")
+            return res.json({ message: 'Password does not match' });
+        }
+
+    } catch (error) {
+        console.error(error);
+        // res.redirect('/loadProfile');
+    }
+}
+
+const updateAddress = async (req, res) => {
+    try {
+        const { name, mobile, houseName, city, state, pinCode } = req.body;
+        console.log("body////////////////////", req.body);
+        const userId = req.session.user;
+        const updated = await Address.findByIdAndUpdate({ _id: req.query.id }, { $set: { name, mobile, houseName, city, state, pinCode } });
+        console.log(updated);
+
+        res.redirect('/loadCheckOut');
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
+const loadAddAddress = async (req, res) => {
+    try {
+  
+        res.render('addAddress');
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
+const loadEditAddress = async (req, res) => {
+    try {
+        const userId = req.session.user;
+        const addressData = await Address.findById(req.query.id);
+
+        res.render('editAddress', { addresses: addressData });
+        //  res.render("editAddress",{})
+
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
+
+
+
+const addAddress = async (req, res) => {
+    try {
+        const userId = req.session.user
+        const { name, mobile, houseName, city, state, pinCode } = req.body;
+        // console.log("gydfyiyh")
+        // console.log(req.body)
+        const address = new Address({
+            userId: userId,
+            name: name,
+            mobile: mobile,
+            houseName: houseName,
+            city: city,
+            state: state,
+            pinCode: pinCode
+
+        });
+
+        const savedAddress = await address.save();
+
+        res.redirect('/loadProfile')
+
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+const addAddress1 = async (req, res) => {
+    try {
+        const userId = req.session.user
+        const { name, mobile, houseName, city, state, pinCode } = req.body;
+        // console.log("gydfyiyh")
+        // console.log(req.body)
+        const address = new Address({
+            userId: userId,
+            name: name,
+            mobile: mobile,
+            houseName: houseName,
+            city: city,
+            state: state,
+            pinCode: pinCode
+
+        });
+
+        const savedAddress = await address.save();
+
+        res.redirect('/loadCheckOut')
+
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
+const removeAddress = async (req, res) => {
+    try {
+        const { addressId } = req.body;
+
+        // Find the address by its ID and delete it
+        const deletedAddress = await Address.findOneAndDelete({ _id: addressId });
+
+        if (!deletedAddress) {
+            // If the address with the given ID is not found, return a 404 status
+            return res.status(404).json({ error: 'Address not found' });
+        }
+
+        res.status(200).json({ message: 'Address removed successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' }); // Send error response
+    }
+};
+
+
+
+
+
+// const loadAddress = async (req, res) => {
+//     try {
+
+//         const { name, mobile, houseName , city , state,  pinCode} = req.body;
+//         // console.log("gydfyiyh")
+//         // console.log(req.body)
+//         const address = new Address({
+//            name:name,
+//             mobile: mobile,
+//             houseName :houseName ,
+//             city:city,
+//             state:state,
+//             pinCode:pinCode
+
+//         });
+
+//        await address.save();
+//        if(couponData){
+//         res.redirect('/admin/loadProfile')
+//        }
+
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
+
+
+
+const OrderCancelled = async (req, res) => {
+    try {
+        const orderId = req.query.id
+        const orderReturned = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Cancelled' } })
+        res.redirect('/loadProfile')
+
+
+
+    } catch (error) {
+        console.log(error.message)
+
+    }
+}
+
+
+const orderReturn = async (req, res) => {
+    try {
+        const orderId = req.query.id
+        const orderReturned = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'orderReturn' } })
+        res.redirect('/loadProfile')
+
+
+
+    } catch (error) {
+        console.log(error.message)
+
+    }
+}
+
+
+
+
+const orderDetail = async (req, res) => {
+    try {
+        res.render('ordersdetail')
+
+
+    } catch (error) {
+        console.log(error.message)
+
+    }
+}
+
+
+
+
+
+
+const categorySearch = async (req, res) => {
+    try {
+        const categories = await Category.find();
+        const userId = req.session.user;
+        const search = req.query.query || "";
+        const userData = await User.findOne({ _id: userId });
+        const regex = new RegExp(search, 'i');
+        const category = req.query.category;
+
+        let products;
+
+        if (category) {
+            // Find the category object by its name
+            const categoryObj = await Category.findOne({ categoryName: category });
+            if (!categoryObj) {
+                return res.status(404).send('Category not found');
+            }
+
+            // Find books belonging to the selected category
+            products = await Product.find({ Categories: categoryObj._id, is_Active: true }).populate('Categories');
+        } else {
+            // Perform regular search or filtering
+            if (req.query.filter) {
+                if (req.query.filter == 'low-high') {
+                    products = await Product.find({ is_Active: true }).sort({ saleprice: 1 });
+                } else if (req.query.filter == 'high-low') {
+                    products = await Product.find({ is_Active: true }).sort({ saleprice: -1 });
+                }
+            } else {
+                products = await Product.aggregate([
+                    {
+                        $match: {
+                            is_Active: true,
+                            Bookname: { $regex: new RegExp(search, "i") }
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: 'categories',
+                            localField: 'Categories',
+                            foreignField: '_id',
+                            as: 'Categories'
+                        }
+                    },
+                    {
+                        $unwind: '$Categories'
+                    },
+                    {
+                        $match: { 'Categories.is_Active': true }
+                    }
+                ]);
+            }
+        }
+
+        res.render('shop', { product: products, categories, name: userData.name, search: search });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 }
 
 
@@ -316,26 +648,8 @@ const loadShop = async (req, res) => {
 
 
 
-
-
-// function generateOrderId(length) {
-//     const characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-//     const orderIdLength = length - 3; 
-//     let orderId = 'ORD';
-
-//     for (let i = 0; i < orderIdLength; i++) {
-//         const randomIndex = Math.floor(Math.random() * characters.length);
-//         orderId += characters[randomIndex];
-//     }
-
-//     return orderId;
-// }
-
-// const orderId = generateOrderId(10);
-// console.log(orderId);
-
-
 module.exports = {
+    loadGuest,
     loadHome,
     loadLogout,
     loadlogin,
@@ -347,6 +661,20 @@ module.exports = {
     shopProduct,
     loadProfile,
     loadShop,
+    profileEdit,
+    addAddress,
+    removeAddress,
+    OrderCancelled,
+    orderReturn,
+    orderDetail,
+    categorySearch,
+    loadEditAddress,
+    updateAddress,
+    loadAddAddress,
+    addAddress1
+
+
+    // loadAddress
 
 
 }

@@ -43,39 +43,47 @@
               class="form-control bg-white"
             />
           </div>
+          <% if (messages.success) { %>
+            <div class="alert alert-success" id="editSuccessMessage">
+                <%= messages.success %>
+            </div>
+        <% } else if (messages.error) { %>
+            <div class="alert alert-danger" id="editErrorMessage">
+                <%= messages.error %>
+            </div>
+         <% } %>
         </div>
         <div class="card">
           <div class="card-body">
             <div class="row">
               <div class="col-md-3">
-                <form method="post" action="/admin/addCategories">
+                <form method="post" action="/admin/addCoupon">
                 
 
 
                   <div class="mb-4">
                     <label for="product_name" class="form-label"
-                      >Category Name</label
+                      >Coupon Name</label
                     >
                     <input
                       type="text"
                       placeholder="Type here"
-                      name="categoryName"
+                      name="couponName"
                       class="form-control"
-                      id="product_name"
                     />
                   </div>
 
 
                   <div class="mb-4">
                     <label for="product_name" class="form-label"
-                      >Coupon Id</label
+                      >Coupon Code</label
                     >
                     <input
+
                       type="text"
                       placeholder="Type here"
-                      name="categoryName"
+                      name="couponCode"
                       class="form-control"
-                      id="product_name"
                     />
                   </div>
 
@@ -84,25 +92,25 @@
                       >Minimum Purchase</label
                     >
                     <input
-                      type="text"
+                      type="number"
                       placeholder="Type here"
-                      name="categoryName"
+                      name="minimumPurchase"
                       class="form-control"
-                      id="product_name"
+                      min=0
                     />
                   </div>
 
 
                   <div class="mb-4">
                     <label for="product_name" class="form-label"
-                      >Discount Amount</label
+                      >Discount %</label
                     >
                     <input
-                      type="text"
+                      type="number"
                       placeholder="Type here"
-                      name="categoryName"
+                      name="discountAmount"
                       class="form-control"
-                      id="product_name"
+                      min="0"
                     />
                   </div>
 
@@ -111,107 +119,98 @@
                       >Maximum Uses</label
                     >
                     <input
-                      type="text"
+                      type="number"
                       placeholder="Type here"
-                      name="categoryName"
+                      name="maximumUses"
                       class="form-control"
-                      id="product_name"
+                      min="1"
                     />
                   </div>
                   
                   <div class="mb-4">
-                    <label for="product_name" class="form-label"
-                      >Expiration Date</label
-                    >
-                    <input
-                      type="text"
-                      placeholder="Type here"
-                      name="categoryName"
-                      class="form-control"
-                      id="product_name"
-                    />
-                  </div>
+                    <label for="expiration_date" class="form-label">Expiration Date</label>
+                    <input type="date" name="expirationDate" class="form-control" id="expiration_date">
+                </div>
+                
+
                   <div class="d-grid">
                     <button class="btn btn-primary" type="submit">
-                      Create category
+                      Create coupon
                     </button>
                   </div>
                 </form>
               </div>
               <div class="col-md-9">
                 <div class="table-responsive">
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th class="text-center">
-                          <div class="form-check"></div>
-                        </th>
-                        <th>ID</th>
-                        <th>Category name</th>
-                        <th>Description</th>
 
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
+             <% if(couponData && couponData.length > 0 ) { %>
+              
+         
 
-                      <tr>
-                        <td class="text-center">
-                          <div class="form-check"></div>
-                        </td>
-                        <td> 1 </td>
-                        <td><b>d</b></td>
-                        <td><b>d</b></td>
-
-                        <td>
-                          <span class="badge rounded-pill alert-success"
-                            >Active</span
-                          >
-                          <span class="badge rounded-pill alert-danger"
-                            >Blocked</span
-                          >
-                        </td>
-                        <td>
-                          <a
-                            href="#"
-                            onclick="confirmBlock('#')"
-                            class="btn btn-sm font-sm btn-light rounded"
-                            style="
-                            background-color: rgb(255, 0, 0);
-                            transition: background-color 0.3s;
-                          "   
-                          
-                          >
-                            <i class="material-icons md-delete_forever"></i>
-                          <b> Block</b> 
-
-                          </a>
-                          <a
-                            href="#"
-                            onclick="confirmUnBlock('#')"
-                            class="btn btn-sm font-sm btn-light rounded"
-                            style="
-                            background-color: #088178;
-                            transition: background-color 0.3s;
-                          "
-                          >
-                            <i class="material-icons md-delete_forever"></i>
-                            Unblock
-
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th class="text-center">
+                      <div class="form-check"></div>
+                    </th>
+                    <th>ID</th>
+                    <th>Category name</th>
+                    <th>Discount %</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for(let i = 0; i < couponData.length; i++) { %>
+                  <tr>
+                    <td class="text-center">
+                      <div class="form-check"></div>
+                    </td>
+                    <td><%= i + 1 %></td>
+                    <td><b><%= couponData[i].couponName %></b></td>
+                    <td><b><%= couponData[i].discountAmount %>%</b></td>
+                    <td>
+                      <% if (couponData[i].isActive) { %>
+                      <span class="badge rounded-pill alert-success">Active</span>
+                      <% } else { %>
+                      <span class="badge rounded-pill alert-danger">Blocked</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <% if(couponData[i].isActive) { %>
+                      <a href="/admin/ToggleblockCoupon?Couid=<%= couponData[i]._id %>"
+                        class="btn btn-sm font-sm btn-light rounded"
+                        style="background-color: rgb(255, 0, 0); transition: background-color 0.3s;"
+                      >
+                        <i class="material-icons md-delete_forever"></i>
+                        <b>Block</b>
+                      </a>
+                      <% } else { %>
+                      <a href="/admin/ToggleblockCoupon?Couid=<%= couponData[i]._id %>"
+                        class="btn btn-sm font-sm btn-light rounded"
+                        style="background-color: #088178; transition: background-color 0.3s;"
+                      >
+                        <i class="material-icons md-delete_forever"></i>
+                        Unblock
+                      </a>
+                      <% } %>
+                    </td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+              
+                  <% } %>
+           
                 </div>
               </div>
-              <!-- .col// -->
             </div>
-            <!-- .row // -->
           </div>
-          <!-- card body .// -->
         </div>
+
+
+
+
         <!-- card .// -->
       </section>
       <!-- content-main end// -->

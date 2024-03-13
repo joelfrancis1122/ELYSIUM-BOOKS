@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
-mongoose.connect('mongodb://localhost:27017/ElysiumProject')
 const nocache = require('nocache');
+const flash = require('express-flash');
+
+const dotenv = require('dotenv').config()
 
 
 
-
-
-const userRoute=require('./routes/userRoute')  
-const adminRoute = require('./routes/adminRoute')     
+const userRoute = require('./routes/userRoute')
+const adminRoute = require('./routes/adminRoute')
 
 const express = require('express')
 const app = express();
@@ -17,33 +17,49 @@ const bcrypt = require('bcrypt')
 const session = require("express-session");
 const { log } = require("console");
 
-const PORT  = 5000
+// mongoose.connect('mongodb://localhost:27017/ElysiumProject')
+const PORT = process.env.PORT || 5000
+
+mongoose.connect(process.env.MONGODB_URI);
 
 app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use(nocache());
 
-app.use(express.urlencoded({ extended: true })); 
+
+app.use(flash());
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.set("view engine", "ejs");
 
+// app.use(
+//   session({
+//     secret: "12dwvgjad234",
+//     resave: false,
+//     saveUninitialized: true,
+//   })
+// );
+
+
+
 app.use(
   session({
-    secret: "12dwvgjad234",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-
   })
 );
 
+log("ELYSIUM ON !");
+
 app.use("/", userRoute);
 app.use("/admin", adminRoute);
-app.use('*',(req,res)=>{
-res.render('users/404')
- })
 
 
-
+app.use('*', (req, res) => {
+  res.render('users/404')
+})
 
 
 

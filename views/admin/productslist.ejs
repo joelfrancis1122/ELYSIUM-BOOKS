@@ -23,6 +23,15 @@
       rel="stylesheet"
       type="text/css"
     />
+
+
+    <style>
+      /* Custom styling for the table */
+      #example {
+        width: 1200px;
+        height: auto; /* You can adjust the height as needed */
+      }
+    </style>
   </head>
 
   <body>
@@ -37,8 +46,6 @@
             <p>Lorem ipsum dolor sit amet.</p>
           </div>
           <div>
-            <!-- <a href="#" class="btn btn-light rounded font-md">Export</a> -->
-            <!-- <a href="#" class="btn btn-light rounded font-md">Import</a> -->
             <a
               href="/admin/loadaddproduct"
               class="btn btn-primary btn-sm rounded"
@@ -47,175 +54,95 @@
           </div>
         </div>
         <div class="card mb-4">
-          <header class="card-header">
-            <div class="row align-items-center">
-              <div class="col col-check flex-grow-0">
-                <div class="form-check ms-2">
-                  <!-- <input class="form-check-input" type="checkbox" value=""> -->
-                </div>
-              </div>
-              <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                <select class="form-select">
-                  <option selected>All Books</option>
-                  <option>Fiction</option>
-                </select>
-              </div>
-              <div class="col-md-2 col-6">
-                <!-- <input type="date" value="02.05.2021" class="form-control"> -->
-                <div class="col-search">
-                  <form class="searchform">
-                    <div class="input-group">
-                      <input
-                        list="search_terms"
-                        type="text"
-                        class="form-control"
-                        placeholder="Search term"
-                      />
-                      <button class="btn btn-light bg" type="button">
-                        <i class="material-icons md-search"></i>
-                      </button>
-                    </div>
-                    <datalist id="search_terms">
-                      <option value="Products"></option>
-                      <option value="New orders"></option>
-                      <option value="Apple iphone"></option>
-                      <option value="Ahmed Hassan"></option>
-                    </datalist>
-                  </form>
-                </div>
-              </div>
-              <div class="col-md-2 col-6">
-                <select class="form-select">
-                  <option selected>Status</option>
-                  <option>Active</option>
-                  <option>Disabled</option>
-                  <option>Show all</option>
-                </select>
-              </div>
-            </div>
-          </header>
-          <!-- card-header end// -->
           <div class="card-body">
             <% if(locals.product) { %>
-            <div class="table-responsive">
-              <div class="d-flex justify-content-center">
-                <table class="table text-center">
-                  <thead style="background-color: #088178; color: white">
-                    <tr>
-                      <th>Book Image</th>
-                      <th>Book Name</th>
-                      <th>Book Categories</th>
-                      <th>Stock</th>
-                      <th>Price</th>
-                      <th>Status</th>
-                      <!-- <th>Stock</th> -->
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <% for(let i = 0 ; i < product.length ; i++) { %>
-                    <tr class="align-middle">
-                      <td class="align-middle">
-                        <a class="itemside" href="#">
-                          <div class="left">
-                            <img
-                              src="/public/uploads/<%=product[i].Images[0]%>"
-                              width="100px"
-                              alt="Item"
-                            />
-                          </div>
-                        </a>
-                      </td>
-                      <td class="align-middle">
-                        <h6 class="mb-0"><%=product[i].Bookname%></h6>
-                      </td>
-                      <td class="align-middle">
-                        <% if (product[i].Categories && product[i].Categories.categoryName) { %>
-                          <%= product[i].Categories.categoryName %>
-                        <% }%>
-                    
-                        
-                      </td>
-                      <td class="align-middle"><%=product[i].stock%></td>
-                      <td class="align-middle"><%=product[i].saleprice%></td>
-                      <td class="align-middle">
-                        <% if (product[i].is_Active) { %>
-                        <span class="badge rounded-pill alert-success"
-                          >Active</span
-                        >
-                        <% } else { %>
-                        <span class="badge rounded-pill alert-danger"
-                          >Blocked</span
-                        >
-                        <% } %>
-                      </td>
-                      <td class="align-middle">
-                        <a
-                          href="/admin/loadeditProduct?id=<%=product[i]._id%>"
-                          class="btn btn-sm font-sm rounded btn-brand"
-                        >
-                          <i class="material-icons md-edit"></i> Edit
-                        </a>
-                        <% if (product[i].is_Active) { %>
-                        <a
-                          href="#"
-                          onclick="confirmBlock('<%= product[i]._id %>')"
-                          class="btn btn-sm font-sm btn-light rounded"
-                          style="
-                            background-color: rgb(255, 0, 0);
-                            transition: background-color 0.3s;
-                          "
-                        >
-                          <i class="material-icons md-delete_forever"></i> Block
-                        </a>
+              <div class="table-responsive">
+                <div class="d-flex justify-content-center">
+               
+               
+                  <table class="table text-center" id="example">
+                    <thead style="background-color: #088178; color: white">
+                      <tr>
+                        <th>Book Image</th>
+                        <th>Book Name</th>
+                        <th>Book Categories</th>
+                        <th>Stock</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(let i = 0 ; i < product.length ; i++) { %>
+                        <tr class="align-middle">
+                          <td class="align-middle">
+                            <a class="itemside" href="#">
+                              <div class="left">
+                                <img
+                                  src="/public/uploads/<%=product[i].Images[0]%>"
+                                  width="100px"
+                                  alt="Item"
+                                />
+                              </div>
+                            </a>
+                          </td>
+                          <td class="align-middle">
+                            <h6 class="mb-0"><%=product[i].Bookname%></h6>
+                          </td>
+                          <td class="align-middle">
+                            <% if (product[i].Categories && product[i].Categories.categoryName) { %>
+                              <%= product[i].Categories.categoryName %>
+                            <% }%>
+                          </td>
+                          <td class="align-middle"><%=product[i].stock%></td>
+                          <td class="align-middle"><%=product[i].saleprice%></td>
+                          <td class="align-middle">
+                            <% if (product[i].is_Active) { %>
+                              <span class="badge rounded-pill alert-success">Active</span>
+                            <% } else { %>
+                              <span class="badge rounded-pill alert-danger">Blocked</span>
+                            <% } %>
+                          </td>
+                          <td class="align-middle">
+                            <a
+                              href="/admin/loadeditProduct?id=<%=product[i]._id%>"
+                              class="btn btn-sm font-sm rounded btn-brand"
+                            >
+                              <i class="material-icons md-edit"></i> Edit
+                            </a>
+                            <% if (product[i].is_Active) { %>
+                              <a
+                                href="#"
+                                onclick="confirmBlock('<%= product[i]._id %>')"
+                                class="btn btn-sm font-sm btn-light rounded"
+                                style="background-color: rgb(255, 0, 0); transition: background-color 0.3s;"
+                              >
+                                <i class="material-icons md-delete_forever"></i> Block
+                              </a>
+                            <% } else { %>
+                              <a
+                                href="#"
+                                onclick="confirmUnblock('<%= product[i]._id %>')"
+                                class="btn btn-sm font-sm btn-light rounded"
+                                style="background-color: #088178; transition: background-color 0.3s;"
+                              >
+                                <i class="material-icons md-delete_forever"></i> Unblock
+                              </a>
+                            <% } %>
+                          </td>
+                        </tr>
+                      <% } %>
+                    </tbody>
+                  </table>
 
-                        <% } else { %>
-                        <a
-                          href="#"
-                          onclick="confirmUnblock('<%= product[i]._id %>')"
 
-                          class="btn btn-sm font-sm btn-light rounded"
-                          style="
-                            background-color: #088178;
-                            transition: background-color 0.3s;
-                          "
-                        >
-                          <i class="material-icons md-delete_forever"></i>
-                          Unblock
-                        </a>
-                        <% } %>
-                      </td>
-                    </tr>
-                    <% } %>
-                  </tbody>
-                </table>
+                  
+                </div>
               </div>
-            </div>
             <% } %>
           </div>
         </div>
-        <div class="pagination-area mt-30 mb-50">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-start">
-              <li class="page-item active">
-                <a class="page-link" href="#">01</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">02</a></li>
-              <li class="page-item"><a class="page-link" href="#">03</a></li>
-              <li class="page-item">
-                <a class="page-link dot" href="#">...</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">16</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#"
-                  ><i class="material-icons md-chevron_right"></i
-                ></a>
-              </li>
-            </ul>
-          </nav>
-        </div>
       </section>
-      <!-- content-main end// -->
       <footer class="main-footer font-xs">
         <div class="row pb-30 pt-15">
           <div class="col-sm-6">
@@ -267,6 +194,15 @@
           }
         });
       }
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            new DataTable('#example');
+    
+    })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

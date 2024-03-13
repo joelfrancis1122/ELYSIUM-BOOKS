@@ -16,11 +16,17 @@
         box-sizing: border-box;
         font-family: 'Poppins', sans-serif;
       }
-      body{
-        min-height: 100vh;
-        width: 100%;
-        background: #f8f9f9;
-      }
+      body {
+    min-height: 100vh;
+    width: 100%;
+    background-image: url('/public/2148827214.jpg');
+    background-size: cover; /* or contain, or specify specific dimensions */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-size: 100% 100%; /* or any specific dimensions */
+
+}
+
       .container{
         position: absolute;
         top: 50%;
@@ -98,7 +104,12 @@
       .signup label:hover{
         text-decoration: underline;
       }
-       
+      .login header,
+.login input,
+.login a {
+    font-family: 'Your Desired Font', Helvetica Neue Bold; /* Change 'Your Desired Font' to the desired font name */
+}
+
       
        </style>
        
@@ -112,8 +123,8 @@
       <form action="/verifyLogin" id="form" method="post">
         
        
-        <input type="email" id="email" placeholder="Enter your email" name="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" required title="Please Check your Email Address">
-        <input type="password" id="password" placeholder="Enter your password"   name="password" pattern=".{8,}" required title="Please Check your Password">
+        <input type="email" id="email" placeholder="Enter your email" name="email" value="joelfrancis422@gmail.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" required title="Please Check your Email Address">
+        <input type="password" id="password" placeholder="Enter your password" value="asdasdasd" name="password" pattern=".{8,}" required title="Please Check your Password">
         <a class="forget" href="">Forgot password?</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/signup">New user? Register here</a>
         <div class="g-signin2" data-onsuccess="onSignIn"></div>
         <h3 class="text-center text-danger" id="loginErrorMessage"><%=locals.errmessage ? errmessage : ''%></h3>
@@ -196,10 +207,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
  
 
-    <!-- <script>
+    <script>
       // Function to display Toastr notification on page load
       function displayToastrOnLoad() {
-        toastr.success('<img src="/public/happ.gif" alt="Crying Emoji" style="width: 35px; height: 35px;"> Page loaded', 'successfull', {
+        toastr.success('<img src="/public/cru.gif" alt="Crying Emoji" style="width: 35px; height: 35px;">', 'Please Login or Signup ', {
                 closeButton: true,  // Show close button 
                 progressBar: true,  // Show progress bar
                 positionClass: 'toast-top-right',  // Position the notification at the top-right corner
@@ -211,7 +222,7 @@
       }
       // Attach the displayToastrOnLoad function to the window.onload event
       window.onload = displayToastrOnLoad;
-  </script> -->
+  </script>
   
   
 </body>

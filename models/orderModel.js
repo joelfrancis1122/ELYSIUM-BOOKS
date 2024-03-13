@@ -4,24 +4,27 @@ const OrderSchema=mongoose.Schema({
     
 
     userId:{type:mongoose.Schema.ObjectId,ref:'User'},
-    product:[{productId:{type:mongoose.Schema.ObjectId,
-    ref:"Product"},
-    quantity:{type:Number}}
-    ],
+    product:[{productId:{type:mongoose.Schema.ObjectId,ref:"Product"},
+    quantity:{type:Number}}],
     
     address:{
-        firstName:{type:String,required:true},
-        lastName:{type:String,required:true},
-        address:{type:String,required:true},
-        city:{type:String,required:true},
-        state:{type:String,required:true},
-        zipcode:{type:Number,required:true},
-        mobile:{type:Number,required:true},
+        name:{type:String},
+        mobile:{type:Number},
+        houseName:{type:String},
+        city:{type:String},
+        state:{type:String},
+        pinCode:{type:Number},
+    
     },
 
     orderId:{type:String},
-    orderDate:{type:Date,default:Date.now}
-
+    orderDate:{type:Date,default:Date.now},
+    totalAmount:{type:String},
+    paymentMethod:{type:String},
+    paymentStatus:{type:String,enum:['Pending','Recieved','Failed','Refund'],default:"Pending"},
+    orderStatus:{type:String,enum:['Order Placed','Confirmed','Shipped','Delivered','Cancelled','Returned'],default:"Order Placed"},
+    couponDiscount:{type:Number},
+    deliveryStatus:{type:Number,default:0},
 })
 
 

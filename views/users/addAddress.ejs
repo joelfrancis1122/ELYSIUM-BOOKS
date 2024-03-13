@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Address</title>
+    <!-- Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for additional styling */
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            margin: 50px auto;
+            max-width: 600px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            border-bottom: none;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            background-color: #046963;
+            color: #fff;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+        }
+
+        .btn-primary {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card border-primary">
+        <div class="card-header">
+            <h5 class="mb-0 text-center">Add Address</h5>
+        </div>
+        <div class="card-body">
+            <form action="/addAddress1" method="post">
+                <div class="form-group">
+                    <label for="inputName">Name</label>
+                    <input type="text" class="form-control" name="name" id="inputName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="inputCity" class="form-label">mobile</label>
+                    <input type="text" maxlength="10" class="form-control" name="mobile" id="inputCity" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputState" class="form-label">House
+                            name</label>
+                        <input type="text" class="form-control" name="houseName" id="inputState" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputZip" class="form-label">City</label>
+                        <input type="text" class="form-control" name="city"city id="inputZip" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputZip" class="form-label">State</label>
+                        <input type="text"class="form-control" name="state" id="inputZip" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="inputZip" class="form-label">Pincode</label>
+                        <input type="text" class="form-control" name="pinCode" id="inputZip" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Save Address</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
+

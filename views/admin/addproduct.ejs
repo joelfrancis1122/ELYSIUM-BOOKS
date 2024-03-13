@@ -191,84 +191,59 @@
       </script>
 
       
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-          const form = document.querySelector("form[action='/admin/addProduct']");
-          form.addEventListener("submit", function(event) {
-            const regularPriceInput = form.querySelector("input[name='Regularprice']");
-            const salePriceInput = form.querySelector("input[name='saleprice']");
-            const stockInput = form.querySelector("input[name='stock']");
-      
-            // Regular expression to match only numbers
-            const regex = /^\d+$/;
-      
-            if (!regex.test(regularPriceInput.value) || !regex.test(salePriceInput.value) || !regex.test(stockInput.value)) {
-              event.preventDefault(); // Prevent form submission
-              toastr.warning("Please enter valid numbers in Regular price, Sale price, and Stock fields."); // Display an alert message
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const imageInput = document.getElementById("imageInput");
+        const previewContainer = document.getElementById("previewContainer");
+
+        imageInput.addEventListener("change", function() {
+            // Clear previous previews
+            previewContainer.innerHTML = '';
+
+            const files = imageInput.files;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.classList.add("img-thumbnail", "mx-2");
+                    previewContainer.appendChild(img);
+
+                    const removeBtn = document.createElement("button");
+                    removeBtn.textContent = "Remove";
+                    removeBtn.classList.add("btn", "btn-danger", "btn-sm", "mx-2");
+                    removeBtn.addEventListener("click", function(event) {
+                        event.preventDefault(); // Prevent default form submission
+                        const fileName = file.name;
+                        // Send request to backend to remove image
+                        fetch(`/remwoveImage?fileName=${fileName}`, {
+                            method: 'post'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // Remove the image preview from the UI
+                                previewContainer.removeChild(img);
+                                previewContainer.removeChild(removeBtn);
+                            } else {
+                                console.error('Failed to remove image from database');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                    });
+                    previewContainer.appendChild(removeBtn);
+                };
+
+                reader.readAsDataURL(file);
             }
-          });
         });
-      </script>
-     
- 
+    });
+</script>
 
 
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-          const form = document.querySelector("form[action='/admin/addProduct']");
-          form.addEventListener("submit", function(event) {
-            const imagesInput = form.querySelector("input[name='Images']");
-      
-            // Check if at least one image is selected
-            if (imagesInput.files.length === 0) {
-              event.preventDefault(); // Prevent form submission
-              toastr.warning("Please select at least one image."); // Display an alert message
-            }
-          });
-        });
-      </script>
-      
-      
-  
-
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const imageInput = document.getElementById("imageInput");
-            const previewContainer = document.getElementById("previewContainer");
-    
-            imageInput.addEventListener("change", function() {
-                // Clear previous previews
-                previewContainer.innerHTML = '';
-    
-                const files = imageInput.files;
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const reader = new FileReader();
-    
-                    reader.onload = function(e) {
-                        const img = document.createElement("img");
-                        img.src = e.target.result;
-                        img.classList.add("img-thumbnail", "mx-2");
-                        previewContainer.appendChild(img);
-    
-                        const removeBtn = document.createElement("button");
-                        removeBtn.textContent = "Remove";
-                        removeBtn.classList.add("btn", "btn-danger", "btn-sm", "mx-2");
-                        removeBtn.addEventListener("click", function() {
-                            previewContainer.removeChild(img);
-                            previewContainer.removeChild(removeBtn);
-                            // Remove the corresponding file from the input
-                            imageInput.value = Array.from(imageInput.files).filter(f => f !== file);
-                        });
-                        previewContainer.appendChild(removeBtn);
-                    };
-    
-                    reader.readAsDataURL(file);
-                }
-            });
-        });
-    </script>
-    <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/public/admin-assets/j
+    s/vendors/jquery-3.6.0.min.js"></script>
     <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/public/admin-assets/js/vendors/select2.min.js"></script>
     <script src="/public/admin-assets/js/vendors/perfect-scrollbar.js"></script>

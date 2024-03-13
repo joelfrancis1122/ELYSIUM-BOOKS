@@ -78,13 +78,14 @@
               
 
               <table class="table table-hover">
+                <% if(orders && orders.length > 0 ){ %> 
+
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Reference Id</th>
                         <th>Total Amount</th>
                         <th>Payment Method</th>
-                        <th>Date</th>
+                        <th>Date && Time</th>
                         <th>Payment Status</th>
                         <th>Order Status</th>
                         <th>Change Status</th>
@@ -92,29 +93,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Example row, repeat this structure for each order -->
+                    <% orders.forEach(order => { %>
                     <tr>
-                        <td>0901</td>
-                        <td><b>Marvin McKinney</b></td>
-                        <td>$9.00</td>
-                        <td>Cash on delivery</td>
-                        <td>03.12.2020</td>
-                        <td><span class="badge bg-warning text-dark">Pending</span></td>
-                        <td><span class="badge bg-warning text-dark">Order Placed</span></td>
-                        <td class="align-middle">
-                            <select class="form-select form-select-sm change-status">
-                                <option value="order-placed" selected>Order Placed</option>
-                                <option value="shipped">Shipped</option>
-                                <option value="delivered">Delivered</option>
-                                <option value="cancelled">Cancelled</option>
-                            </select>
-                        </td>
+                        <td><%= order.orderId %></td>
+                        <td><%= order.totalAmount %></td>
+                        <td><%= order.paymentMethod %></td>
+                        <td><%= order.orderDate.toLocaleString() %></td>
+                        <td><span class="badge bg-warning text-dark"><%= order.paymentStatus%></span></td>
+                        <td><span class="badge bg-warning text-dark"><%= order.orderStatus%></span></td>
+                        <td>  
+                          <div class="dropdown ">
+                           <button class="btn btn-sm btn-icon dropdown-toggle" type="button" id="deliveryStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                               Status
+                           </button>
+                        
+                           <ul class="dropdown-menu dropdown-menu-sm" aria-labelledby="deliveryStatusDropdown">
+                               <li><a class="dropdown-item" href="/admin/adminOrderpending?id=<%=order._id%>">Pending</a></li>
+                               <li><a class="dropdown-item" href="/admin/adminOrderShipped?id=<%=order._id%>">Shipped</a></li>
+                               <li><a class="dropdown-item" href="/admin/adminOrderDelivered?id=<%=order._id%>">Delivered</a></li>
+                               <li><a class="dropdown-item" href="/admin/adminOrderCancelled?id=<%=order._id%>">Cancelled</a></li>
+                               <li><a class="dropdown-item" href="/admin/adminOrderReturned?id=<%=order._id%>">Returned</a></li>
+
+                           <!-- <li><a class="dropdown-item" href="#">Cancelled</a></li> -->
+                           </ul>
+                          </div>
+                          </div>
+                       
+                       </td>
                         <td class="text-end">
                             <a href="/admin/loadOrderDetails" class="btn btn-sm btn-outline-dark">Order Detail</a>
                         </td>
                     </tr>
-                    <!-- Repeat rows for other orders -->
-                </tbody>
+                    <% }); %>
+                    <% }else{ %>
+<h3>No orders</h3>
+                        <% } %>
+
             </table>
             
 
@@ -190,41 +204,9 @@
       src="/public/admin-assets/js/main.js"
       type="text/javascript"
     ></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-          const selectElements = document.querySelectorAll("select.form-select");
+   
   
-          selectElements.forEach(selectElement => {
-              selectElement.addEventListener("change", function() {
-                  const selectedOption = selectElement.options[selectElement.selectedIndex].text;
-                  const orderStatusCell = selectElement.closest("tr").querySelector("td:nth-child(7) span");
-  
-                  // Remove all existing classes
-                  orderStatusCell.classList.remove("bg-warning", "bg-success", "bg-info", "bg-danger", "text-dark", "text-white");
-  
-                  // Set new classes based on selected option
-                  switch(selectedOption) {
-                      case "Shipped":
-                          orderStatusCell.classList.add("bg-info", "text-white");
-                          break;
-                      case "Delivered":
-                      orderStatusCell.classList.add("bg-success", "text-white");
-                         
-                          break;
-                      case "Cancelled":
-                          orderStatusCell.classList.add("bg-danger", "text-white");
-                          break;
-                      default:
-                          orderStatusCell.classList.add("bg-warning", "text-dark");
-                          break;
-                  }
-  
-                  // Update order status cell text
-                  orderStatusCell.textContent = selectedOption;
-              });
-          });
-      });
-  </script>
+
   
   </body>
 
