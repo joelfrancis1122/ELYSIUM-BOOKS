@@ -277,12 +277,13 @@ const shopProduct = async (req, res) => {
         let productId = req.query.id
         let userId = req.session.user;
         const productData = await Product.findOne({ _id: productId }).populate('Categories');
+        const relatedProducts =await Product.find({Categories:productData.Categories , _id: { $ne: productId }}); //id
+        console.log("relatedProducts",relatedProducts)
         const userData = await User.findOne({ _id: userId });
-        res.render('singleproduct', { product: productData, name: userData.name })
+        res.render('singleproduct', { product: productData, name: userData.name,relatedProducts})
 
     } catch (error) {
         console.log(error)
-
     }
 }
 
@@ -299,6 +300,18 @@ const loadProfile = async (req, res) => {
         res.redirect('/'); // Redirect to home or any other page in case of error
     }
 }
+
+
+
+const loadOrderDetails = async (req,res)=>{
+    try {
+        const orders = await Orders.find({ userId: userId }).populate('userId');
+        res.render("ordersdetail",{orders})
+    } catch (error) {
+        console.log(error.message)  
+    }
+}
+
 
 const loadShop = async (req, res) => {
     try {
@@ -671,7 +684,8 @@ module.exports = {
     loadEditAddress,
     updateAddress,
     loadAddAddress,
-    addAddress1
+    addAddress1,
+    loadOrderDetails
 
 
     // loadAddress

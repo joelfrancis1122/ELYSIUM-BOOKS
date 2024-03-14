@@ -3,7 +3,7 @@
   <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
   <head>
     <meta charset="utf-8" />
-    <title>Evara Dashboard</title>
+    <title>ELYSIUM-BOOKS</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -78,78 +78,57 @@
               <div class="col-md-9">
                 <div class="table-responsive">
                   <% if(locals.categories) { %>
-                  <table class="table table-hover">
-                    <thead>
-                      <tr>
-                        <th class="text-center">
-                          <div class="form-check"></div>
-                        </th>
-                        <th>ID</th>
-                        <th>Category name</th>
-                        <th>Description</th>
-
-                        <th>Status</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% for(let i = 0 ; i < categories.length ; i++) { %>
-
-                      <tr>
-                        <td class="text-center">
-                          <div class="form-check"></div>
-                        </td>
-                        <td><%= i+1 %></td>
-                        <td><b><%=categories[i].categoryName %></b></td>
-                        <td><b><%=categories[i].Description %></b></td>
-
-                        <td>
-                          <% if (categories[i].is_Active) { %>
-                          <span class="badge rounded-pill alert-success"
-                            >Active</span
-                          >
-                          <% } else { %>
-                          <span class="badge rounded-pill alert-danger"
-                            >Blocked</span
-                          >
+                    <table class="table table-hover">
+                      <thead>
+                          <tr>
+                              <th class="text-center">
+                                  <div class="form-check"></div>
+                              </th>
+                              <th>No</th>
+                              <th>Category name</th>
+                              <th>Description</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <% for(let i = 0 ; i < categories.length ; i++) { %>
+                          <tr>
+                              <td class="text-center">
+                                  <div class="form-check"></div>
+                              </td>
+                              <td><%= i+1 %></td>
+                              <td><b><%= categories[i].categoryName %></b></td>
+                              <td><b><%= categories[i].Description %></b></td>
+                              <td>
+                                  <% if (categories[i].is_Active) { %>
+                                  <span class="badge rounded-pill alert-success">Active</span>
+                                  <% } else { %>
+                                  <span class="badge rounded-pill alert-danger">Blocked</span>
+                                  <% } %>
+                              </td>
+                              <td>
+                                <a href="/admin/loadeditCategory?id=<%=categories[i]._id%>" class="btn btn-sm font-sm btn-light rounded" style="background-color: #007bff; color: #fff; margin-left: 5px;">
+                                    <i class="material-icons md-edit"></i>
+                                    Edit
+                                </a>
+                                  <% if (categories[i].is_Active) { %>
+                                  <a href="#" onclick="confirmBlock('<%= categories[i]._id %>')" class="btn btn-sm font-sm btn-light rounded" style="background-color: rgb(255, 0, 0); transition: background-color 0.3s;">
+                                      <i class="material-icons md-delete_forever"></i>
+                                      <b> Block</b>
+                                  </a>
+                                  <% } else { %>
+                                  <a href="#" onclick="confirmUnBlock('<%= categories[i]._id %>')" class="btn btn-sm font-sm btn-light rounded" style="background-color: #088178; transition: background-color 0.3s;">
+                                      <i class="material-icons md-delete_forever"></i>
+                                      Unblock
+                                  </a>
+                                  <% } %>
+                              </td>
+                          </tr>
                           <% } %>
-                        </td>
-                        <td>
-                          <% if (categories[i].is_Active) { %>
-                          <a
-                            href="#"
-                            onclick="confirmBlock('<%= categories[i]._id %>')"
-                            class="btn btn-sm font-sm btn-light rounded"
-                            style="
-                            background-color: rgb(255, 0, 0);
-                            transition: background-color 0.3s;
-                          "   
-                          
-                          >
-                            <i class="material-icons md-delete_forever"></i>
-                          <b> Block</b> 
-
-                          </a>
-                          <% } else { %>
-                          <a
-                            href="#"
-                            onclick="confirmUnBlock('<%= categories[i]._id %>')"
-                            class="btn btn-sm font-sm btn-light rounded"
-                            style="
-                            background-color: #088178;
-                            transition: background-color 0.3s;
-                          "
-                          >
-                            <i class="material-icons md-delete_forever"></i>
-                            Unblock
-
-                          </a>
-                          <% } %>
-                        </td>
-                      </tr>
-                      <% } %>
-                    </tbody>
+                      </tbody>
                   </table>
+                  
                   <% } %>
                 </div>
               </div>

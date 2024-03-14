@@ -82,6 +82,32 @@ const addCategories = async (req, res) => {
 };
 
 
+const loadeditCategory = async(req,res)=>{
+try {
+
+    const categories = await Category.findById(req.query.id);
+    req.session.cateid=req.query.id
+    res.render('editcategories',{categories})
+    
+} catch (error) {
+    console.log(error)
+}}
+
+
+const editCategory = async(req,res)=>{
+
+    try{
+        const {name,Description} = req.body
+        const updated = await Category.findByIdAndUpdate({ _id:  req.session.cateid }, { $set: { name, Description } })
+        res.redirect("/admin/loadCategories ")
+        console.log(updated)
+
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
+
 
 
 const ToggleblockCategories = async (req,res)=>{
@@ -142,7 +168,8 @@ const loadOrders = async (req,res)=>{
 
 const loadOrderDetails = async (req,res)=>{
     try {
-        res.render("ordersdetail")
+        const orders = await Orders.find()
+        res.render("ordersdetail",{orders})
     } catch (error) {
         console.log(error.message)  
     }
@@ -175,30 +202,6 @@ const loadLogout = async (req, res) => {
 
     }
 }
-
-
-const deleteImage = async (req, res) => {
-    try {
-        const fileName = req.query.fileName;
-
-        // Find the product containing the image
-        const product = await Product.findOne({ Images: fileName });
-        if (!product) {
-            return res.status(404).json({ error: 'Product not found' });
-        }
-
-        // Remove the image from the Images array
-        product.Images = product.Images.filter(image => image !== fileName);
-
-        // Save the updated product
-        await product.save();
-
-        res.sendStatus(200); // Send success response
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' }); // Send error response
-    }
-};
 
 
 
@@ -307,11 +310,12 @@ module.exports = {
     loadCoupon,
     ToggleblockCategories,
     ToggleblockUser,
-    deleteImage,
     adminOrderReturned,
-    adminOrderDelivered,
+    adminOrderDelivered,        
     adminOrderShipped,
     adminOrderPending,
+    loadeditCategory,
+    editCategory
 
 
 }

@@ -44,6 +44,8 @@ adminRoute.get('/ToggleblockCategories', Auth.isLogin, adminControllers.Togglebl
 
 adminRoute.get('/loadCategories', Auth.isLogin, adminControllers.loadCategories)
 adminRoute.post('/addCategories', Auth.isLogin, adminControllers.addCategories)
+adminRoute.get('/loadeditCategory',Auth.isLogin,adminControllers.loadeditCategory)
+adminRoute.post('/editCategory',Auth.isLogin,adminControllers.editCategory)
 
 
 adminRoute.get('/loaduserlist', Auth.isLogin, adminControllers.loaduserlist)
@@ -52,7 +54,7 @@ adminRoute.get('/loadOrderDetails', Auth.isLogin, adminControllers.loadOrderDeta
 adminRoute.get('/loadCoupon', Auth.isLogin, adminControllers.loadCoupon)
 adminRoute.post('/addCoupon', Auth.isLogin, cartControllers.addCoupon)
 adminRoute.get('/ToggleblockCoupon', Auth.isLogin, cartControllers.ToggleblockCoupon)
-adminRoute.post('/removeImage', Auth.isLogin, adminControllers.deleteImage)
+adminRoute.post('/removeImage', Auth.isLogin, productControllers.removeImage)
 
 
 //order status

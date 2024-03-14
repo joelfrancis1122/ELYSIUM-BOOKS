@@ -69,16 +69,19 @@ const editProduct = async (req,res)=>{
               const stock = req.body.stock;
 
             const editProduct = await Product.findOne({_id:req.session.editProductId})
+            console.log(editProduct,":edit product kitty ")
             editProduct.Bookname = Bookname
             editProduct.Description = Description;
             editProduct.Regularprice = Regularprice;
             editProduct.saleprice = saleprice;
             editProduct.stock = stock;
-
-            if(req.files){
+            console.log(req.files);
+const images=req.files
+            if(images){
                 const images = req.files.map(file => file.filename);
-                console.log('images ',images);
-                editProduct.Images=images
+                console.log(images,"images got ");
+                editProduct.Images=[...editProduct.Images,...images] 
+                console.log(editProduct,"ukhfhgfddfgg");
             }
 
             const productUpdateddata = await editProduct.save()
@@ -109,11 +112,37 @@ const ToggleblockProduct = async (req,res)=>{
 }
 
 
+
+const removeImage = async (req, res) => {
+    try {
+        console.log(req.body,"hghghjg")
+        const imageName = req.body.filename;
+        const product = await Product.findById(req.body.productid);
+        console.log(product,"uyjythhytuy");
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        const index = product.Images.findIndex((image) => image === imageName);
+        console.log(index)
+        if (index !== -1) {
+            product.Images.splice(index, 1);
+            await product.save();
+            res.status(200).json({ message: 'Image removed successfully',index });
+        } else {
+            res.status(404).json({ message: 'Image not found in product' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+``
 module.exports = {
     loadaddproduct,
     addProduct,
     loadeditProduct,
     ToggleblockProduct,
-    editProduct
+    editProduct,
+    removeImage
 
 }

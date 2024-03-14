@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Evara - eCommerce HTML Template</title>
+    <title>ELYSIUM-BOOKS</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -781,7 +781,6 @@
                                         <div class="total-section">
                                             <h3>Total Price: $<span id="totalPrice"></span></h3>
                                         </div>
-                                        <hr>
                                         <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i>
                                         </div>
 
@@ -942,51 +941,54 @@
             }
         }
     </script>
+  <script>
+   function increase(productId) {
+    const quantityElement = document.getElementById(`quantity_${productId}`);
+    const currentQuantity = parseInt(quantityElement.textContent);
+    const stockElement = document.getElementById(`stock_${productId}`);
+    const stock = parseInt(stockElement.textContent);
+
+    if (currentQuantity >= stock) {
+        toastr.error("Sorry, the maximum stock limit exceeded.");
+        return; // Exit the function early if stock limit exceeded
+    }
+
+    fetch('/updateCart', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            productId: productId,
+            quantity: 1 // Increase by 1
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            // Increment the quantity displayed on the page
+            quantityElement.textContent = currentQuantity + 1;
+
+            // Update the subtotal
+            const salePrice = document.getElementById(`saleprice_${productId}`).textContent;
+            const subtotalElement = document.getElementById(`subtotal_${productId}`);
+            const saleP = parseFloat(salePrice.replace('$', ''));
+            subtotalElement.textContent = `$${saleP * (currentQuantity + 1)}`;
+
+            updateTotalPrice();
+        } else {
+            console.error('Failed to update cart');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+</script>
 
 
     <script>
-        // function increase(pId) {
-        //     const quantityElement = document.getElementById('quantity_' + pId);
-        //     const currentQuantity = parseInt(quantityElement.textContent);
-        //     if (currentQuantity >= 1) {
-        //         fetch('/updateCart', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({
-        //                 productId: pId,
-        //                 quantity: 1 // Increase by 1
-        //             })
-        //         })
-        //             .then(response => {
-        //                 if (response.ok) {
-        //                     // Increment the quantity displayed on the page
-        //                     quantityElement.textContent = currentQuantity + 1;
-
-        //                     // Update the subtotal
-        //                     const subtotalElement = document.getElementById('subtotal_' + pId);
-        //                     const salePrice = document.getElementById('saleprice_' + pId);
-        //                     // console.log(salePrice * quantityElement.textContent)
-        //                     let saleP = parseFloat(salePrice.textContent.replace('$', ''));
-        //                     console.log(parseFloat(salePrice.textContent.replace('$', '')))
-        //                     document.getElementById('subtotal_' + pId).innerText = saleP * parseInt(quantityElement.textContent);
-        //                     // const price = parseFloat(subtotalElement.textContent.replace('$', ''));
-        //                     // subtotalElement.textContent = '$' + (price + parseFloat(price / parseInt(quantityElement.textContent)));
-        //                     updateTotalPrice();
-        //                 } else {
-        //                     console.error('Failed to update cart');
-        //                 }
-        //             })
-        //             .catch(error => {
-        //                 console.error('Error:', error);
-        //             });
-        //     } else {
-        //         // Quantity is less than 1, do nothing or display a message
-        //         console.log('Quantity is already 0 or less, cannot increase further.');
-        //     }
-        // }
-
+     
         function decrease(pId) {
             const quantityElement = document.getElementById('quantity_' + pId);
             const currentQuantity = parseInt(quantityElement.textContent);
@@ -1005,7 +1007,6 @@
                         if (response.ok) {
                             // Decrement the quantity displayed on the page
                             quantityElement.textContent = currentQuantity - 1;
-
                             // Update the subtotal
                             const subtotalElement = document.getElementById('subtotal_' + pId);
                             const salePrice = document.getElementById('saleprice_' + pId);
@@ -1013,7 +1014,8 @@
                             let saleP = parseFloat(salePrice.textContent.replace('$', ''));
                             console.log(parseFloat(salePrice.textContent.replace('$', '')))
                             document.getElementById('subtotal_' + pId).innerText = saleP * parseInt(quantityElement.textContent);
-                            // const price = parseFloat(subtotalElement.textContent.replace('$', ''));
+                            const price = parseFloat(subtotalElement.textContent.replace('$', ''));
+                            subtotalElement.textContent = `$${saleP * (currentQuantity - 1)}`;
                             // subtotalElement.textContent = '$' + (price + parseFloat(price / parseInt(quantityElement.textContent)));
                             updateTotalPrice();
                         } else {
@@ -1078,51 +1080,7 @@
 
 
 
-    <script>
-   function increase(productId) {
-    const quantityElement = document.getElementById(`quantity_${productId}`);
-    const currentQuantity = parseInt(quantityElement.textContent);
-    const stockElement = document.getElementById(`stock_${productId}`);
-    const stock = parseInt(stockElement.textContent);
-
-    if (currentQuantity >= stock) {
-        toastr.error("Sorry, the maximum stock limit exceeded.");
-        return; // Exit the function early if stock limit exceeded
-    }
-
-    fetch('/updateCart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            productId: productId,
-            quantity: 1 // Increase by 1
-        })
-    })
-    .then(response => {
-        if (response.ok) {
-            // Increment the quantity displayed on the page
-            quantityElement.textContent = currentQuantity + 1;
-
-            // Update the subtotal
-            const salePrice = document.getElementById(`saleprice_${productId}`).textContent;
-            const subtotalElement = document.getElementById(`subtotal_${productId}`);
-            const saleP = parseFloat(salePrice.replace('$', ''));
-            subtotalElement.textContent = `$${saleP * (currentQuantity + 1)}`;
-
-            updateTotalPrice();
-        } else {
-            console.error('Failed to update cart');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-</script>
-
+  
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

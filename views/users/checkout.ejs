@@ -5,7 +5,7 @@
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:10:07 GMT -->
 <head>
     <meta charset="utf-8">
-    <title>Evara - eCommerce HTML Template</title>
+    <title>ELYSIUM-BOOKS</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,6 +29,75 @@
 .remove-icon {
     margin-left: 570px;
 }
+
+
+/* 
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+} */
+
+.coupon-container {
+  display: flex;
+  justify-content: center;
+}
+
+.coupon {
+  background-color: #fff;
+  border: 2px dashed #333;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+}
+
+.coupon-header {
+  text-align: center;
+}
+ .coupon-header img {
+  width: 150px;
+} 
+
+.coupon-header h1 {
+  font-size: 24px;
+  color: #333;
+}
+
+.coupon-content {
+  text-align: center;
+}
+
+.coupon-content p {
+  font-size: 16px;
+  color: #555;
+}
+
+.coupon-content h2 {
+  font-size: 32px;
+  color: #ff5733;
+  margin: 10px 0;
+}
+
+#apply-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#apply-btn:hover {
+  background-color: #45a049;
+}
+
         </style>
 </head>
 
@@ -665,6 +734,22 @@
                     
 
                     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    
                     
                     <div class="col-md-6">
                         <div class="order_review">
@@ -705,6 +790,46 @@
 
                                 </table>
                             </div>
+
+                        
+
+
+
+
+<div class="coupon-container">
+    <div class="coupon">
+      <div class="coupon-header">
+        <img src="coupon-image.jpg" alt="Coupon Image">
+        <h1>Special Offer</h1>
+      </div>
+      <div class="coupon-content">
+        <p>Use this coupon code to get a discount:</p>
+        <h2 id="coupon-code">ABC123</h2>
+        <button id="apply-btn">Apply Coupon</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           
+
                             <div class="bt-1 border-color-1 mt-30 mb-30"></div>
                             <div class="payment_method">
                                 <div class="mb-25">
@@ -720,7 +845,7 @@
                                     </div>
                                     <div class="custome-radio">
                                         <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios4" checked="">
-                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Razorpay</label>
+                                        <!-- <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Razorpay</label> -->
                                         <div class="form-group collapse in" id="checkPayment">
                                             <p class="text-muted mt-5">Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode. </p>
                                         </div>

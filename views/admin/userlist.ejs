@@ -3,7 +3,7 @@
   <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:00 GMT -->
   <head>
     <meta charset="utf-8" />
-    <title>Evara Dashboard</title>
+    <title>ELYSIUM-BOOKS</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -98,7 +98,8 @@
                 <table class="table text-center">
                   <thead style="background-color: #088178; color: white">
                     <tr>
-                      <th>User Name</th>
+                      <th>No</th>
+                      <th>User Name</th>  
                       <th>Email</th>
                       <th>Mobile no</th>
                       <th>Status</th>
@@ -108,6 +109,9 @@
                   <tbody>
                     <% for(let i = 0 ; i < users.length ; i++) { %>
                     <tr class="align-middle">
+                      <td class="align-middle">
+                        <h6 class="mb-0"><%=i+1%></h6>
+                      </td>
                       <td class="align-middle">
                         <h6 class="mb-0"><%=users[i].name%></h6>
                       </td>

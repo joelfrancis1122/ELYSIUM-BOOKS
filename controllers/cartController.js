@@ -307,7 +307,8 @@ module.exports = {
     isCartEmpty,
     loadCheckOut,
     placeOrder,
-    addCoupon,ToggleblockCoupon,
+    addCoupon,
+    ToggleblockCoupon,
     clearCart,
     orderCancel
 
