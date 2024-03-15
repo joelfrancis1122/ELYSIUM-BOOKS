@@ -993,112 +993,83 @@ body {
         </div>
     </div>
     <!-- Vendor JS-->
-
     <script>
-     function placeOrder() {
-        console.log("place order worked")
-    const selectedRadioButton = document.querySelector('input[name="payment_option"]:checked').value;
-    const selectedAddress1 = document.querySelector('input[name="selectedAddress"]:checked');
-    if (!selectedAddress1) {
-        toastr.info("Please select an address.");
-        return false; // Prevent the form from being submitted
-    }
-    const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked').value;
-    const totalAmount = document.getElementById("GrandTotal").innerText;
-    const orderData = {
-        paymentMethod: selectedRadioButton,
-        amount: totalAmount,
-        addresss:selectedAddress
-    };
-
-    // Send a POST request to place the order
-    fetch('/placeorder', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-    })
-    .then(response => response.json())
-    .then(data => {
-        Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Order Placed",
-            showConfirmButton: false,
-            timer: 2000
-        });
-        // Chain the removeItem function here
-        removeItem(); // This will execute removeItem after placeOrder is successful
-    })
-    .then(() => {
-        setTimeout(() => {
-            window.location.href = '/';
-        }, 1000);
-        
-    })
-    .catch(error => {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Something went wrong!",
-        });
-        // Handle error (display an error message, etc.)
-    });
-}
-
-function removeItem() {
-    fetch('/clearCart', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({}), 
-    })
-    .then(response => {
-        // Handle response (if needed)
-    })
-    .catch(error => {
-        // Handle error (display an error message, etc.)
-    });
-}
-
-
-
+        function placeOrder() {
+            console.log("place order worked")
+            const selectedRadioButton = document.querySelector('input[name="payment_option"]:checked').value;
+            const selectedAddress1 = document.querySelector('input[name="selectedAddress"]:checked');
+            if (!selectedAddress1) {
+                toastr.info("Please select an address.");
+                return false; // Prevent the form from being submitted
+            }
+            const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked').value;
+            const totalAmount = document.getElementById("GrandTotal").innerText;
+            const orderData = {
+                paymentMethod: selectedRadioButton,
+                amount: totalAmount,
+                addresss:selectedAddress
+            };
     
-
-
+            // Send a POST request to place the order
+            fetch('/placeorder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Order Placed",
+                    showConfirmButton: false,
+                    timer: 2000
+                }).then(() => {
+                    window.location.href = '/';
+                });
+                // Chain the removeItem function here
+                removeItem(); // This will execute removeItem after placeOrder is successful
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+                // Handle error (display an error message, etc.)
+            });
+        }
+    
+        function removeItem() {
+            fetch('/clearCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}), 
+            })
+            .then(response => {
+                // Handle response (if needed)
+            })
+            .catch(error => {
+                // Handle error (display an error message, etc.)
+            });
+        }
     </script>
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
     <script>
-        // Get the "Place Order" button element
-        // const placeOrderBtn = document.getElementById('placeOrderBtn');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
     
-        // Add click event listener to the button
-        // placeOrderBtn.addEventListener('click', function(event) {
-        //     // Prevent the default action of the button (e.g., submitting a form or following a link)
-        //     event.preventDefault();
-    
-        //     // Display a SweetAlert confirmation dialog
-        //     Swal.fire({
-        //         title: 'Order Placed !',
-        //         icon: 'success',
-        //         // showCancelButton: true,
-        //         confirmButtonColor: '#3085d6',
-        //         cancelButtonColor: '#d33',
-        //         confirmButtonText: 'Ok'
-        //     }).then((result) => {
-        //         // If the user clicks the confirm button, proceed with the order placement
-        //         if (result.isConfirmed) {
-        //             // Place your order logic here
-        //             // For example, you can submit a form or redirect to a new page
-        //             // Replace the "#" with the URL or function you want to execute after confirming
-        //             window.location.href = "/placeOrder"; // Example URL or function
-        //         }
-        //     });
-        // });
-        
+        placeOrderBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            placeOrder(); // Call placeOrder function instead of displaying SweetAlert2
+        });
     </script>
+    
     <script>
         function removeAddress(addressId) {
             const addressElement = document.getElementById('address_' + addressId);
@@ -1125,6 +1096,7 @@ function removeItem() {
             }
         }
     </script>
+    
     
 
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

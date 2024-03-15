@@ -156,7 +156,6 @@ const loadCheckOut = async(req,res)=>{
         const cart = await Cart.findOne({ userId });
         const userData = await User.findOne({ _id: userId });
         const addressData = await Address.find({ userId : userId });
-        console.log("*******************",addressData)
         const cartData= await Cart.findOne({userId:userId}).populate('product.productId')
         res.render('checkout',{name:userData.name,cartData, addresses: addressData })
     }catch(error){

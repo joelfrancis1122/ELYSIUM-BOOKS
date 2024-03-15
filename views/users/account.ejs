@@ -343,7 +343,7 @@
         <section class="pt-150 pb-150">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-10 m-auto">
+                    <div class="col-lg-12 label">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="dashboard-menu">
@@ -469,7 +469,7 @@
                                                                                     <% } %>
                                                                         </td>
                                                                         <td style="padding: 10px;"><a
-                                                                                href="/loadOrderDetails"
+                                                                                href="/loadOrderDetails?id=<%=order._id%>"
                                                                                 class="btn btn-primary btn-sm view-order"
                                                                                 data-order-id="<%= order._id %>"><i
                                                                                     class="fas fa-eye"></i> View</a>

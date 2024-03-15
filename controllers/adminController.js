@@ -33,9 +33,8 @@ const productslist = async(req,res)=>{
              
         
             ],
-        }).populate('Categories');
+        }).populate('Categories').sort({ CreatedOn: -1 })
         console.log(productData)
-        productData.sort((a, b) => new Date(a.CreatedOn) - new Date(b.CreatedOn));
         res.render('productslist',{product:productData,search:search})
     }catch(error){
 console.log(error);
@@ -168,8 +167,10 @@ const loadOrders = async (req,res)=>{
 
 const loadOrderDetails = async (req,res)=>{
     try {
-        const orders = await Orders.find()
-        res.render("ordersdetail",{orders})
+        const productId = req.query.id
+        const orders = await Orders.findOne({ _id:productId}).populate('product.productId')
+
+        res.render("ordersview",{orders})
     } catch (error) {
         console.log(error.message)  
     }
@@ -180,7 +181,7 @@ const loadOrderDetails = async (req,res)=>{
 
 const loadCoupon = async (req, res) => {
     try {
-        const couponData = await Coupon.find()
+        const couponData = await Coupon.find().sort({ Date: -1 })
         console.log("Coupo data: " , couponData)
         res.render('Coupon',{couponData})
     } catch (error) {

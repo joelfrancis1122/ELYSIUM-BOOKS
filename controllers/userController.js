@@ -3,6 +3,7 @@ const User = require('../models/userModel')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
 const Address = require('../models/addressModel')
+const Cart = require('../models/cartModel')
 const Orders = require('../models/orderModel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
@@ -62,7 +63,6 @@ const loadHome = async (req, res) => {
     try {
         let userId = req.session.user;
 
-        console.log(userId, "user");
         let search = req.query.query || "";
 
         const productData = await Product.aggregate([
@@ -120,6 +120,8 @@ const verifyLogin = async (req, res) => {
 
         if (userData) {
             const passwordMatch = await bcrypt.compare(password, userData.password);
+            console.log(password,"password--------------------")
+            console.log(userData.password,"userdata+++++++++++++++++++")
             if (passwordMatch) {
                 if (userData.is_active == true) {
                     if (userData.is_admin === true) {
@@ -305,13 +307,36 @@ const loadProfile = async (req, res) => {
 
 const loadOrderDetails = async (req,res)=>{
     try {
-        const orders = await Orders.find({ userId: userId }).populate('userId');
-        res.render("ordersdetail",{orders})
+        const userId = req.session.user;
+        const productID = req.query.id
+        const orders = await Orders.findOne({ _id:productID}).populate('product.productId')
+        const userData = await User.findOne({ orderId: productID });
+        const addressData = await Address.findOne({ userId : userId });
+        const cartData= await Cart.findOne({userId:userId})
+        res.render("ordersdetail",{orders,user:userData,address:addressData,cartData})
+
+
     } catch (error) {
         console.log(error.message)  
     }
 }
 
+
+const loadInvoice =  async(req,res)=>{
+    try{
+        const userId = req.session.user;
+        const productID = req.query.id
+        const userData = await User.findOne({_id: userId });
+
+        const orders = await Orders.findOne({ _id:productID}).populate('product.productId')
+        const addressData = await Address.findOne({ userId : userId });
+
+        res.render("invoice",{orders,address:addressData,user:userData})
+
+        }catch(error){
+        console.log(error)
+    }
+}
 
 const loadShop = async (req, res) => {
     try {
@@ -685,7 +710,8 @@ module.exports = {
     updateAddress,
     loadAddAddress,
     addAddress1,
-    loadOrderDetails
+    loadOrderDetails,
+    loadInvoice
 
 
     // loadAddress

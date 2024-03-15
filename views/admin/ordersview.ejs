@@ -20,7 +20,7 @@
 
 <body>
   <div class="screen-overlay"></div>
-
+  <%-include('../partials/adminAside')-%>
   <main class="main-wrap">
     
     <section class="content-main">
@@ -44,11 +44,7 @@
                   <br />
                   <p>Details for Order ID: <%=orders.orderId%></p>
               </div>
-              <% if (orders.orderStatus === "Delivered") { %>
-              <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                  <a class="btn btn-primary" href="/loadInvoice?id=<%=orders._id%>">Invoice</a>
-              </div>
-              <% } %>
+             
           </div>
       </header>
       

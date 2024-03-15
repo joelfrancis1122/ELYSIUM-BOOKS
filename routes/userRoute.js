@@ -39,6 +39,7 @@ userRoute.get('/loadAddAddress', Auth.isLogin, userControllers.loadAddAddress)
 userRoute.get('/loadAddAddress', Auth.isLogin, userControllers.loadAddAddress)
 userRoute.post('/updateAddress', Auth.isLogin, userControllers.updateAddress)
 userRoute.get('/loadOrderDetails', Auth.isLogin, userControllers.loadOrderDetails)
+userRoute.get('/loadInvoice', Auth.isLogin, userControllers.loadInvoice)
 
 
 
