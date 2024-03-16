@@ -156,13 +156,13 @@
                                     <a href="shop-wishlist.html">
                                         <img class="svgInject" alt="Evara"
                                             src="public/assets/imgs/theme/icons/icon-heart.svg">
-                                        <span class="pro-count blue">4</span>
+                                        <span class="pro-count blue">0</span>
                                     </a>
                                 </div>
                                 <div class="header-action-icon-2">
                                     <a class="mini-cart-icon" href="/cart">
                                         <img alt="Evara" src="public/assets/imgs/theme/icons/icon-cart.svg">
-                                        <span class="pro-count blue">2</span>
+                                        <span class="pro-count blue"><%=cartLength%></span>
                                     </a>
 
                                 </div>
@@ -463,7 +463,7 @@
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="shop-cart.html">
                                     <img alt="Evara" src="public/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count white">2</span>
+                                    <span class="pro-count white"></span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
@@ -1080,7 +1080,12 @@
 
 
 
-  
+<script>
+    // Get the span element
+    const cartCountSpan = document.getElementById('cart-count');
+
+    // Update the content of the span with the cart length
+</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

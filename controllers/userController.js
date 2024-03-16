@@ -64,7 +64,8 @@ const loadHome = async (req, res) => {
         let userId = req.session.user;
 
         let search = req.query.query || "";
-
+        const cartData= await Cart.findOne({userId:userId})
+        const cartLength = cartData ? cartData.product.length : 0
         const productData = await Product.aggregate([
             {
                 $match: {
@@ -89,8 +90,7 @@ const loadHome = async (req, res) => {
         ]);
 
         const userData = await User.findOne({ _id: userId });
-        // console.log('product data ', productData);
-        res.render('home', { product: productData, name: userData.name, search: search });
+        res.render('home', { product: productData, name: userData.name, search: search ,cartLength});
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');
@@ -282,7 +282,10 @@ const shopProduct = async (req, res) => {
         const relatedProducts =await Product.find({Categories:productData.Categories , _id: { $ne: productId }}); //id
         console.log("relatedProducts",relatedProducts)
         const userData = await User.findOne({ _id: userId });
-        res.render('singleproduct', { product: productData, name: userData.name,relatedProducts})
+        const cartData= await Cart.findOne({userId:userId})
+
+        const cartLength = cartData ? cartData.product.length : 0
+        res.render('singleproduct', { product: productData, name: userData.name,relatedProducts,cartLength})
 
     } catch (error) {
         console.log(error)
@@ -295,8 +298,10 @@ const loadProfile = async (req, res) => {
         const userData = await User.findOne({ _id: userId });
         const Order = await Orders.find({ userId: userId }).populate('userId');
         const addressData = await Address.find({ userId: userId });
+        const cartData= await Cart.findOne({userId:userId})
 
-        res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order });
+        const cartLength = cartData ? cartData.product.length : 0
+        res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order,cartLength });
     } catch (error) {
         console.log(error);
         res.redirect('/'); // Redirect to home or any other page in case of error
@@ -313,7 +318,8 @@ const loadOrderDetails = async (req,res)=>{
         const userData = await User.findOne({ orderId: productID });
         const addressData = await Address.findOne({ userId : userId });
         const cartData= await Cart.findOne({userId:userId})
-        res.render("ordersdetail",{orders,user:userData,address:addressData,cartData})
+        const cartLength = cartData ? cartData.product.length : 0
+        res.render("ordersdetail",{orders,user:userData,address:addressData,cartData,cartLength:cartLength})
 
 
     } catch (error) {
@@ -346,7 +352,9 @@ const loadShop = async (req, res) => {
 
         const userData = await User.findOne({ _id: userId });
         const regex = new RegExp(search, 'i');
+        const cartData= await Cart.findOne({userId:userId})
 
+        const cartLength = cartData ? cartData.product.length : 0
         if (req.query.filter) {
             let products
             if (req.query.filter == 'low-high') {
@@ -379,8 +387,7 @@ const loadShop = async (req, res) => {
                     $match: { 'Categories.is_Active': true }
                 }
             ]);
-
-            res.render('shop', { product: products, categories, name: userData.name, search: search });
+            res.render('shop', { product: products, categories, name: userData.name, search: search ,cartLength});
         }
     } catch (error) {
         console.error(error);

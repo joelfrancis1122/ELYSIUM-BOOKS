@@ -64,12 +64,24 @@
                 </div>
                 <div class="header-right">
                     <div class="search-style-2">
-                        <form action="/loadShop" class="premium-search-form">
-                            
-                            <input type="text" name="query"   value="<%=search%>" placeholder="Search for items...">
-                            <button type="submit"></button>
-                        </form>
 
+                        <%if(locals.search){ %>
+
+                            <form action="/loadShop" class="premium-search-form">
+                            
+                                <input type="text" name="query"   value="<%=search%>" placeholder="Search for items...">
+                                <button type="submit"></button>
+                            </form>
+    
+
+                       <% }else { %>
+                            <form action="/loadShop" class="premium-search-form">
+                            
+                                <input type="text" name="query"    placeholder="Search for items...">
+                                <button type="submit"></button>
+                            </form>
+                       <% } %>
+                      
                         
                     </div>
                     <div class="header-action-right">
@@ -77,15 +89,26 @@
                             <div class="header-action-icon-2">
                                 <a href="shop-wishlist.html">
                                     <img class="svgInject" alt="Evara" src="/public/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">4</span>
+                                    <span class="pro-count blue">0</span>
                                 </a>
                             </div>
+                            <%if(locals.cartLength){ %>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="/cart">
-                                    <img alt="Evara" src="/public/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count blue">2</span>
-                                </a>
-                                
+                                <div class="header-action-icon-2">
+                                    <a class="mini-cart-icon" href="/cart">
+                                        <img alt="Evara" src="/public/assets/imgs/theme/icons/icon-cart.svg">
+                                        <span id="cart-count" class="pro-count blue"><%= cartLength %></span>
+                                    </a>
+                                </div>
+                                <% }else { %>
+                                    <div class="header-action-icon-2">
+                                        <div class="header-action-icon-2">
+                                            <a class="mini-cart-icon" href="/cart">
+                                                <img alt="Evara" src="/public/assets/imgs/theme/icons/icon-cart.svg">
+                                            </a>
+                                        </div>
+                                <% } %>
+
                             </div>
                         </div>
                     </div>

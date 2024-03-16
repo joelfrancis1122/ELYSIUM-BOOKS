@@ -1,7 +1,9 @@
 const express = require('express')
 const adminRoute = express()
 const multer = require('multer')
-const path = require('path')
+
+const MulterImage = require('../config/multer')
+// const  = require('../config/multer')
 
 adminRoute.set('view engine', 'ejs')
 adminRoute.set('views', './views/admin')
@@ -11,31 +13,19 @@ const productControllers = require('../controllers/productController')
 const cartControllers = require('../controllers/cartController')
 const Auth = require('../middlewares/adminAuth')
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, '../public/uploads');
-        console.log("Destination Path: ", uploadPath); // Logging destination path
-        cb(null, uploadPath);
-    },
-    filename: function (req, file, cb) {
-        const name = Date.now() + '-' + file.originalname;
-        cb(null, name);
-    }
-});
 
 
-const upload = multer({ storage: storage })
 
 
 adminRoute.get('/dashboard', Auth.isLogin, adminControllers.dashboardLoad)
 adminRoute.get('/productslist', Auth.isLogin, adminControllers.productslist)
 
 adminRoute.get('/loadaddproduct', Auth.isLogin, productControllers.loadaddproduct)
-adminRoute.post('/addProduct', Auth.isLogin, upload.array('Images', 5), productControllers.addProduct)
+adminRoute.post('/addProduct', Auth.isLogin, MulterImage.upload.array('Images', 5), productControllers.addProduct)
 
 
 adminRoute.get('/loadeditProduct', Auth.isLogin, productControllers.loadeditProduct)
-adminRoute.post('/editProduct', Auth.isLogin, upload.array('Images', 5), productControllers.editProduct)
+adminRoute.post('/editProduct', Auth.isLogin, MulterImage.upload.array('Images', 5), productControllers.editProduct)
 
 adminRoute.get('/ToggleblockProduct', Auth.isLogin, productControllers.ToggleblockProduct)
 adminRoute.get('/ToggleblockUser', Auth.isLogin, adminControllers.ToggleblockUser)
@@ -68,7 +58,6 @@ adminRoute.get('/adminOrderReturned', Auth.isLogin, adminControllers.adminOrderR
 
 adminRoute.get('/logout', Auth.isLogin, adminControllers.loadLogout)
 
-// adminRoute.post('/addproduct',auth.isLogin,productController.insertProduct);
 
 module.exports = adminRoute
 

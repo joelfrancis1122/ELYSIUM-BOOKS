@@ -11,9 +11,10 @@ const getCart= async(req,res)=>{
     try {
 
         const userId= req.session.user
-        const cartData= await Cart.findOne({userId:userId}).populate('product.productId')
         const userData = await User.findOne({ _id: userId });
-        res.render("cart",{cartData,name:userData.name})
+        const cartData= await Cart.findOne({userId:userId}).populate('product.productId')
+        const cartLength = cartData ? cartData.product.length : 0
+        res.render("cart",{cartData,name:userData.name,cartLength})
         
     } catch (error) {
         console.log(error.message)
@@ -157,7 +158,9 @@ const loadCheckOut = async(req,res)=>{
         const userData = await User.findOne({ _id: userId });
         const addressData = await Address.find({ userId : userId });
         const cartData= await Cart.findOne({userId:userId}).populate('product.productId')
-        res.render('checkout',{name:userData.name,cartData, addresses: addressData })
+
+        const cartLength = cartData ? cartData.product.length : 0
+        res.render('checkout',{name:userData.name,cartData, addresses: addressData ,cartLength})
     }catch(error){
         console.log(error)
     }
