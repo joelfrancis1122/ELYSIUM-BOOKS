@@ -257,7 +257,7 @@ const verifyOtp = async (req, res) => {
             })
 
 
-
+ 
 
             const userData = await user.save()
             if (userData) {

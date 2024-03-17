@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <!-- 959154758023-tu1liisoua39ocfh2dbtqvevuoe1kl8t.apps.googleusercontent.com -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="959154758023-tu1liisoua39ocfh2dbtqvevuoe1kl8t.apps.googleusercontent.com">
-    <title>Document</title>
+    
+    <meta name="google-signin-client_id" content="959154758023-oho8hi88gopv8i5cfepvnh4f2dpdd0po.apps.googleusercontent.com">
+    <title>ELYSIUM-BOOKS</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png">
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
@@ -196,8 +198,7 @@
 
   
 </script>
-
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
    <script src="index.js"> </script>
    
@@ -208,6 +209,14 @@
  
 
     <script>
+      function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+    </script>
+    <script>  
       // Function to display Toastr notification on page load
       function displayToastrOnLoad() {
         toastr.success('<img src="/public/cru.gif" alt="Crying Emoji" style="width: 35px; height: 35px;">', 'Please Login or Signup ', {

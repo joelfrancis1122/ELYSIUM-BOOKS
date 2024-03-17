@@ -96,9 +96,10 @@ try {
 const editCategory = async(req,res)=>{
 
     try{
-        const {name,Description} = req.body
-        const updated = await Category.findByIdAndUpdate({ _id:  req.session.cateid }, { $set: { name, Description } })
-        res.redirect("/admin/loadCategories ")
+        const { categoryName,Description} = req.body
+        console.log(req.body,":========================================================")
+        const updated = await Category.findByIdAndUpdate({ _id:  req.session.cateid }, { $set: {  categoryName, Description } })
+        res.redirect("/admin/loadCategories")
         console.log(updated)
 
     }catch(error){

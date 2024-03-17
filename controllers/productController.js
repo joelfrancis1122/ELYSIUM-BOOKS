@@ -67,12 +67,14 @@ const editProduct = async (req,res)=>{
               const Regularprice = req.body.Regularprice;
               const saleprice = req.body.saleprice;
               const stock = req.body.stock;
+              const Categories = req.body.Categories;
 
             const editProduct = await Product.findOne({_id:req.session.editProductId})
             console.log(editProduct,":edit product kitty ")
             editProduct.Bookname = Bookname
             editProduct.Description = Description;
             editProduct.Regularprice = Regularprice;
+            editProduct.Categories = Categories;
             editProduct.saleprice = saleprice;
             editProduct.stock = stock;
             console.log(req.files);

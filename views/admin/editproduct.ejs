@@ -83,10 +83,9 @@
                                         <div class="mb-4">
                                             <label class="form-label">Categories</label>
                                             <select class="form-select" name="Categories">
-                                                <option> Fiction </option>
-                                                <option> NonFiction </option>
-                                                <option> Horror </option>
-                                                <option> Teens & YA </option>
+                                                <% for(let i = 0 ; i < categories.length ; i++) { %>
+                                                    <option value="<%=categories[i]._id%>"><%=categories[i].categoryName%></option>
+                                                <% } %>
                                             </select>
                                         </div>
                                     </div> <!-- col.// -->
