@@ -286,19 +286,7 @@ body {
                         <!-- <div class="toggle_info">
                             <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Have a coupon?</span> <a href="#coupon" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Click here to enter your code</a></span>
                         </div> -->
-                        <div class="panel-collapse collapse coupon_form " id="coupon">
-                            <div class="panel-body">
-                                <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
-                                <form method="post">
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Enter Coupon Code...">
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn  btn-md" name="login">Apply Coupon</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 <div class="row">
@@ -418,10 +406,9 @@ body {
 
 
 
-<div class="coupon-container">
+<!-- <div class="coupon-container">
     <div class="coupon">
       <div class="coupon-header">
-        <img src="coupon-image.jpg" alt="Coupon Image">
         <h1>Special Offer</h1>
       </div>
       <div class="coupon-content">
@@ -431,13 +418,21 @@ body {
       </div>
     </div>
   </div>
+ -->
 
-
-
-
-
-
-
+ <div class="panel-body">
+    <p class="mb-30 font-sm">
+        <h4>If you have a coupon code, please apply it below.</h4>
+    </p>
+   
+        <div class="form-group">
+            <input type="text" placeholder="Enter Coupon Code..." id="couponCode"/>
+        </div>
+        <div class="form-group">
+           <a class="btn  mr-10 mb-sm-15" id="applyCouponBtn" onclick="applyCoupon()" ></i>Apply Coupon</a>
+           <a class="btn  mr-10 mb-sm-15 bg-danger" id="removeCouponBtn" style="display: none;" onclick="removeCoupon()" ></i>Remove Coupon</a>
+        </div>
+</div>
 
 
 

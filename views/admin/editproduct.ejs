@@ -98,7 +98,7 @@
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Cost in USD</label>
-                                            <input type="text" name="Regularprice" value="<%=product.Regularprice%>" placeholder="$00.0" class="form-control">
+                                            <input type="text" name="Regularprice"  pattern="[1-9][0-9]*"  value="<%=product.Regularprice%>" placeholder="$00.0" class="form-control">
                                         </div>
                                     </div> <!-- col.// -->
                                     <div class="col-md-3">
@@ -107,7 +107,7 @@
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Cost in USD</label>
-                                            <input type="text" name="saleprice" value="<%=product.saleprice%>"placeholder="$00.0" class="form-control">
+                                            <input type="text" name="saleprice"  pattern="[1-9][0-9]*" value="<%=product.saleprice%>"placeholder="$00.0" class="form-control">
                                         </div>
                                     </div> 
                                     <div class="col-md-3">
@@ -116,7 +116,7 @@
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Stock</label>
-                                            <input type="text" name="stock"  value="<%=product.stock%>"placeholder="0" class="form-control">
+                                            <input type="text" name="stock"  pattern="[1-9][0-9]*"  value="<%=product.stock%>"placeholder="0" class="form-control">
                                         </div>
                                     </div>  
                                 </div> <!-- row.// -->

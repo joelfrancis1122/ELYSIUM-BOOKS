@@ -412,53 +412,50 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+
                                             <div class="col-lg-6" id="addressFormContainer" style="display: none;">
                                                 <div class="card mb-4 mb-lg-0">
                                                     <div class="card-header">
                                                         <h5 class="mb-0">Add New Address</h5>
                                                     </div>
                                                     <div class="card-body">
-                                                        <form action="/addAddress" method="post">
+                                                        <form id="addressForm" action="/addAddress" method="post">
                                                             <div class="mb-3">
-                                                                <label for="inputAddress"
-                                                                    class="form-label">Name</label>
-                                                                <input type="text" class="form-control form-control-lg"
-                                                                    name="name" id="inputAddress">
+                                                                <label for="inputAddress" class="form-label">Name</label>
+                                                                <input type="text" class="form-control form-control-lg" name="name" id="inputAddress" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="inputCity" class="form-label">mobile</label>
-                                                                <input type="text" maxlength="10"
-                                                                    class="form-control form-control-lg" name="mobile"
-                                                                    id="inputCity">
+                                                                <label for="inputCity" class="form-label">Mobile</label>
+                                                                <input type="tel" pattern="[0-9]{10}" class="form-control form-control-lg" name="mobile" id="inputCity" required>
+                                                                <small>Please enter a 10-digit mobile number.</small>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="inputState" class="form-label">House
-                                                                    name</label>
-                                                                <input type="text" class="form-control form-control-lg"
-                                                                    name="houseName" id="inputState">
+                                                                <label for="inputState" class="form-label">House Name</label>
+                                                                <input type="text" class="form-control form-control-lg" name="houseName" id="inputState" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="inputZip" class="form-label">City</label>
-                                                                <input type="text" class="form-control form-control-lg"
-                                                                    name="city" id="inputZip">
+                                                                <input type="text" class="form-control form-control-lg" name="city" id="inputZip" required>
                                                             </div>
                                                             <div class="mb-3">
-                                                                <label for="inputZip" class="form-label">State</label>
-                                                                <input type="text" class="form-control form-control-lg"
-                                                                    name="state" id="inputZip">
+                                                                <label for="inputState" class="form-label">State</label>
+                                                                <input type="text" class="form-control form-control-lg" name="state" id="inputState" required>
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="inputZip" class="form-label">Pincode</label>
-                                                                <input type="text" class="form-control form-control-lg"
-                                                                    name="pinCode" id="inputZip">
+                                                                <input type="text" class="form-control form-control-lg" name="pinCode" id="inputZip" required pattern="[0-9]{6}">
+                                                                <small>Please enter a 6-digit pin code.</small>
                                                             </div>
-                                                            <button type="submit" class="btn btn-primary btn-lg">Save
-                                                                Address</button>
+                                                            <button type="submit" class="btn btn-primary btn-lg">Save Address</button>
                                                         </form>
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
+
                                     </div>
                                     <div class="tab-pane fade" id="account-detail" role="tabpanel"
                                         aria-labelledby="account-detail-tab">
@@ -470,9 +467,9 @@
                                             <div class="card-body">
                                                 <form id="profileEditForm" action="profileEdit" method="post">
                                                     <label for="name">Name:</label>
-                                                    <input type="text" id="name" name="name" value="<%= name %>">
+                                                    <input type="text" id="name" name="name" value="<%= name %>" required>
                                                     <label for="email">Email:</label>
-                                                    <input type="email" id="email" name="email" value="<%= email %>">
+                                                    <input type="email" id="email" name="email" value="<%= email %>" required>
                                                     <hr>
                                                     <label for="password">
                                                         <h4>Enter Your Original Password to Confirm:</h4>
@@ -480,6 +477,7 @@
                                                     <input type="password" id="password" name="password" required>
                                                     <button type="submit">Update</button>
                                                 </form>
+                                                
                                             </div>
 
                                         </div>
@@ -721,45 +719,112 @@
     </script>
 
 
-    <script>
-        const profileEdit = async (event) => {
-            event.preventDefault(); // Prevent form submission
-            const formData = new FormData(document.getElementById('profileEditForm')); // Get form data
-            const body = Object.fromEntries(formData); // Convert form data to object
+<script>
+    const profileEdit = async (event) => {
+        event.preventDefault(); // Prevent form submission
+        const nameInput = document.getElementById("name");
+        
+        // Validate Name field to disallow spaces or numbers
+        if (/[\s\d]/.test(nameInput.value)) {
+            toastr.error("Name should not contain spaces or numbers.");
+            nameInput.focus();
+            return;
+        }
+        
+        const formData = new FormData(document.getElementById('profileEditForm')); // Get form data
+        const body = Object.fromEntries(formData); // Convert form data to object
 
-            try {
-                const response = await fetch('/profileEdit', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                });
-                console.log(response)
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-
-                if (!data.success) {
-                    toastr.error(data.message);
-                } else {
-                    toastr.success(data.message);
-                    setTimeout(() => {
-                        window.location.reload()
-
-                    }, 1500)
-                }
-            } catch (error) {
-                console.error('Error:', error);
+        try {
+            const response = await fetch('/profileEdit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            console.log(response)
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        };
+            const data = await response.json();
 
-        document.getElementById('profileEditForm').addEventListener('submit', profileEdit);
+            if (!data.success) {
+                toastr.error(data.message);
+            } else {
+                toastr.success(data.message);
+                setTimeout(() => {
+                    window.location.reload()
+
+                }, 1500)
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    document.getElementById('profileEditForm').addEventListener('submit', profileEdit);
+</script>
+
+<!-- <script>
+    // Add custom JavaScript validation
+    document.getElementById("addressForm").addEventListener("submit", function(event) {
+        // Validate each input
+        const mobileInput = document.getElementById("inputCity");
+        if (!/^\d{10}$/.test(mobileInput.value)) {
+            toastr("Please enter a valid 10-digit mobile number.");
+            mobileInput.focus();
+            event.preventDefault();
+            return;
+        }
+
+        const pinCodeInput = document.getElementById("inputZip");
+        if (!/^\d{6}$/.test(pinCodeInput.value)) {
+            toastr("Please enter a valid 6-digit pin code.");
+            pinCodeInput.focus();
+            event.preventDefault();
+            return;
+        }
+
+        // Additional validation for other fields if needed
+
+        // If all validations pass, the form will submit
+    });
+</script> -->
+
+    <!-- Vendor JS-->
+
+
+
+    <script>
+        document.getElementById("addressForm").addEventListener("submit", function(event) {
+            // Prevent form submission
+            event.preventDefault();
+    
+            // Validate Name field to disallow spaces
+            const nameInput = document.getElementById("inputAddress");
+            if (/\s/.test(nameInput.value)) {
+                toastr.error("Name should not contain spaces.");
+                nameInput.focus();
+                return;
+            }
+    
+            // Validate State, City, and House Name fields to disallow numbers
+            const stateInput = document.getElementById("inputState");
+            const cityInput = document.getElementById("inputZip");
+            const houseNameInput = document.getElementById("inputZip");
+    
+            if (/\d/.test(stateInput.value) || /\d/.test(cityInput.value) || /\d/.test(houseNameInput.value)) {
+                toastr.error("State, City, and House Name should not contain numbers.");
+                stateInput.focus();
+                return;
+            }
+    
+            // If all validations pass, submit the form
+            this.submit();
+        });
     </script>
 
 
-    <!-- Vendor JS-->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">

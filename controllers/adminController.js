@@ -7,7 +7,6 @@ const Orders = require('../models/orderModel')
 
 const dashboardLoad  = async (req, res) => {
     try {
-        console.log('inside user dashboard');
         res.render('admindashboard')
     } catch (error) {
         console.log(error)
@@ -34,7 +33,6 @@ const productslist = async(req,res)=>{
         
             ],
         }).populate('Categories').sort({ CreatedOn: -1 })
-        console.log(productData)
         res.render('productslist',{product:productData,search:search})
     }catch(error){
 console.log(error);
@@ -49,7 +47,6 @@ const loadCategories = async(req,res)=>{
     try {
         const catData = await Category.find()
            if(catData){
-          console.log("success");
           res.render('addCategories',{categories : catData})
            }
     } catch (error) {
@@ -97,7 +94,6 @@ const editCategory = async(req,res)=>{
 
     try{
         const { categoryName,Description} = req.body
-        console.log(req.body,":========================================================")
         const updated = await Category.findByIdAndUpdate({ _id:  req.session.cateid }, { $set: {  categoryName, Description } })
         res.redirect("/admin/loadCategories")
         console.log(updated)
@@ -127,7 +123,6 @@ const ToggleblockCategories = async (req,res)=>{
 const loaduserlist = async (req, res) => {
     try {
         const userData = await User.find({is_admin:false})
-        console.log(userData)
         res.render('userlist',{users:userData})
     } catch (error) {
         console.log(error)

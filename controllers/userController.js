@@ -120,8 +120,6 @@ const verifyLogin = async (req, res) => {
 
         if (userData) {
             const passwordMatch = await bcrypt.compare(password, userData.password);
-            console.log(password,"password--------------------")
-            console.log(userData.password,"userdata+++++++++++++++++++")
             if (passwordMatch) {
                 if (userData.is_active == true) {
                     if (userData.is_admin === true) {
@@ -280,7 +278,6 @@ const shopProduct = async (req, res) => {
         let userId = req.session.user;
         const productData = await Product.findOne({ _id: productId }).populate('Categories');
         const relatedProducts =await Product.find({Categories:productData.Categories , _id: { $ne: productId }}); //id
-        console.log("relatedProducts",relatedProducts)
         const userData = await User.findOne({ _id: userId });
         const cartData= await Cart.findOne({userId:userId})
 
@@ -403,7 +400,6 @@ const loadShop = async (req, res) => {
 const profileEdit = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        console.log("body ", req.body)
         const userId = req.session.user;
         const user = await User.findOne({ _id: userId });
         if (!user) {
@@ -411,15 +407,11 @@ const profileEdit = async (req, res) => {
             res.redirect('/loadProfile');
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
-        console.log('passsword match :', passwordMatch)
         if (passwordMatch) {
             const updated = await User.updateOne({ _id: userId }, { $set: { name, email } });
-            console.log(updated)
            res.json({success:true, message: 'Profile updated sucesfully !' });
 
-            // res.redirect('/loadProfile');
         } else {
-            console.log("///////////toastr////////////")
             return res.json({ message: 'Password does not match' });
         }
 
@@ -432,10 +424,8 @@ const profileEdit = async (req, res) => {
 const updateAddress = async (req, res) => {
     try {
         const { name, mobile, houseName, city, state, pinCode } = req.body;
-        console.log("body////////////////////", req.body);
         const userId = req.session.user;
         const updated = await Address.findByIdAndUpdate({ _id: req.query.id }, { $set: { name, mobile, houseName, city, state, pinCode } });
-        console.log(updated);
 
         res.redirect('/loadCheckOut');
     } catch (error) {
@@ -476,8 +466,6 @@ const addAddress = async (req, res) => {
     try {
         const userId = req.session.user
         const { name, mobile, houseName, city, state, pinCode } = req.body;
-        // console.log("gydfyiyh")
-        // console.log(req.body)
         const address = new Address({
             userId: userId,
             name: name,
@@ -502,8 +490,6 @@ const addAddress1 = async (req, res) => {
     try {
         const userId = req.session.user
         const { name, mobile, houseName, city, state, pinCode } = req.body;
-        // console.log("gydfyiyh")
-        // console.log(req.body)
         const address = new Address({
             userId: userId,
             name: name,
@@ -548,32 +534,6 @@ const removeAddress = async (req, res) => {
 
 
 
-
-// const loadAddress = async (req, res) => {
-//     try {
-
-//         const { name, mobile, houseName , city , state,  pinCode} = req.body;
-//         // console.log("gydfyiyh")
-//         // console.log(req.body)
-//         const address = new Address({
-//            name:name,
-//             mobile: mobile,
-//             houseName :houseName ,
-//             city:city,
-//             state:state,
-//             pinCode:pinCode
-
-//         });
-
-//        await address.save();
-//        if(couponData){
-//         res.redirect('/admin/loadProfile')
-//        }
-
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
 
 
 

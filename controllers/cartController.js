@@ -56,8 +56,6 @@ const addToCart = async (req, res) => {
 
 const updateCart = async (req, res) => {
     try {
-        console.log('update cart------------------')
-        console.log("Product Id :",req.body)
         const  {productId, quantity}  = req.body;
         const  userId  = req.session.user; 
         let cart = await Cart.findOne({ userId });
@@ -67,9 +65,6 @@ const updateCart = async (req, res) => {
         }
 
         const productIndex = cart.product.findIndex(item => item.productId.toString() === productId);
-        console.log(req.body,"this is productId--_")
-        console.log(productId,"this is productId--_")
-        console.log(quantity,"this is quantity-")
         if (productIndex !== -1) {
             if (quantity > 0) {
                 cart.product[productIndex].quantity += quantity;
@@ -80,7 +75,6 @@ const updateCart = async (req, res) => {
             }
         } else if (quantity > 0) {
             cart.product.push({ productId, quantity });
-            console.log(quantity,"quantity")
         }
 
         await cart.save();
@@ -103,7 +97,6 @@ const updateCart = async (req, res) => {
 const removeItem = async(req,res)=>{
     try {
         const {productId} = req.body;
-        console.log(productId,"odiyan")
         const userId = req.session.user;
         let cart = await Cart.findOne({ userId });
         if (!cart) {
@@ -111,20 +104,16 @@ const removeItem = async(req,res)=>{
         }   
         // Find the index of the product
         const productIndex = cart.product.findIndex(item => item.productId.toString() === productId);
-console.log(productIndex,"product index kitty.............................")
         if (productIndex !== -1) {
             //  product   remove it
             cart.product.splice(productIndex, 1);
          const updateCart = await cart.save();
-            console.log(updateCart,"after deleted odi")
             return res.status(200).send('Product removed from the cart');
         } else {
-            console.log("Joel francis")
             return res.status(404).send('Product not found in the cart');
         }
     } catch (error) {
         console.error(error.message);
-        // Send an error response
         res.status(500).send('Internal Server Error');
     }
 };
@@ -172,11 +161,8 @@ const placeOrder = async (req, res) => {
         try {
 
             const userId = req.session.user
-            console.log("user from placeOrder: " , userId)
             const cart = await Cart.findOne({userId:userId});
-            console.log("cart frm placeOrder : " , cart)
             const address = await Address.findOne({_id:req.body.addresss});
-            console.log("address frm placeOrder : " , address)
 
             // const address = await Address.findById(addressId);
   
@@ -210,7 +196,6 @@ const placeOrder = async (req, res) => {
                 // You can add other fields like user ID, order date, etc. if needed
             });
             await order.save()  
-            console.log("newOrder:",order)
             res.status(200).json({message:"Order Placed Successfully"})
             // // Respond with success
             // res.status(200).json({ message: 'Order placed successfully' });
@@ -228,8 +213,6 @@ const addCoupon = async (req, res) => {
         const { couponName, couponCode, minimumPurchase , discountAmount , maximumUses, expirationDate} = req.body;
         // const couponData = await Coupon.find()
 
-        console.log("gydfyiyh")
-        console.log(req.body)
         const coupons = new Coupon({
             couponName: couponName,
             couponCode: couponCode,
@@ -239,10 +222,8 @@ const addCoupon = async (req, res) => {
             expirationDate:expirationDate
 
         });
-        console.log("Coupon :",coupons)
 
        let couponData =  await coupons.save();
-       console.log("Sample coppn data : " , couponData)
        if(couponData){
         req.flash('success', 'This is a success message');
         res.redirect('/admin/loadCoupon')
@@ -257,7 +238,6 @@ const addCoupon = async (req, res) => {
 const ToggleblockCoupon = async(req,res)=>{
     try{
         const Couid = req.query.Couid
-        console.log("................................",Couid)
         const coupons = await Coupon.findOne({_id:Couid});
         coupons.isActive=!coupons.isActive
         await coupons.save()

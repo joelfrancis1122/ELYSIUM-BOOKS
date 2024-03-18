@@ -1,5 +1,8 @@
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
+const { v4: uuidv4 } = require("uuid")
+const sharp = require('sharp')
+const fs = require('fs')
 
 
 
@@ -12,100 +15,127 @@ const loadaddproduct = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 }
-const addProduct= async(req,res)=>{
+const addProduct = async (req, res) => {
     try {
-        console.log("s");
-        console.log(req.files);
-        const images = req.files.map(file => file.filename);
-        
-           const {Bookname,Description,Categories,Regularprice,stock,saleprice}=req.body
-           const product = new Product({
-            Bookname:Bookname,
-            Description:Description,
-            Categories:Categories,
-            Regularprice:Regularprice,
-            stock:stock,
-            saleprice:saleprice,
-            Images:images
-           })
-           
-           const productData = await product.save()
+        const { Bookname, Description, Categories, Regularprice, stock, saleprice } = req.body;
+        const imageUrls = [];
 
-           if(productData){
-          console.log("success");
-          res.render('admindashboard')
-           }else{
-            console.log("error");
-           }
-        
+        for (const file of req.files) {
+            const filename = `${uuidv4()}.jpg`;
+            try {
+                // Check if file buffer is empty or not
+                // if (!file.buffer || file.buffer.length === 0) {
+                // throw new Error("Invalid input: File buffer is empty or missing.");
+                // }
+                console.log("file-----------------------------------------", file)
+
+                await sharp(file.path)
+                    .resize({ width: 386, height: 595 })
+                    .toFile(`C:/Users/joelf/OneDrive/Desktop/ELYSIUM/public/uploads/${filename}`);
+
+                const imageUrl = `${filename}`;
+                imageUrls.push(imageUrl);
+            } catch (sharpError) {
+                console.error("Sharp Error:", sharpError);
+                throw new Error("Invalid input: Sharp failed to process the image.");
+            }
+        }
+
+        const product = new Product({
+            Bookname: Bookname,
+            Description: Description,
+            Categories: Categories,
+            Regularprice: Regularprice,
+            stock: stock,
+            saleprice: saleprice,
+            Images: imageUrls
+        });
+
+        const productData = await product.save();
+
+        if (productData) {
+            res.render('admindashboard');
+        } else {
+            console.log("Error saving product.");
+            res.status(500).send("Error saving product.");
+        }
     } catch (error) {
-        console.log(error)
+        console.error("Error:", error.message);
+        res.status(500).send("Internal Server Error");
     }
 }
 
 
-const loadeditProduct = async(req,res)=>{
-    try{
-        const id= req.query.id
+
+const loadeditProduct = async (req, res) => {
+    try {
+        const id = req.query.id
         req.session.editProductId = id;
         const product = await Product.findById(id)
         const categories = await Category.find(); // Assuming you're fetching categories from the database
 
-        res.render('editproduct',{product,categories})
-        
-    }catch(error){
+        res.render('editproduct', { product, categories })
+
+    } catch (error) {
         console.log(error);
     }
 }
 
-const editProduct = async (req,res)=>{
+const editProduct = async (req, res) => {
+    try {
+        const { Bookname, Description, Regularprice, saleprice, stock, Categories } = req.body;
+        const images = req.files;
 
-        try {
-    console.log("keri")
-              const Bookname = req.body.Bookname;
-              const Description = req.body.Description;
-              const Regularprice = req.body.Regularprice;
-              const saleprice = req.body.saleprice;
-              const stock = req.body.stock;
-              const Categories = req.body.Categories;
+        const editProduct = await Product.findOne({ _id: req.session.editProductId });
+        
+        // Update product details
+        editProduct.Bookname = Bookname;
+        editProduct.Description = Description;
+        editProduct.Regularprice = Regularprice;
+        editProduct.saleprice = saleprice;
+        editProduct.stock = stock;
+        editProduct.Categories = Categories;
 
-            const editProduct = await Product.findOne({_id:req.session.editProductId})
-            console.log(editProduct,":edit product kitty ")
-            editProduct.Bookname = Bookname
-            editProduct.Description = Description;
-            editProduct.Regularprice = Regularprice;
-            editProduct.Categories = Categories;
-            editProduct.saleprice = saleprice;
-            editProduct.stock = stock;
-            console.log(req.files);
-const images=req.files
-            if(images){
-                const images = req.files.map(file => file.filename);
-                console.log(images,"images got ");
-                editProduct.Images=[...editProduct.Images,...images] 
-                console.log(editProduct,"ukhfhgfddfgg");
+        // Handle image uploads
+        if (images && images.length > 0) {
+            for (const file of images) {
+                const filename = `${uuidv4()}.jpg`;
+
+                try {
+                    // Perform image cropping and resizing
+                    await sharp(file.path)
+                        .resize({ width: 386, height: 595 })
+                        .toFile(`C:/Users/joelf/OneDrive/Desktop/ELYSIUM/public/uploads/${filename}`);
+
+                    // Push the new image URL to the product's image array
+                    editProduct.Images.push(filename);
+                } catch (sharpError) {
+                    console.error("Sharp Error:", sharpError);
+                    throw new Error("Invalid input: Sharp failed to process the image.");
+                }
             }
+        }
 
-            const productUpdateddata = await editProduct.save()
-              if(productUpdateddata){
-                console.log("success");
-                 }else{
-                  console.log("error");
-                 }
+        // Save the updated product
+        const productUpdateddata = await editProduct.save();
+
+        if (productUpdateddata) {
             res.redirect("/admin/dashboard");
-           
-          } catch (err) {
-            console.log(err.message);
+        } else {
+            console.log("Error updating product.");
+            res.status(500).send("Error updating product.");
+        }
+    } catch (error) {
+        console.error("Error:", error.message);
+        res.status(500).send("Internal Server Error");
+    }
 }
-}
 
-
-
-const ToggleblockProduct = async (req,res)=>{
-    try{
-        const id= req.query.id
-        const product = await Product.findOne({_id:id}); 
-        product. is_Active=!product. is_Active
+const ToggleblockProduct = async (req, res) => {
+    try {
+        const id = req.query.id
+        const product = await Product.findOne({ _id: id });
+        product.is_Active = !product.is_Active
         await product.save()
         res.redirect('/admin/productslist');
     } catch (error) {
@@ -117,19 +147,17 @@ const ToggleblockProduct = async (req,res)=>{
 
 const removeImage = async (req, res) => {
     try {
-        console.log(req.body,"hghghjg")
         const imageName = req.body.filename;
         const product = await Product.findById(req.body.productid);
-        console.log(product,"uyjythhytuy");
         if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
         const index = product.Images.findIndex((image) => image === imageName);
-        console.log(index)
+        console.log(index, "productIndex")
         if (index !== -1) {
             product.Images.splice(index, 1);
             await product.save();
-            res.status(200).json({ message: 'Image removed successfully',index });
+            res.status(200).json({ message: 'Image removed successfully', index });
         } else {
             res.status(404).json({ message: 'Image not found in product' });
         }
