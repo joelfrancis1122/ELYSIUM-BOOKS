@@ -31,6 +31,31 @@
         width: 1200px;
         height: auto; /* You can adjust the height as needed */
       }
+      .price-cell {
+  font-size: 16px; /* Adjust as needed */
+  position: relative; /* Position the elements relative to this container */
+}
+
+.price-symbol {
+  font-size: 1.2em; /* Adjust as needed */
+}
+
+.big-number {
+  font-size: 1.2em; /* Adjust as needed */
+}
+
+.decimal {
+  font-size: 0.8em; /* Adjust as needed */
+}
+
+.small-number {
+  font-size: 0.8em; /* Adjust as needed */
+  position: absolute; /* Position absolutely */
+  top: 50%; /* Position at 50% from the top */
+  right: 0; /* Align to the right */
+  transform: translateY(-50%); /* Center vertically based on its own height */
+}
+
     </style>
   </head>
 
@@ -95,7 +120,14 @@
                             <% }%>
                           </td>
                           <td class="align-middle"><%=product[i].stock%></td>
-                          <td class="align-middle"><%=product[i].saleprice%></td>
+                          <td class="align-middle price-cell">
+                            <span class="price-symbol">$</span>
+                            <span class="big-number"><%= Math.floor(product[i].saleprice) %></span>
+                            <span class="decimal">.</span>
+                            <span class="small-number"><%= (product[i].saleprice % 1).toFixed(2).substring(2) %></span>
+                          </td>
+                          
+                          
                           <td class="align-middle">
                             <% if (product[i].is_Active) { %>
                               <span class="badge rounded-pill alert-success">Active</span>
@@ -205,6 +237,7 @@
     })
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
 
     <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>

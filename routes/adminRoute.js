@@ -52,7 +52,8 @@ adminRoute.get('/adminOrderpending', Auth.isLogin, adminControllers.adminOrderPe
 adminRoute.get('/adminOrderShipped', Auth.isLogin, adminControllers.adminOrderShipped)
 adminRoute.get('/adminOrderDelivered', Auth.isLogin, adminControllers.adminOrderDelivered)
 adminRoute.get('/adminOrderReturned', Auth.isLogin, adminControllers.adminOrderReturned)
-// adminRoute.get('/adminOrderdetails',Auth.isLogin,adminControllers.orderDetails)
+adminRoute.get('/adminOrderCancelled', Auth.isLogin, adminControllers.adminOrderCancelled)
+
 
 
 

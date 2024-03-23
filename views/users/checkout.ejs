@@ -425,17 +425,14 @@ body {
         <h4>If you have a coupon code, please apply it below.</h4>
     </p>
    
-        <div class="form-group">
-            <input type="text" placeholder="Enter Coupon Code..." id="couponCode"/>
-        </div>
-        <div class="form-group">
-           <a class="btn  mr-10 mb-sm-15" id="applyCouponBtn" onclick="applyCoupon()" ></i>Apply Coupon</a>
-           <a class="btn  mr-10 mb-sm-15 bg-danger" id="removeCouponBtn" style="display: none;" onclick="removeCoupon()" ></i>Remove Coupon</a>
-        </div>
+    <div class="form-group">
+        <input type="text" placeholder="Enter Coupon Code..." id="couponCode"/>
+    </div>
+    <div class="form-group">
+        <a class="btn  mr-10 mb-sm-15" id="applyCouponBtn" onclick="applyCoupon()">Apply Coupon</a>
+    </div>
+    <div id="couponNamePlaceholder"></div>
 </div>
-
-
-
 
 
 
@@ -714,7 +711,70 @@ body {
         }
     </script>
     
-    
+    <script>
+       async function applyCoupon() {
+        const couponCode = document.getElementById('couponCode').value;
+    const grandTotalElement = document.getElementById('GrandTotal');
+    const selectedAmountText = grandTotalElement.innerText;
+    const selectedAmount = parseFloat(selectedAmountText.replace('$', '')); // Extract numeric value
+
+    console.log(selectedAmount,"odi vvannitend")
+    try {
+        const couponCodeInput = document.getElementById('couponCode');
+        const selectedAmountInput = document.getElementById('GrandTotal');
+
+        const response = await fetch('/applyCoupon', {
+            method: 'post',
+            headers: {  
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ couponCode,selectedAmount })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to apply coupon.');
+        }
+
+        const data = await response.json();
+        if (data.used) {
+            toastr.error(data.message); 
+        }
+        if (data.success) {
+    toastr.success(data.message);
+    const couponName = data.couponName;
+    const discountAmount = data.discountAmount;
+    const originalTotal = parseFloat(document.getElementById('GrandTotal').innerText.replace('$', ''));
+    const discountPercent = parseFloat(discountAmount) / 100; // Convert discount amount to percentage
+    const discountedTotal = originalTotal * (1 - discountPercent); // Applying discount    
+
+    // Display the coupon name with a cross button
+    document.getElementById('couponNamePlaceholder').innerHTML = `
+        <span style="color: green;">Coupon Applied: ${couponName}</span>
+        <button id="removeCouponBtn" style="background: none; border: none; cursor: pointer;">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    // Add event listener to the remove coupon button
+    document.getElementById('removeCouponBtn').addEventListener('click', function() {
+        location.reload(); // Reload the page to remove the coupon
+    });
+
+    // Update the total price display
+    document.getElementById('GrandTotal').innerText = '$' + discountedTotal.toFixed(2);
+    couponCodeInput.readOnly = true;
+} else {
+    toastr.error(data.message);
+}
+
+
+    } catch (error) {
+        console.error('Error applying coupon:', error);
+        // Handle error display or logging
+    }
+}
+
+    </script>
 
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">

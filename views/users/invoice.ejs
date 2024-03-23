@@ -145,12 +145,13 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
-
+                                                <% if(orderData ) { %>
                                                 <div class="total text-end">
                                                     <div class="field grand-total">
-                                                        <h5><strong> Total: <span>$<%= grandTotal.toFixed(2) %></span></strong></h5>
+                                                        <h5><strong> Total: <span><%= orderData.totalAmount %></span></strong></h5>
                                                     </div>
                                                 </div>
+                                                <%}%>
                                             </div>
                                         </div>
                                     </div>

@@ -16,6 +16,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
+    
     <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
     
 </head>
@@ -112,7 +113,8 @@
                                     <div class="card-body">
                                         <div class="input-upload">
                                             <div id="previewContainer" class="mt-3"></div>
-                                            <input id="imageInput" class="form-control" name="Images" type="file" accept="image/*" multiple>
+                                            <input id="imageInput" class="form-control" name="Images" type="file" accept="image/*" multiple onchange="validateImages(this)">
+
                                         </div>
                                     </div>
                                     
@@ -218,7 +220,7 @@
                         event.preventDefault(); // Prevent default form submission
                         const fileName = file.name;
                         // Send request to backend to remove image
-                        fetch(`/remwoveImage?fileName=${fileName}`, {
+                        fetch(`/removseImage?fileName=${fileName}`, {
                             method: 'post'
                         })
                         .then(response => {
@@ -240,7 +242,22 @@
         });
     });
 </script>
+<script>
+    function validateImages(input) {
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    const files = input.files;
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!allowedExtensions.test(file.name)) {
+            toastr.error('Please select only image files (JPEG, JPG, PNG).');
+            input.value = ''; //
+            return false; // entry ila
+        }
+    }
+    return true;
+}
 
+</script>
 
     <script src="/public/admin-assets/j
     s/vendors/jquery-3.6.0.min.js"></script>
@@ -251,7 +268,4 @@
     <!-- Main Script -->
     <script src="/public/admin-assets/js/main.js" type="text/javascript"></script>
 </body>
-
-
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
 </html>

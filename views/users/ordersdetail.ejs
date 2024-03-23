@@ -84,10 +84,9 @@
                  
                     Shipping:ELYSIUM EXPRESS <br />
                     Pay method:<%=orders.paymentMethod%><br />
-                    Status: <%=orders.paymentStatus%>
+                    Status: <%=orders.orderStatus%>
 
                   </p>
-                  <a href="#">Download info</a>
                 </div>
               </article>
             </div>
@@ -104,7 +103,7 @@
                     <br />
                     Po Box 10000
                   </p>
-                  <a href="#">View profile</a>
+                  <a href="/loadProfile">View profile</a>
                 </div>
               </article>
             </div>
@@ -123,7 +122,7 @@
                       <th width="20%" class="text-end">Total</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody> 
                     <% let grandTotal = 0; %>
                     <% for(let order of orders.product) { %>
                         <tr>
@@ -135,26 +134,31 @@
                             </td>
                             <td><%= order.productId.saleprice %></td>
                             <td><%= order.quantity %></td>
+                         
+                            
                             <td class="text-end"><%= (order.quantity * order.productId.saleprice).toFixed(2) %></td>
                         </tr>
                         <% grandTotal += order.quantity * order.productId.saleprice; %>
-                    <% } %>
+                        <% } %>
+
+                        <% if(orderData ) { %>
+                      
+                  <br>
                     
                     <tr>
-                      <td colspan="4">
+                      <td colspan="5">
     <article class="float-end">
         <dl class="dlist">
-         <h5>   <dt style="font-weight: bold; color: #333;">Grand total: $<%= grandTotal.toFixed(2) %></dt></h5 >
-            <dd></dd>
+         <h5>   <dt style="font-weight: bold; color: #333;">Grandtotal:<%= orderData.totalAmount%></dt></h5 >
         </dl>
     </article>
+    <% } %>
 </td>
-
                     </tr>
                           <dl class="dlist">
-                            <dt class="text-muted">Status:</dt>
+                            <dt class="text">Payment Status:</dt>
                             <dd>
-                              <span class="badge rounded-pill alert-success text-success">Payment done</span>
+                              <span class="badge rounded-pill alert-secondary text-secondary"><%=orders.paymentStatus%></span>
                             </dd>
                           </dl>
                         </article>

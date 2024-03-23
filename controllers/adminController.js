@@ -5,14 +5,16 @@ const Coupon = require('../models/couponModel')
 const Orders = require('../models/orderModel')
 
 
+
 const dashboardLoad  = async (req, res) => {
     try {
         res.render('admindashboard')
     } catch (error) {
         console.log(error)
-
     }
 }
+
+
 
 const adminLogin = async(req,res)=>{
     try{
@@ -22,15 +24,14 @@ res.render('login')
     }
 }
 
+
+
 const productslist = async(req,res)=>{ 
     try{
         let search = req.query.search ? req.query.search : "" 
         const productData = await Product.find({
             $and:[{
             Bookname: { $regex: new RegExp(search, "i") } },
-            
-             
-        
             ],
         }).populate('Categories').sort({ CreatedOn: -1 })
         res.render('productslist',{product:productData,search:search})
@@ -38,11 +39,9 @@ const productslist = async(req,res)=>{
 console.log(error);
     }
 }
-    
+
 
 //=======================categories================================\\
-
-
 const loadCategories = async(req,res)=>{
     try {
         const catData = await Category.find()
@@ -55,6 +54,7 @@ const loadCategories = async(req,res)=>{
 }
 
 
+
 const addCategories = async (req, res) => {
     try {
         const { categoryName, Description } = req.body;
@@ -63,12 +63,10 @@ const addCategories = async (req, res) => {
         if (existingCategory) {
             return res.render('addcategories', { categoriesExists: true ,categories : catData}); // Pass flag to indicate category exists
         }
-        // Category name is unique, proceed to save
         const categories = new Category({
             categoryName: categoryName,
             Description: Description,
         });
-
         const categoryData = await categories.save();
         res.redirect('/admin/loadCategories');
     } catch (error) {
@@ -78,31 +76,28 @@ const addCategories = async (req, res) => {
 };
 
 
+
 const loadeditCategory = async(req,res)=>{
 try {
-
     const categories = await Category.findById(req.query.id);
     req.session.cateid=req.query.id
     res.render('editcategories',{categories})
-    
 } catch (error) {
     console.log(error)
 }}
 
 
-const editCategory = async(req,res)=>{
 
+const editCategory = async(req,res)=>{
     try{
         const { categoryName,Description} = req.body
         const updated = await Category.findByIdAndUpdate({ _id:  req.session.cateid }, { $set: {  categoryName, Description } })
         res.redirect("/admin/loadCategories")
         console.log(updated)
-
     }catch(error){
         console.log(error.message)
     }
 }
-
 
 
 
@@ -126,11 +121,8 @@ const loaduserlist = async (req, res) => {
         res.render('userlist',{users:userData})
     } catch (error) {
         console.log(error)
-
     }
 }
-
-
 
 
 
@@ -145,7 +137,6 @@ const ToggleblockUser = async (req,res)=>{
         console.log(error);
     }
 }
-
 
 
 
@@ -165,8 +156,8 @@ const loadOrderDetails = async (req,res)=>{
     try {
         const productId = req.query.id
         const orders = await Orders.findOne({ _id:productId}).populate('product.productId')
-
-        res.render("ordersview",{orders})
+        const orderData = await Orders.findOne({ _id:productId})
+        res.render("ordersview",{orders,orderData})
     } catch (error) {
         console.log(error.message)  
     }
@@ -174,19 +165,14 @@ const loadOrderDetails = async (req,res)=>{
 
 
 
-
 const loadCoupon = async (req, res) => {
     try {
         const couponData = await Coupon.find().sort({ Date: -1 })
-        console.log("Coupo data: " , couponData)
         res.render('Coupon',{couponData})
     } catch (error) {
         console.log(error)
-
     }
 }
-
-
 
 
 
@@ -196,101 +182,67 @@ const loadLogout = async (req, res) => {
         res.redirect('/')
     } catch (error) {
         console.log(error)
-
     }
 }
 
 
-
-
-// const updateOrderStatus = async (req, res) => {
-
-//     try {
-//         const { orderId, newStatus } = req.body;
-
-//         // Update order status in the database
-//         const updatedOrder = await Orders.findOneAndUpdate({ orderId }, { orderStatus: newStatus }, { new: true });
-
-//         res.json({ success: true, updatedOrder });
-//     } catch (error) {
-//         console.error('Error updating order status:', error);
-//         res.status(500).json({ success: false, message: 'Failed to update order status' });
-//     }
-// }
 
 const adminOrderPending= async(req,res)=>{
     try {
-
-       
         const orderId= req.query.id
         const orderPending= await Orders.findByIdAndUpdate(orderId,{$set:{orderStatus:"Pending"}})
         res.redirect('/admin/loadOrders')
-        
     } catch (error) {
-
         console.log(error.message)
-        
     }
 }
-
 
 
 
 const adminOrderShipped= async(req,res)=>{
-
     try {
-       
-
         const orderId= req.query.id
-    
         const orderShipped =await Orders.findByIdAndUpdate(orderId,{$set:{ orderStatus:'Shipped'}})
          res.redirect('/admin/loadOrders')
-        
     } catch (error) {
-
         console.log(error.message)
-        
     }
-   
 }
+
 
 
 const adminOrderDelivered=async(req,res)=>{
-
-
     try {
-
-       
-
         const orderId= req.query.id
         const orderDelivered= await  Orders.findByIdAndUpdate(orderId,{$set:{orderStatus:'Delivered'}})
          res.redirect('/admin/loadOrders')
-        
     } catch (error) {
-
         console.log(error.message)
-        
     }
-   
-
-
 }
+
 
 
 const adminOrderReturned=async(req,res)=>{
     try {
         const orderId= req.query.id
         const orderReturned= await  Orders.findByIdAndUpdate(orderId,{$set:{orderStatus:'Returned'}})
-         res.redirect('/admin/loadOrders')
-
-
-        
+        res.redirect('/admin/loadOrders')
     } catch (error) {
         console.log(error.message)
-        
     }
 }
 
+
+const adminOrderCancelled=async(req,res)=>{
+    try {
+        const orderId= req.query.id
+        const OrderCancelled= await Orders.findByIdAndUpdate(orderId,{$set:{orderStatus:'Cancelled'}})
+        res.redirect('/admin/loadOrders')
+    } catch (error) {
+        console.log(error.message)
+    }
+}
 
 
 
@@ -312,7 +264,8 @@ module.exports = {
     adminOrderShipped,
     adminOrderPending,
     loadeditCategory,
-    editCategory
+    editCategory,
+    adminOrderCancelled
 
 
 }

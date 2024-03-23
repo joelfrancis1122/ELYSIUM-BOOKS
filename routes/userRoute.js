@@ -32,12 +32,15 @@ userRoute.get('/shop-product', Auth.isLogin, userControllers.shopProduct)
 userRoute.get("/loadProfile", Auth.isLogin, userControllers.loadProfile)
 userRoute.get('/loadShop', Auth.isLogin, userControllers.loadShop)
 userRoute.post('/profileEdit', Auth.isLogin, userControllers.profileEdit)
+userRoute.get('/loadAddAddress', Auth.isLogin, userControllers.loadAddAddress)
+
 userRoute.post('/addAddress', Auth.isLogin, userControllers.addAddress)
 userRoute.post('/addAddress1', Auth.isLogin, userControllers.addAddress1)
 userRoute.get('/loadEditAddress', Auth.isLogin, userControllers.loadEditAddress)
-userRoute.get('/loadAddAddress', Auth.isLogin, userControllers.loadAddAddress)
-userRoute.get('/loadAddAddress', Auth.isLogin, userControllers.loadAddAddress)
+userRoute.get('/loadEditAddress1', Auth.isLogin, userControllers.loadEditAddress1)
 userRoute.post('/updateAddress', Auth.isLogin, userControllers.updateAddress)
+userRoute.post('/updateAddress1', Auth.isLogin, userControllers.updateAddress1)
+
 userRoute.get('/loadOrderDetails', Auth.isLogin, userControllers.loadOrderDetails)
 userRoute.get('/loadInvoice', Auth.isLogin, userControllers.loadInvoice)
 
@@ -57,7 +60,7 @@ userRoute.get("/orderCancel", Auth.isLogin, userControllers.OrderCancelled)
 userRoute.get("/orderReturn", Auth.isLogin, userControllers.orderReturn)
 userRoute.get("/orderDetail", Auth.isLogin, userControllers.orderDetail)
 userRoute.get("/categorySearch", Auth.isLogin, userControllers.categorySearch)
-
+userRoute.post('/applyCoupon', Auth.isLogin, cartControllers.applyCoupon)
 
 
 

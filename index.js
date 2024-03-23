@@ -1,8 +1,39 @@
 const mongoose = require("mongoose");
 const nocache = require('nocache');
 const flash = require('express-flash');
-
 const dotenv = require('dotenv').config()
+
+// const Razorpay = require('razorpay');
+// var instance = new Razorpay({ key_id: 'YOUR_KEY_ID', key_secret: 'YOUR_SECRET' })
+
+
+
+
+
+
+// var instance = new Razorpay({
+//   key_id: RAZORPAY_ID_KEY,
+//   key_secret: RAZORPAY_SECRET_KEY,
+// });
+
+
+
+
+
+// var options = {
+//   amount: re.body.amount,  // amount in the smallest currency unit
+//   currency: "INR",
+//   receipt: "rcp1"
+// };
+// instance.orders.create(options, function(err, order) {
+//   console.log(order);
+//   res.send({orderId:order.id})
+// });
+
+
+
+
+
 
 
 

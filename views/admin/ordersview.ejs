@@ -63,7 +63,6 @@
                   Phone:<%=orders.address.mobile%>
                     <br />
                   </p>
-                  <a href="/loadProfile">View profile</a>
                 </div>
               </article>
             </div>
@@ -80,10 +79,9 @@
                  
                     Shipping:ELYSIUM EXPRESS <br />
                     Pay method:<%=orders.paymentMethod%><br />
-                    Status: <%=orders.paymentStatus%>
+                    Status: <%=orders.orderStatus%>
 
                   </p>
-                  <a href="#">Download info</a>
                 </div>
               </article>
             </div>
@@ -100,7 +98,6 @@
                     <br />
                     Po Box 10000
                   </p>
-                  <a href="#">View profile</a>
                 </div>
               </article>
             </div>
@@ -135,22 +132,23 @@
                         </tr>
                         <% grandTotal += order.quantity * order.productId.saleprice; %>
                     <% } %>
-                    
+                    <% if(orderData) { %>
+
                     <tr>
                       <td colspan="4">
     <article class="float-end">
         <dl class="dlist">
-         <h5>   <dt style="font-weight: bold; color: #333;">Grand total: $<%= grandTotal.toFixed(2) %></dt></h5 >
+         <h5>   <dt style="font-weight: bold; color: #333;">Grand total: <%=orderData.totalAmount %></dt></h5 >
             <dd></dd>
         </dl>
     </article>
 </td>
-
+<% } %>
                     </tr>
                           <dl class="dlist">
                             <dt class="text-muted">Status:</dt>
                             <dd>
-                              <span class="badge rounded-pill alert-success text-success">Payment done</span>
+                              <span class="badge rounded-pill alert-success text-success"><%=orders.paymentStatus%></span>
                             </dd>
                           </dl>
                         </article>

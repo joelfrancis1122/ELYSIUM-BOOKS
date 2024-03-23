@@ -42,10 +42,8 @@
                                         <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"><span><%=name%></span></a>
                                 <% } %>
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                                    <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                                    <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
+                                    <a class="dropdown-item" href="/loadProfile"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
                                     <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                                    <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
                                     <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item text-danger" href="/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
@@ -80,7 +78,6 @@
                             <form action="/loadShop" class="premium-search-form">
                             
                                 <input type="text" name="query"    placeholder="Search for items...">
-                                <button type="submit"></button>
                             </form>
                        <% } %>
                       
@@ -107,6 +104,7 @@
                                         <div class="header-action-icon-2">
                                             <a class="mini-cart-icon" href="/cart">
                                                 <img alt="Evara" src="/public/assets/imgs/theme/icons/icon-cart.svg">
+                                                <span class="pro-count blue">0</span>
                                             </a>
                                         </div>
                                 <% } %>

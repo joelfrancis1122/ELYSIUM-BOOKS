@@ -83,6 +83,8 @@
                                         <div class="mb-4">
                                             <label class="form-label">Categories</label>
                                             <select class="form-select" name="Categories">
+                                                <option selected value="<%=product.Categories._id%>"><%=product.Categories.categoryName%></option>
+
                                                 <% for(let i = 0 ; i < categories.length ; i++) { %>
                                                     <option value="<%=categories[i]._id%>"><%=categories[i].categoryName%></option>
                                                 <% } %>
@@ -98,7 +100,7 @@
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Cost in USD</label>
-                                            <input type="text" name="Regularprice"  pattern="[1-9][0-9]*"  value="<%=product.Regularprice%>" placeholder="$00.0" class="form-control">
+                                            <input type="text" name="Regularprice"  pattern="\d+(\.\d{1,2})?"  value="<%=product.Regularprice%>" placeholder="$00.0" class="form-control">
                                         </div>
                                     </div> <!-- col.// -->
                                     <div class="col-md-3">
@@ -107,7 +109,7 @@
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Cost in USD</label>
-                                            <input type="text" name="saleprice"  pattern="[1-9][0-9]*" value="<%=product.saleprice%>"placeholder="$00.0" class="form-control">
+                                            <input type="text" name="saleprice"  pattern="\d+(\.\d{1,2})?" value="<%=product.saleprice%>"placeholder="$00.0" class="form-control">
                                         </div>
                                     </div> 
                                     <div class="col-md-3">
@@ -148,7 +150,7 @@
                                                 <% }); %>
                                             </ul>
                                             <div id="previewContainer" class="mt-3"></div>
-                                            <input id="imageInput" class="form-control" name="Images" type="file" accept="image/*" multiple onchange="previewImages(event)">
+                                            <input id="imageInput" class="form-control" name="Images" type="file" accept="image/*" multiple onchange="handleImageSelection(event)">
                                         </div>
                                     </div>
                                     
@@ -223,7 +225,7 @@
                 const regularPriceInput = form.querySelector("input[name='Regularprice']");
                 const salePriceInput = form.querySelector("input[name='saleprice']");
                 const stockInput = form.querySelector("input[name='stock']");
-                const regex = /^\d+$/;
+                const regex = /^\d+(\.\d+)?$/;
           
                 if (!regex.test(regularPriceInput.value) || !regex.test(salePriceInput.value) || !regex.test(stockInput.value)) {
                     event.preventDefault();
@@ -290,7 +292,17 @@
         }
     }
 
-    function previewImages(event) {
+   
+</script>
+
+<script>
+
+function handleImageSelection(event) {
+    previewImages(event); // Call the function to preview images
+    validateImages(event.target); // Call the function to validate images
+}
+
+function previewImages(event) {
         const previewContainer = document.getElementById('previewContainer');
         const imageList = document.getElementById('imageList');
 
@@ -305,16 +317,7 @@
                 imgElement.classList.add('img-thumbnail');
                 
                 const removeButton = document.createElement('button');
-                // removeButton.textContent = 'Remove';
-                // removeButton.classList;
-                removeButton.onclick = function() {
-                    // Get the image name
-                    // const imageName = file.name;
-                    // Remove the preview when the remove button is clicked
-                    // listItem.remove();
-                    // Call the removeImage function to remove the image from the database
-                    // removeImage(i, imageName, event);
-                };
+                
 
                 const imagePreview = document.createElement('div');
                 imagePreview.classList.add('image-preview');
@@ -331,7 +334,22 @@
             reader.readAsDataURL(file);
         }
     }
+function validateImages(input) {
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    const files = input.files;
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!allowedExtensions.test(file.name)) {
+            toastr.error('Please select only image files (JPEG, JPG, PNG).');
+            input.value = ''; //
+            return false; // entry ila
+        }
+    }
+    return true;
+}  
+
 </script>
+
 
 
 

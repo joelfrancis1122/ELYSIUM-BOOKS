@@ -23,6 +23,9 @@
       rel="stylesheet"
       type="text/css"
     />
+
+
+    
   </head>
 
   <body>
@@ -69,23 +72,27 @@
                         <td><%= order.paymentMethod %></td>
                         <td><%= order.orderDate.toLocaleString() %></td>
                         <td><span class="badge bg-warning text-dark"><%= order.paymentStatus%></span></td>
-                        <td><span class="badge bg-warning text-dark"><%= order.orderStatus%></span></td>
-                        <td>  
-                          <div class="dropdown ">
-                           <button class="btn btn-sm btn-icon dropdown-toggle" type="button" id="deliveryStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                               Status
-                           </button>
-                        
-                           <ul class="dropdown-menu dropdown-menu-sm" aria-labelledby="deliveryStatusDropdown">
-                               <li><a class="dropdown-item" href="/admin/adminOrderpending?id=<%=order._id%>">Pending</a></li>
-                               <li><a class="dropdown-item" href="/admin/adminOrderShipped?id=<%=order._id%>">Shipped</a></li>
-                               <li><a class="dropdown-item" href="/admin/adminOrderDelivered?id=<%=order._id%>">Delivered</a></li>
-                               <li><a class="dropdown-item" href="/admin/adminOrderCancelled?id=<%=order._id%>">Cancelled</a></li>
-                               <li><a class="dropdown-item" href="/admin/adminOrderReturned?id=<%=order._id%>">Returned</a></li>
-
-                           <!-- <li><a class="dropdown-item" href="#">Cancelled</a></li> -->
-                           </ul>
+                        <td>
+                          <span class="badge bg-<%= order.orderStatus === 'Shipped' ? 'primary' : (order.orderStatus === 'Returned' ? 'secondary' : (order.orderStatus === 'Cancelled' ? 'danger' : (order.orderStatus === 'Delivered' ? 'success' : 'warning'))) %> text-dark">                            <%= order.orderStatus %>
+                          </span>
+                          
+                      </td>
+                      <td>  
+                          <div class="dropdown">
+                              <button class="btn btn-sm btn-icon dropdown-toggle" type="button" id="deliveryStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Status
+                              </button>
+                                              
+                              <ul class="dropdown-menu dropdown-menu-sm" aria-labelledby="deliveryStatusDropdown">
+                                  <li><a class="dropdown-item" href="/admin/adminOrderpending?id=<%= order._id %>">Pending</a></li>
+                                  <li><a class="dropdown-item" href="/admin/adminOrderShipped?id=<%= order._id %>">Shipped</a></li>
+                                  <li><a class="dropdown-item" href="/admin/adminOrderDelivered?id=<%= order._id %>">Delivered</a></li>
+                                  <li><a class="dropdown-item" href="/admin/adminOrderCancelled?id=<%= order._id %>">Cancelled</a></li>
+                                  <li><a class="dropdown-item" href="/admin/adminOrderReturned?id=<%= order._id %>">Returned</a></li>
+                              </ul>
                           </div>
+                      </td>
+                      
                           </div>
                        
                        </td>
@@ -95,7 +102,7 @@
                     </tr>
                     <% }); %>
                     <% }else{ %>
-<h3>No orders</h3>
+                <h3>No orders</h3>
                         <% } %>
 
             </table>
@@ -108,26 +115,7 @@
           <!-- card-body end// -->
         </div>
         <!-- card end// -->
-        <div class="pagination-area mt-15 mb-50">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-start">
-              <li class="page-item active">
-                <a class="page-link" href="#">01</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">02</a></li>
-              <li class="page-item"><a class="page-link" href="#">03</a></li>
-              <li class="page-item">
-                <a class="page-link dot" href="#">...</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="#">16</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#"
-                  ><i class="material-icons md-chevron_right"></i
-                ></a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+      
       </section>
       <!-- content-main end// -->
       <footer class="main-footer font-xs">
