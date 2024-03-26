@@ -307,7 +307,7 @@ body {
                                     <hr>
                                     <div class="address-container" id="address_<%= address._id %>">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="selectedAddress" id="address_radio_<%= address._id %>" value="<%= address._id %>">
+                                            <input class="form-check-input" type="radio" name="selectedAddress" id="address_radio_<%= address._id %>" value="<%= address._id %>" <%= addresses.length === 1 ? 'checked' : '' %>
                                             <label class="form-check-label" for="address_radio_<%= address._id %>">
                                                 <address>
                                                     Name: <%= address.name %> <br>
@@ -316,14 +316,13 @@ body {
                                                     State: <%= address.state %>. <br>
                                                     Pincode: <%= address.pinCode %>
                                                 </address>
-                                                
                                                 <a class="remove-icon" onclick="removeAddress('<%= address._id %>')"> <i class="fa-solid fa-trash fa-xl"></i></a>
                                                 <h4><a href="/loadEditAddress?id=<%= address._id %>" class="edit-address" style="color: green;">Edit</a> </h4>
                                             </label>
                                         </div>
-                                        <h5>  
-                                        </h5>
+                                        <h5></h5>
                                     </div>
+                                    
                                     
                                     <hr>
                                 <% }); %>
@@ -450,25 +449,24 @@ body {
                                     <h5>Payment</h5>
                                 </div>
                                 <div class="payment_option">
-                                    <div class="custome-radio">
+                                    <!-- <div class="custome-radio">
                                         <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios3" checked="">
-                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">Direct Bank Transfer</label>
+                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">Razorpay</label>
                                         <div class="form-group collapse in" id="bankTranfer">
                                             <p class="text-muted mt-5">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration. </p>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios4" checked="">
-                                        <!-- <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Razorpay</label> -->
+                                        <input class="form-check-input" required="" type="radio" name="payment_option" value="Razorpay" id="exampleRadios4" >
+                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse" data-target="#checkPayment" aria-controls="checkPayment">Razorpay</label>
                                         <div class="form-group collapse in" id="checkPayment">
                                             <p class="text-muted mt-5">Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode. </p>
                                         </div>
                                     </div>
                                     <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option" value="Cash on delivery" id="exampleRadios5" checked="">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option" value="Cash on delivery" id="exampleRadios5" >
                                         <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">Cash on Delivery</label>
                                         <div class="form-group collapse in" id="paypal">
-                                            <p class="text-muted mt-5">Pay via PayPal; you can pay with your credit card if you don't have a PayPal account.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -607,53 +605,123 @@ body {
         </div>
     </div>
     <!-- Vendor JS-->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <script>
         function placeOrder() {
-            console.log("place order worked")
-            const selectedRadioButton = document.querySelector('input[name="payment_option"]:checked').value;
+            console.log("place order worked");
+            let selectedRadioButton = document.querySelector('input[name="payment_option"]:checked');
+            if (!selectedRadioButton) {
+                toastr.info("Please select a Payment Method.");
+                return false; // Prevent the form from being submitted
+            }
+            const selectedRadioButtons = selectedRadioButton.value;
+
+            if (!selectedRadioButtons) {
+    toastr.info("Please select a Payment Method.");
+    return false; // Prevent the form from being submitted
+}
             const selectedAddress1 = document.querySelector('input[name="selectedAddress"]:checked');
             if (!selectedAddress1) {
                 toastr.info("Please select an address.");
                 return false; // Prevent the form from being submitted
             }
-            const selectedAddress = document.querySelector('input[name="selectedAddress"]:checked').value;
-            const totalAmount = document.getElementById("GrandTotal").innerText;
+          
+            const selectedAddress = selectedAddress1.value;
+            const totalAmountWithSymbol = document.getElementById("GrandTotal").innerText;
+            const totalAmount = parseFloat(totalAmountWithSymbol.replace('$', ''));
             const orderData = {
-                paymentMethod: selectedRadioButton,
+                paymentMethod: selectedRadioButtons,
                 amount: totalAmount,
-                addresss:selectedAddress
+                address: selectedAddress
             };
     
-            // Send a POST request to place the order
-            fetch('/placeorder', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderData),
-            })
-            .then(response => response.json())
-            .then(data => {
-                Swal.fire({
-                    position: "center",
-                    icon: "success",
-                    title: "Order Placed",
-                    showConfirmButton: false,
-                    timer: 2000
-                }).then(() => {
-                    window.location.href = '/';
+            let url = '';
+            if (selectedRadioButtons === 'Razorpay') {
+                // If payment method is Razorpay, make a fetch request to '/onlinepay' endpoint
+                url = '/onlinepay';
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData),
+                })
+                .then((response) => response.json())
+                .then(data => {
+                    // Initialize Razorpay checkout with received order details
+                    const options = {
+                        "key": 'rzp_test_bdVGrcCwlFiIwl', // Replace with your Razorpay key ID
+                        "amount": data.order2.amount, // Check if the amount is correct based on your totalAmount
+                        "currency": 'INR', // Change the currency to match your requirements
+                        "name": 'ELYSIUM_BOOKS',
+                        "description": 'Purchase Description',
+                        "order_id": data.order2.id,
+                        "handler": function (response) {
+                            Swal.fire({
+                                position: "center",
+                                icon: "success",
+                                title: "Payment successful!",
+                                showConfirmButton: false,
+                                timer: 2000
+                            }).then(() => {
+                                window.location.href = '/';
+                            });
+                            removeItem();
+                        },
+                       
+                        "prefill": {
+                            "name": 'Joel',
+                            "email": 'joel@example.com',
+                            "contact": '9999999999',
+                        },
+                        "theme": {
+                            "color": '#11ff00'
+                        }
+                    };
+                    const razorpayInstance = new Razorpay(options);
+                    razorpayInstance.open();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
                 });
-                // Chain the removeItem function here
-                removeItem(); // This will execute removeItem after placeOrder is successful
-            })
-            .catch(error => {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
+            } else {
+                // If payment method is not Razorpay, make a fetch request to '/placeorder' endpoint
+                url = '/placeorder';
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Order Placed",
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
+                        window.location.href = '/';
+                    });
+                    removeItem();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
                 });
-                // Handle error (display an error message, etc.)
-            });
+            }
         }
     
         function removeItem() {
@@ -662,16 +730,26 @@ body {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({}), 
+                body: JSON.stringify({}),
             })
             .then(response => {
-                // Handle response (if needed)
+                // Handle the response if needed
             })
             .catch(error => {
-                // Handle error (display an error message, etc.)
+                console.error('Error:', error);
             });
         }
     </script>
+    
+    
+
+
+
+
+
+
+
+
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     
@@ -725,12 +803,12 @@ body {
 
         const response = await fetch('/applyCoupon', {
             method: 'post',
-            headers: {  
+            headers: {          
                 'Content-Type': 'application/json'
-            },
+            },      
             body: JSON.stringify({ couponCode,selectedAmount })
         });
-
+        
         if (!response.ok) {
             throw new Error('Failed to apply coupon.');
         }
@@ -742,23 +820,44 @@ body {
         if (data.success) {
     toastr.success(data.message);
     const couponName = data.couponName;
+    const couponid = data._id;
     const discountAmount = data.discountAmount;
     const originalTotal = parseFloat(document.getElementById('GrandTotal').innerText.replace('$', ''));
     const discountPercent = parseFloat(discountAmount) / 100; // Convert discount amount to percentage
     const discountedTotal = originalTotal * (1 - discountPercent); // Applying discount    
-
-    // Display the coupon name with a cross button
+    console.log(couponid)
+            // Display the coupon name with a cross button
     document.getElementById('couponNamePlaceholder').innerHTML = `
         <span style="color: green;">Coupon Applied: ${couponName}</span>
         <button id="removeCouponBtn" style="background: none; border: none; cursor: pointer;">
-            <i class="fas fa-times"></i>
+        <i class="fas fa-times"></i>
         </button>
     `;
 
-    // Add event listener to the remove coupon button
+            // Add event listener to the remove coupon button
     document.getElementById('removeCouponBtn').addEventListener('click', function() {
-        location.reload(); // Reload the page to remove the coupon
+    fetch('/removeCoupon', {
+        method: 'POST', // Assuming you want to send a POST request
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({couponCode}), // You can include any data if required
+    })
+    .then(response => {
+        if (response.ok) {
+            // Reload the page after successful removal
+            location.reload(); // Reload the page to remove the coupon
+        } else {
+            console.error('Failed to remove coupon');
+            // Handle the error if needed
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        // Handle the error if needed
     });
+});
+
 
     // Update the total price display
     document.getElementById('GrandTotal').innerText = '$' + discountedTotal.toFixed(2);

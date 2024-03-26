@@ -136,7 +136,7 @@
                             <td><%= order.quantity %></td>
                          
                             
-                            <td class="text-end"><%= (order.quantity * order.productId.saleprice).toFixed(2) %></td>
+                            <td class="text-end">$<%= (order.quantity * order.productId.saleprice).toFixed(2) %></td>
                         </tr>
                         <% grandTotal += order.quantity * order.productId.saleprice; %>
                         <% } %>
@@ -149,7 +149,7 @@
                       <td colspan="5">
     <article class="float-end">
         <dl class="dlist">
-         <h5>   <dt style="font-weight: bold; color: #333;">Grandtotal:<%= orderData.totalAmount%></dt></h5 >
+         <h5>   <dt style="font-weight: bold; color: #333;">Grandtotal:$<%= orderData.totalAmount%></dt></h5 >
         </dl>
     </article>
     <% } %>

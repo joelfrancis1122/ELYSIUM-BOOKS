@@ -29,7 +29,7 @@
               <h2 class="content-title card-title">Coupon</h2>
               <p>Give offeres use copons</p>
             </div>
-          
+
             <% if (messages.success) { %>
               <div class="alert alert-success" id="editSuccessMessage">
                 <%= messages.success %>
@@ -53,13 +53,13 @@
                       <label for="couponName" class="form-label">Coupon Name</label>
                       <input type="text" placeholder="Type here" name="couponName" class="form-control" id="couponName">
                       <div id="couponNameValidation" class="invalid-feedback"></div>
-                  </div>
-                  
-                  <div class="mb-4">
+                    </div>
+
+                    <div class="mb-4">
                       <label for="couponCode" class="form-label">Coupon Code</label>
                       <input type="text" placeholder="Type here" name="couponCode" class="form-control" id="couponCode">
                       <div id="couponCodeValidation" class="invalid-feedback"></div>
-                  </div>
+                    </div>
 
                     <div class="mb-4">
                       <label for="product_name" class="form-label">Minimum Purchase</label>
@@ -69,22 +69,23 @@
 
                     <div class="mb-4">
                       <label for="product_name" class="form-label">Discount %</label>
-                      <input type="number" placeholder="0%" name="discountAmount" class="form-control" min="1" max="99"/>
+                      <input type="number" placeholder="0%" name="discountAmount" class="form-control" min="1"
+                        max="99" />
                     </div>
 
-               
+
 
                     <div class="mb-4">
                       <label for="expiration_date" class="form-label">Expiration Date</label>
                       <input type="date" name="expirationDate" class="form-control" id="expiration_date">
                       <div id="expirationDateValidation" class="invalid-feedback"></div>
-                  </div>
+                    </div>
 
                     <div class="d-grid">
                       <button class="btn btn-primary" type="submit">
                         Create coupon
-                    </button>
-                    
+                      </button>
+
                     </div>
                   </form>
                 </div>
@@ -120,42 +121,42 @@
                                 <%= i + 1 %>
                               </td>
                               <td><b>
-                                <%= couponData[i].couponName %>
-                              </b></td>
+                                  <%= couponData[i].couponName %>
+                                </b></td>
                               <td><b>
-                                <%= couponData[i].couponCode %>
-                              </b></td>
+                                  <%= couponData[i].couponCode %>
+                                </b></td>
                               <td><b>
-                               $ <%= couponData[i].minimumPurchase %>
-                              </b></td>
-                            <td><b>
+                                  $ <%= couponData[i].minimumPurchase %>
+                                </b></td>
+                              <td><b>
                                   <%= couponData[i].discountAmount %>%
                                 </b></td>
-                                <td>
-                                  <% if (couponData[i].isActive) { %>
-                                      <span class="badge rounded-pill alert-success">Active</span>
+                              <td>
+                                <% if (couponData[i].isActive) { %>
+                                  <span class="badge rounded-pill alert-success">Active</span>
                                   <% } else { %>
-                                      <span class="badge rounded-pill alert-danger">Blocked</span>
-                                  <% } %>
+                                    <span class="badge rounded-pill alert-danger">Blocked</span>
+                                    <% } %>
                               </td>
                               <td>
-                                  <% if(couponData[i].isActive) { %>
-                                      <a href="#" class="btn btn-sm font-sm btn-light rounded block-btn"
-                                          data-couid="<%= couponData[i]._id %>"
-                                          style="background-color: rgb(255, 0, 0); transition: background-color 0.3s;">
-                                          <i class="material-icons md-delete_forever"></i>
-                                          <b>Block</b>
-                                      </a>
+                                <% if(couponData[i].isActive) { %>
+                                  <a href="#" class="btn btn-sm font-sm btn-light rounded block-btn"
+                                    data-couid="<%= couponData[i]._id %>"
+                                    style="background-color: rgb(255, 0, 0); transition: background-color 0.3s;">
+                                    <i class="material-icons md-delete_forever"></i>
+                                    <b>Block</b>
+                                  </a>
                                   <% } else { %>
-                                      <a href="#" class="btn btn-sm font-sm btn-light rounded unblock-btn"
-                                          data-couid="<%= couponData[i]._id %>"
-                                          style="background-color: #088178; transition: background-color 0.3s;">
-                                          <i class="material-icons md-delete_forever"></i>
-                                          Unblock
-                                      </a>
-                                  <% } %>
+                                    <a href="#" class="btn btn-sm font-sm btn-light rounded unblock-btn"
+                                      data-couid="<%= couponData[i]._id %>"
+                                      style="background-color: #088178; transition: background-color 0.3s;">
+                                      <i class="material-icons md-delete_forever"></i>
+                                      Unblock
+                                    </a>
+                                    <% } %>
                               </td>
-                              
+
                             </tr>
                             <% } %>
                         </tbody>
@@ -189,91 +190,76 @@
           </div>
         </footer>
     </main>
-    
-   <script>
-    // Function to validate input field
-    function validateInputField(inputFieldId, validationMessageId, errorMessage) {
+
+    <script>
+      function validateInputField(inputFieldId, validationMessageId, errorMessage) {
         const inputField = document.getElementById(inputFieldId);
         const inputValue = inputField.value.trim();
         const validationMessage = document.getElementById(validationMessageId);
-
-        // Remove the 'is-invalid' class initially
         inputField.classList.remove('is-invalid');
-
-        // Check if the input consists of only spaces
         if (inputValue.length === 0) {
-            validationMessage.innerText = errorMessage;
-            inputField.classList.add('is-invalid');
-            return false;
+          validationMessage.innerText = errorMessage;
+          inputField.classList.add('is-invalid');
+          return false;
         } else {
-            validationMessage.innerText = '';
-            return true;
+          validationMessage.innerText = '';
+          return true;
         }
-    }
+      }
 
-    // Function to validate expiration date
-    function validateExpirationDate() {
-    const expirationDateInput = document.getElementById('expiration_date');
-    const expirationDateValue = expirationDateInput.value;
+      function validateExpirationDate() {
+        const expirationDateInput = document.getElementById('expiration_date');
+        const expirationDateValue = expirationDateInput.value;
+        expirationDateInput.classList.remove('is-invalid');
 
-    // Remove the 'is-invalid' class initially
-    expirationDateInput.classList.remove('is-invalid');
+        if (!expirationDateValue) {
+          document.getElementById('expirationDateValidation').innerText = 'Expiration date cannot be empty';
+          expirationDateInput.classList.add('is-invalid');
+          return false;
+        }
 
-    // Check if the expiration date is empty
-    if (!expirationDateValue) {
-        document.getElementById('expirationDateValidation').innerText = 'Expiration date cannot be empty';
-        expirationDateInput.classList.add('is-invalid');
-        return false;
-    }
+        const currentDate = new Date();
+        currentDate.setHours(0, 0, 0, 0); // Set hours, minutes, seconds, and milliseconds to end of the day
 
-    // Get the current date
-    const currentDate = new Date();
-    currentDate.setHours(0, 0, 0,0); // Set hours, minutes, seconds, and milliseconds to end of the day
+        // Convert the expiration date input value to a Date object
+        const expirationDate = new Date(expirationDateValue);
 
-    // Convert the expiration date input value to a Date object
-    const expirationDate = new Date(expirationDateValue);
+        // Check if the expiration date is before the current date
+        if (expirationDate < currentDate) {
+          document.getElementById('expirationDateValidation').innerText = 'Expiration date cannot be a past date';
+          expirationDateInput.classList.add('is-invalid');
+          return false;
+        }
 
-    // Check if the expiration date is before the current date
-    if (expirationDate < currentDate) {
-        document.getElementById('expirationDateValidation').innerText = 'Expiration date cannot be a past date';
-        expirationDateInput.classList.add('is-invalid');
-        return false;
-    }
-
-    // Clear validation message if validation passes
-    document.getElementById('expirationDateValidation').innerText = '';
-    return true;
-}
+        document.getElementById('expirationDateValidation').innerText = '';
+        return true;
+      }
 
 
-    // Function to validate all input fields
-    function validateAllFields() {
+      function validateAllFields() {
         const couponNameValid = validateInputField('couponName', 'couponNameValidation', 'Coupon name cannot be empty');
         const couponCodeValid = validateInputField('couponCode', 'couponCodeValidation', 'Coupon code cannot be empty');
         const expirationDateValid = validateExpirationDate();
 
         // Return true only if all input fields are valid
         return couponNameValid && couponCodeValid && expirationDateValid;
-    }
+      }
 
-    // Function to handle button state based on input validity and initiate fetch
-    function handleButtonState() {
+      function handleButtonState() {
         const createCouponButton = document.querySelector('.btn.btn-primary[type="submit"]');
         createCouponButton.disabled = !validateAllFields();
 
-        // If all fields are valid, initiate the fetch request
-   
-    }
 
-    // Add event listeners for input fields to handle button state
-    document.getElementById('couponName').addEventListener('input', handleButtonState);
-    document.getElementById('couponCode').addEventListener('input', handleButtonState);
-    document.getElementById('expiration_date').addEventListener('input', handleButtonState);
+      }
 
-    // Initially handle button state
-    handleButtonState();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      // Add event listeners for input fields to handle button state
+      document.getElementById('couponName').addEventListener('input', handleButtonState);
+      document.getElementById('couponCode').addEventListener('input', handleButtonState);
+      document.getElementById('expiration_date').addEventListener('input', handleButtonState);
+
+      handleButtonState();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -289,60 +275,60 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-          const blockButtons = document.querySelectorAll('.block-btn');
-          const unblockButtons = document.querySelectorAll('.unblock-btn');
-  
-          blockButtons.forEach(button => {
-              button.addEventListener('click', function (event) {
-                  event.preventDefault();
-                  const couponId = this.getAttribute('data-couid');
-                  Swal.fire({
-                      title: 'Are you sure?',
-                      text: "You are about to block this coupon!",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, block it!'
-                  }).then((result) => {
-                      if (result.isConfirmed) {
-                          // If confirmed, redirect to block coupon route
-                          window.location.href = `/admin/ToggleblockCoupon?Couid=${couponId}`;
-                      }
-                  });
-              });
+        const blockButtons = document.querySelectorAll('.block-btn');
+        const unblockButtons = document.querySelectorAll('.unblock-btn');
+
+        blockButtons.forEach(button => {
+          button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const couponId = this.getAttribute('data-couid');
+            Swal.fire({
+              title: 'Are you sure?',
+              text: "You are about to block this coupon!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, block it!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // If confirmed, redirect to block coupon route
+                window.location.href = `/admin/ToggleblockCoupon?Couid=${couponId}`;
+              }
+            });
           });
-  
-          unblockButtons.forEach(button => {
-              button.addEventListener('click', function (event) {
-                  event.preventDefault();
-                  const couponId = this.getAttribute('data-couid');
-                  Swal.fire({
-                      title: 'Are you sure?',
-                      text: "You are about to unblock this coupon!",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, unblock it!'
-                  }).then((result) => {
-                      if (result.isConfirmed) {
-                          // If confirmed, redirect to unblock coupon route
-                          window.location.href = `/admin/ToggleblockCoupon?Couid=${couponId}`;
-                      }
-                  });
-              });
+        });
+
+        unblockButtons.forEach(button => {
+          button.addEventListener('click', function (event) {
+            event.preventDefault();
+            const couponId = this.getAttribute('data-couid');
+            Swal.fire({
+              title: 'Are you sure?',
+              text: "You are about to unblock this coupon!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, unblock it!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                // If confirmed, redirect to unblock coupon route
+                window.location.href = `/admin/ToggleblockCoupon?Couid=${couponId}`;
+              }
+            });
           });
+        });
       });
-  </script>
+    </script>
     <%if(locals.couponExists){%>
       <script>
-         Swal.fire({
-                  icon: 'warning',
-                  title: 'coupon already exists!',
-         })
+        Swal.fire({
+          icon: 'warning',
+          title: 'coupon already exists!',
+        })
       </script>
-            <%}%>
+      <%}%>
 
 </body>
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->

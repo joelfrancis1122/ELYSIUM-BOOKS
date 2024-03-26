@@ -11,7 +11,7 @@ const loadaddproduct = async (req, res) => {
         const categories = await Category.find();
         res.render('addproduct', { categories });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 }
@@ -75,7 +75,7 @@ const loadeditProduct = async (req, res) => {
         const categories = await Category.find({ is_Active: true })
         res.render('editproduct', { product, categories })
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -136,7 +136,7 @@ const ToggleblockProduct = async (req, res) => {
         await product.save()
         res.redirect('/admin/productslist');
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -151,6 +151,7 @@ const removeImage = async (req, res) => {
         }
         const index = product.Images.findIndex((image) => image === imageName);
         console.log(index, "productIndex")
+        
         if (index !== -1) {
             product.Images.splice(index, 1);
             await product.save();

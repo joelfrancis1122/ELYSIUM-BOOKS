@@ -39,7 +39,7 @@ const loadGuest = async (req, res) => {
         ]);
         res.render('home', { name: null, search: null, product: productData, search: search }); 
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -49,7 +49,7 @@ const loadlogin = async (req, res) => {
     try {
         res.render('login')
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -86,7 +86,7 @@ const loadHome = async (req, res) => {
         const userData = await User.findOne({ _id: userId });
         res.render('home', { product: productData, name: userData.name, search: search ,cartLength});
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).send('Internal Server Error');
     }
 };
@@ -98,7 +98,7 @@ const loadLogout = async (req, res) => {
         req.session.destroy()
         res.redirect('/')
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -129,7 +129,7 @@ const verifyLogin = async (req, res) => {
             res.render("login", { errmessage: "User not found" });
         }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 };
 
@@ -139,7 +139,7 @@ const signup = async (req, res) => {
     try {
         res.render('registeration', { emailExists: false })
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -163,7 +163,7 @@ const verifySignup = async (req, res) => {
             res.redirect("/getOtp")
         }
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -198,7 +198,7 @@ const getOtp = async (req, res) => {
         });
         res.render("otp")
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -224,7 +224,7 @@ const verifyOtp = async (req, res) => {
             res.render("registeration", { errmessage: "." })
         }
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -236,12 +236,14 @@ const shopProduct = async (req, res) => {
         let userId = req.session.user;
         const productData = await Product.findOne({ _id: productId }).populate('Categories');
         const relatedProducts =await Product.find({Categories:productData.Categories , _id: { $ne: productId }}); //id
+    
         const userData = await User.findOne({ _id: userId });
         const cartData= await Cart.findOne({userId:userId})
         const cartLength = cartData ? cartData.product.length : 0
         res.render('singleproduct', { product: productData, name: userData.name,relatedProducts,cartLength})
     } catch (error) {
-        console.log(error)
+        console.error(error)
+        res.render('error',{error})
     }
 }
 
@@ -257,7 +259,7 @@ const loadProfile = async (req, res) => {
         const cartLength = cartData ? cartData.product.length : 0
         res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order,cartLength });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.redirect('/'); 
     }
 }
@@ -276,7 +278,7 @@ const loadOrderDetails = async (req,res)=>{
         const cartLength = cartData ? cartData.product.length : 0
         res.render("ordersdetail",{orders,user:userData,address:addressData,cartData,cartLength:cartLength,orderData})
     } catch (error) {
-        console.log(error.message)  
+        console.error(error)  
     }
 }
 
@@ -292,7 +294,7 @@ const loadInvoice =  async(req,res)=>{
         const addressData = await Address.findOne({ userId : userId });
         res.render("invoice",{orders,address:addressData,user:userData,orderData})
         }catch(error){
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -350,19 +352,50 @@ const loadShop = async (req, res) => {
 
 const profileEdit = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        // const { name, email, password } = req.body;
+        // const userId = req.session.user;
+        // const user = await User.findOne({ _id: userId });
+        // if (!user) {
+        //     console.error('User not found');
+        //     res.redirect('/loadProfile');
+        // }
+        // const passwordMatch = await bcrypt.compare(password, user.password);
+        // if (passwordMatch) {
+        //     const updated = await User.updateOne({ _id: userId }, { $set: { name, email } });
+        //    res.json({success:true, message: 'Profile updated sucesfully !' });
+        // } else {
+        //     return res.json({ message: 'Password does not match' });
+        // }
+        res.render("changePass")
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+const profileEdit2 = async (req, res) => {
+    try {
+        console.log("------------------------------------------------")
+        const { password, npassword, cnpassword } = req.body;
+        
         const userId = req.session.user;
         const user = await User.findOne({ _id: userId });
+        
         if (!user) {
             console.error('User not found');
             res.redirect('/loadProfile');
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
-        if (passwordMatch) {
-            const updated = await User.updateOne({ _id: userId }, { $set: { name, email } });
-           res.json({success:true, message: 'Profile updated sucesfully !' });
+        if (!passwordMatch) {
+            return res.json({ message: 'Current password is incorrect' });
+        }
+        const hashedPassword = await bcrypt.hash(npassword, 10); // 10 is the salt rounds
+        const updated = await User.updateOne({ _id: userId }, { $set: { password: hashedPassword } });
+        if (updated) {
+            console.log("Password updated successfully");
+            return res.json({ success: true, message: 'Password updated successfully!' });
         } else {
-            return res.json({ message: 'Password does not match' });
+            console.error('Failed to update password');
+            return res.json({ success: false, message: 'Failed to update password' });
         }
     } catch (error) {
         console.error(error);
@@ -499,7 +532,7 @@ const OrderCancelled = async (req, res) => {
         const orderReturned = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Cancelled' } })
         res.redirect('/loadProfile')
     } catch (error) {
-        console.log(error.message)
+        console.error(error)
     }
 }
 
@@ -511,7 +544,7 @@ const orderReturn = async (req, res) => {
         const orderReturned = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Returned' } })
         res.redirect('/loadProfile')
     } catch (error) {
-        console.log(error.message)
+        console.error(error)
     }
 }
 
@@ -521,7 +554,7 @@ const orderDetail = async (req, res) => {
     try {
         res.render('ordersdetail')
     } catch (error) {
-        console.log(error.message)
+        console.error(error)
     }
 }
 
@@ -597,6 +630,8 @@ module.exports = {
     loadProfile,
     loadShop,
     profileEdit,
+    profileEdit2,
+    
     addAddress,
     addAddress1,
     loadEditAddress,

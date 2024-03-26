@@ -27,11 +27,17 @@
   <!-- magic zoom cdn  -->
   <link rel="stylesheet" href="/public/assets/magiczoomplus/magiczoomplus.css">
   <script src="/public/assets/magiczoomplus/magiczoomplus.js"></script>
+  <style>
+    .out-of-stock {
+    color: red;
+}
+
+  </style>
 </head>
 
 <body>
  
-  <   <%-include('../partials/userHeader')-%>
+     <%-include('../partials/userHeader')-%>
 
   <div class="mobile-header-active mobile-header-wrapper-style">
     <div class="mobile-header-wrapper-inner">
@@ -58,37 +64,7 @@
             <a class="categori-button-active-2" href="#">
               <span class="fi-rs-apps"></span> Browse Categories
             </a>
-            <div class="categori-dropdown-wrap categori-dropdown-active-small">
-              <ul>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a>
-                </li>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a>
-                </li>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-smartphone"></i> Cellphones</a>
-                </li>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-desktop"></i>Computer & Office</a>
-                </li>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-cpu"></i>Consumer Electronics</a>
-                </li>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-home"></i>Home & Garden</a>
-                </li>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-high-heels"></i>Shoes</a>
-                </li>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i>Mother & Kids</a>
-                </li>
-                <li>
-                  <a href="shop-grid-right.html"><i class="evara-font-kite"></i>Outdoor fun</a>
-                </li>
-              </ul>
-            </div>
+          
           </div>
           <!-- mobile menu start -->
           <nav>
@@ -275,7 +251,7 @@
   <main class="main">
     <div class="page-header breadcrumb-wrap">
 
- <% if(product){ %>
+ <% if(product){   %>
       <div class="container">
         <div class="breadcrumb">
           <a href="/home" rel="nofollow">Home</a>
@@ -384,19 +360,32 @@
                         </li>
                       </ul>
                     </div>
-                    <a href="/addToCart?id=<%=product._id%>" class="button button-add-to-cart"
-                      style="color: rgb(255, 255, 255);">
-                      Add to cart <i class="fa-solid fa-cart-shopping fa-shake"></i>
-                    </a>
+                    <% if (product.stock > 0) { %>
+                      <a href="/addToCart?id=<%=product._id%>" class="button button-add-to-cart" style="color: rgb(255, 255, 255);">
+                          Add to cart <i class="fa-solid fa-cart-shopping fa-shake"></i>
+                      </a>
+                  <% } else { %>
+                    <div style="background-color: rgb(130, 15, 15); border: none; border-radius: 5px; padding: 10px 20px; display: inline-block; cursor: not-allowed;">
+                      <h3 style="color: white; margin: 0;"><strong>Currently Unavailable</strong></h3>
+                  </div>
+                                    <% } %>
+                  
                   </div>
                   <ul class="product-meta font-xs color-grey mt-50">
                     <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li>
                     <li class="mb-5">
                     </li>
                     <li>
-                      Available Stock:<span class="in-stock text-success ml-2">
-                        <%=product.stock%>
-                      </span>
+             Available Stock:
+        <span class="<%= product.stock > 0 ? 'text-success' : 'text-danger' %> ml-2">
+        <% if (product.stock > 0) { %>
+        <%= product.stock %>
+        <% } else { %>
+       <strong><span style="color: red;">Out of Stock</span></strong>
+        <% } %>
+      </span>
+
+
                     </li>
                   </ul>
                 </div>
@@ -722,55 +711,66 @@
                   Related products
                 </h3>
               </div>
-              <div class="row related-products">
-                <% if (relatedProducts) { %>
-                <% for(let i=0 ; i < relatedProducts.length ; i++) { %>
-                        <div class="col-lg-3 col-md-4 col-12 col-sm-6">
-                            <div class="product-cart-wrap small hover-up">
-                                <div class="product-img-action-wrap">
-                                    <div class="product-img product-img-zoom">
-                                        <a href="/shop-product?id=<%=relatedProducts[i]._id%>" tabindex="0">
-                                            <img class="default-img" src="/public/uploads/<%=relatedProducts[i].Images[0]%>" alt="" />
-                                            <img class="hover-img" src="/public/uploads/<%=relatedProducts[i].Images[1] %>" alt="" />
-                                        </a>
+              
+<div class="col-lg-12 col-md-12">
+  <div class="tab-content wow fadeIn animated" id="myTabContent-1">
+      <div class="tab-pane fade show active" id="tab-one-1" role="tabpanel"
+          aria-labelledby="tab-one-1">
+          <div class="carausel-4-columns-cover arrow-center position-relative">
+              <div class="slider-arrow slider-arrow-2 carausel-4-columns-arrow"
+                  id="carausel-4-columns-arrows"></div>
+              <div class="carausel-4-columns carausel-arrow-center"
+                  id="carausel-4-columns">
+                  <% if (relatedProducts) { %>
+                    <% for(let i=0 ; i < relatedProducts.length ; i++) { %>
+                            <div class="col-lg-3 col-md-4 col-12 col-sm-6">
+                                <div class="product-cart-wrap small hover-up" style=" border: 1px   solid rgb(169, 192, 175); ">
+                                    <div class="product-img-action-wrap" >
+                                        <div class="product-img product-img-zoom">
+                                            <a href="/shop-product?id=<%=relatedProducts[i]._id%>" tabindex="0">
+                                                <img class="default-img" src="/public/uploads/<%=relatedProducts[i].Images[0]%>" alt="" />
+                                                <img class="hover-img" src="/public/uploads/<%=relatedProducts[i].Images[1] %>" alt="" />
+                                            </a>
+                                        </div>
+                                        <div class="product-action-1">
+                                            <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal"
+                                                data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
+                                            <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html"
+                                                tabindex="0"><i class="fi-rs-heart"></i></a>
+                                            <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html"
+                                                tabindex="0"><i class="fi-rs-shuffle"></i></a>
+                                        </div>
+                                        <div class="product-badges product-badges-position product-badges-mrg">
+                                            <span class="hot">Hot</span>
+                                        </div>
                                     </div>
-                                    <div class="product-action-1">
-                                        <a aria-label="Quick view" class="action-btn small hover-up" data-bs-toggle="modal"
-                                            data-bs-target="#quickViewModal"><i class="fi-rs-search"></i></a>
-                                        <a aria-label="Add To Wishlist" class="action-btn small hover-up" href="shop-wishlist.html"
-                                            tabindex="0"><i class="fi-rs-heart"></i></a>
-                                        <a aria-label="Compare" class="action-btn small hover-up" href="shop-compare.html"
-                                            tabindex="0"><i class="fi-rs-shuffle"></i></a>
-                                    </div>
-                                    <div class="product-badges product-badges-position product-badges-mrg">
-                                        <span class="hot">Hot</span>
-                                    </div>
-                                </div>
-                                <div class="product-content-wrap">
-                                    <h2>
-                                        <a href="/shop-product?id=<%=relatedProducts[i]._id%>" tabindex="0">
-                                           <%=relatedProducts[i].Bookname%>
-                                        </a>
-                                    </h2>
-                                    <div class="rating-result" title="90%">
-                                        <span> </span>
-                                    </div>
-                                    <div class="product-price">
-                                        <span>
-                                            <%= relatedProducts[i].saleprice %>
-                                        </span>
-                                        <span class="old-price">$<%=relatedProducts[i].Regularprice %></span>
+                                    <div class="product-content-wrap">
+                                        <h2>
+                                            <a href="/shop-product?id=<%=relatedProducts[i]._id%>" tabindex="0">
+                                               <%=relatedProducts[i].Bookname%>
+                                            </a>
+                                        </h2>
+                                        <div class="rating-result" title="90%">
+                                            <span> </span>
+                                        </div>
+                                        <div class="product-price">
+                                            <span>
+                                                <%= relatedProducts[i].saleprice %>
+                                            </span>
+                                            <span class="old-price">$<%=relatedProducts[i].Regularprice %></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <% } %>
-                <% }; %>
-            </div>
+                        <% } %>
+                    <% }; %>
 
 
-
-              
+              </div>
+          </div>
+      </div>
+  </div>
+              <!-- ............................................ -->
             </div>
           </div>
         </div>

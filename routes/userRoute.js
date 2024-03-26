@@ -31,7 +31,8 @@ userRoute.post('/verifyLogin', Auth.isLogout, userControllers.verifyLogin)
 userRoute.get('/shop-product', Auth.isLogin, userControllers.shopProduct)
 userRoute.get("/loadProfile", Auth.isLogin, userControllers.loadProfile)
 userRoute.get('/loadShop', Auth.isLogin, userControllers.loadShop)
-userRoute.post('/profileEdit', Auth.isLogin, userControllers.profileEdit)
+userRoute.get('/profileEdit', Auth.isLogin, userControllers.profileEdit)
+userRoute.post('/profileEdit2', Auth.isLogin, userControllers.profileEdit2)
 userRoute.get('/loadAddAddress', Auth.isLogin, userControllers.loadAddAddress)
 
 userRoute.post('/addAddress', Auth.isLogin, userControllers.addAddress)
@@ -61,6 +62,8 @@ userRoute.get("/orderReturn", Auth.isLogin, userControllers.orderReturn)
 userRoute.get("/orderDetail", Auth.isLogin, userControllers.orderDetail)
 userRoute.get("/categorySearch", Auth.isLogin, userControllers.categorySearch)
 userRoute.post('/applyCoupon', Auth.isLogin, cartControllers.applyCoupon)
+userRoute.post('/onlinepay',Auth.isLogin,cartControllers.onlinePay)
+userRoute.post('/removeCoupon',Auth.isLogin,cartControllers.removeCoupon)
 
 
 

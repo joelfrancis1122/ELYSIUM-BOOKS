@@ -3,6 +3,7 @@
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+
 <head>
     <meta charset="utf-8">
     <title>ELYSIUM-BOOKS</title>
@@ -24,11 +25,11 @@
             display: inline-block;
             margin-right: 10px;
         }
-    
+
         .image-preview {
             position: relative;
         }
-    
+
         .remove-btn {
             position: absolute;
             top: 100px;
@@ -36,8 +37,8 @@
             z-index: 1;
         }
     </style>
-    
-    
+
+
 </head>
 
 <body>
@@ -46,146 +47,164 @@
     <%-include('../partials/adminAside')-%>
 
 
-    <main class="main-wrap">
-        <%-include('../partials/adminHeader')-%>
-        <form action="/admin/editProduct" method="post" enctype="multipart/form-data">
+        <main class="main-wrap">
+            <%-include('../partials/adminHeader')-%>
+                <form action="/admin/editProduct" method="post" enctype="multipart/form-data">
 
 
-            <section class="content-main">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="content-header">
-                            <h2 class="content-title">Edit Product</h2>
-                            <div>
-                                <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button>
-                                <button class="btn btn-md rounded font-sm hover-up" type="submit">Update</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>1. General info</h6>
+                    <section class="content-main">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="content-header">
+                                    <h2 class="content-title">Edit Product</h2>
+                                    <div>
+                                        <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to
+                                            draft</button>
+                                        <button class="btn btn-md rounded font-sm hover-up"
+                                            type="submit">Update</button>
                                     </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <label class="form-label">Book Name</label>
-                                            <input type="text" name="Bookname" value="<%=product.Bookname%>" placeholder="Type here" class="form-control">
-                                        </div>
-                                        <div class="mb-4">
-                                            <label class="form-label">Description</label>
-                                            <textarea placeholder="Type here" name="Description" class="form-control" rows="4"><%=product.Description%></textarea>
-                                        </div>
-                                        <div class="mb-4">
-                                            <label class="form-label">Categories</label>
-                                            <select class="form-select" name="Categories">
-                                                <option selected value="<%=product.Categories._id%>"><%=product.Categories.categoryName%></option>
-
-                                                <% for(let i = 0 ; i < categories.length ; i++) { %>
-                                                    <option value="<%=categories[i]._id%>"><%=categories[i].categoryName%></option>
-                                                <% } %>
-                                            </select>
-                                        </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <hr class="mb-4 mt-0">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>2.Price</h6>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <label class="form-label">Cost in USD</label>
-                                            <input type="text" name="Regularprice"  pattern="\d+(\.\d{1,2})?"  value="<%=product.Regularprice%>" placeholder="$00.0" class="form-control">
-                                        </div>
-                                    </div> <!-- col.// -->
-                                    <div class="col-md-3">
-                                        <h6>3. Offer Price</h6>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <label class="form-label">Cost in USD</label>
-                                            <input type="text" name="saleprice"  pattern="\d+(\.\d{1,2})?" value="<%=product.saleprice%>"placeholder="$00.0" class="form-control">
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-3">
-                                        <h6>4. Stock</h6>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <div class="mb-4">
-                                            <label class="form-label">Stock</label>
-                                            <input type="text" name="stock"  pattern="[1-9][0-9]*"  value="<%=product.stock%>"placeholder="0" class="form-control">
-                                        </div>
-                                    </div>  
-                                </div> <!-- row.// -->
-                                <hr class="mb-4 mt-0">
-                                <div class="row">
-                                   
                                 </div>
-                                <hr class="mb-4 mt-0">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>4. Media</h6>
-                                    </div>
-                                
-
-
-
-
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card mb-4">
                                     <div class="card-body">
-                                        <div class="input-upload">
-                                            <ul id="imageList" class="image-list">
-                                                <% product.Images.forEach((image) => { %>
-                                                    <li class="image-item">
-                                                        <div class="image-preview">
-                                                            <img src="/public/uploads/<%=image%>" class="img-thumbnail" alt="Uploaded Image">
-                                                            <button class="btn btn-danger remove-btn" onclick="removeImage('<%= product._id %>','<%= image%>')">Remove</button>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>1. General info</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Book Name</label>
+                                                    <input type="text" name="Bookname" value="<%=product.Bookname%>"
+                                                        placeholder="Type here" class="form-control">
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="form-label">Description</label>
+                                                    <textarea placeholder="Type here" name="Description"
+                                                        class="form-control"
+                                                        rows="4"><%=product.Description%></textarea>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="form-label">Categories</label>
+                                                    <select class="form-select" name="Categories">
+                                                        <option selected value="<%=product.Categories._id%>">
+                                                            <%=product.Categories.categoryName%>
+                                                        </option>
 
-                                                        </div>
-                                                    </li>
-                                                <% }); %>
-                                            </ul>
-                                            <div id="previewContainer" class="mt-3"></div>
-                                            <input id="imageInput" class="form-control" name="Images" type="file" accept="image/*" multiple onchange="handleImageSelection(event)">
+                                                        <% for(let i=0 ; i < categories.length ; i++) { %>
+                                                            <option value="<%=categories[i]._id%>">
+                                                                <%=categories[i].categoryName%>
+                                                            </option>
+                                                            <% } %>
+                                                    </select>
+                                                </div>
+                                            </div> <!-- col.// -->
+                                        </div> <!-- row.// -->
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>2.Price</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Cost in USD</label>
+                                                    <input type="text" name="Regularprice" pattern="\d+(\.\d{1,2})?"
+                                                        value="<%=product.Regularprice%>" placeholder="$00.0"
+                                                        class="form-control">
+                                                </div>
+                                            </div> <!-- col.// -->
+                                            <div class="col-md-3">
+                                                <h6>3. Offer Price</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Cost in USD</label>
+                                                    <input type="text" name="saleprice" pattern="\d+(\.\d{1,2})?"
+                                                        value="<%=product.saleprice%>" placeholder="$00.0"
+                                                        class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h6>4. Stock</h6>
+                                            </div>
+                                            <div class="col-md-9">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Stock</label>
+                                                    <input type="text" name="stock" pattern="[1-9][0-9]*"
+                                                        value="<%=product.stock%>" placeholder="0" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div> <!-- row.// -->
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+
                                         </div>
+                                        <hr class="mb-4 mt-0">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h6>4. Media</h6>
+                                            </div>
+
+
+
+
+
+                                            <div class="card-body">
+                                                <div class="input-upload">
+                                                    <ul id="imageList" class="image-list">
+                                                        <% product.Images.forEach((image)=> { %>
+                                                            <li class="image-item">
+                                                                <div class="image-preview">
+                                                                    <img src="/public/uploads/<%=image%>"
+                                                                        class="img-thumbnail" alt="Uploaded Image">
+                                                                    <button class="btn btn-danger remove-btn"
+                                                                        onclick="removeImage('<%= product._id %>','<%= image%>')">Remove</button>
+
+                                                                </div>
+                                                            </li>
+                                                            <% }); %>
+                                                    </ul>
+                                                    <div id="previewContainer" class="mt-3"></div>
+                                                    <input id="imageInput" class="form-control" name="Images"
+                                                        type="file" accept="image/*" multiple
+                                                        onchange="handleImageSelection(event)">
+                                                </div>
+                                            </div>
+
+
+
+
+                                        </div> <!-- .row end// -->
                                     </div>
-                                    
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </section> <!-- content-main end// -->
+                </form>
 
-
-                                    
-                                </div> <!-- .row end// -->
+                <footer class="main-footer font-xs">
+                    <div class="row pb-30 pt-15">
+                        <div class="col-sm-6">
+                            <script>
+                                document.write(new Date().getFullYear())
+                            </script> ©,ELYSIUM-BOOKS.
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="text-sm-end">
+                                All rights reserved
                             </div>
                         </div>
                     </div>
-                </div>
-                </div>
-            </section> <!-- content-main end// -->
-        </form>
-       
-        <footer class="main-footer font-xs">
-            <div class="row pb-30 pt-15">
-                <div class="col-sm-6">
-                    <script>
-                    document.write(new Date().getFullYear())
-                    </script> ©,ELYSIUM-BOOKS.
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end">
-                        All rights reserved
-                    </div>
-                </div>
-            </div>
-        </footer>
-    </main>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
- 
-    <!-- <script>
+                </footer>
+        </main>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+        <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const removeButtons = document.querySelectorAll('.remove-btn');
     
@@ -200,168 +219,169 @@
         });
     </script> -->
 
-    
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const form = document.querySelector("form[action='/admin/editProduct']");
-            
-            form.addEventListener("submit", function(event) {
-                const inputs = form.querySelectorAll("input[type='text'], textarea");
-                let isValid = true;
-          
-                inputs.forEach(function(input) {
-                    const trimmedValue = input.value.trim();
-                    if (trimmedValue === "") {
-                        isValid = false;
-                        return;
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.querySelector("form[action='/admin/editProduct']");
+
+                form.addEventListener("submit", function (event) {
+                    const inputs = form.querySelectorAll("input[type='text'], textarea");
+                    let isValid = true;
+
+                    inputs.forEach(function (input) {
+                        const trimmedValue = input.value.trim();
+                        if (trimmedValue === "") {
+                            isValid = false;
+                            return;
+                        }
+                    });
+
+                    if (!isValid) {
+                        event.preventDefault();
+                        toastr.warning("Please fill out all fields.");
                     }
+
+                    const regularPriceInput = form.querySelector("input[name='Regularprice']");
+                    const salePriceInput = form.querySelector("input[name='saleprice']");
+                    const stockInput = form.querySelector("input[name='stock']");
+                    const regex = /^\d+(\.\d+)?$/;
+
+                    if (!regex.test(regularPriceInput.value) || !regex.test(salePriceInput.value) || !regex.test(stockInput.value)) {
+                        event.preventDefault();
+                        toastr.warning("Please enter valid numbers in Regular price, Sale price, and Stock fields.");
+                    }
+
+                    // const imagesInput = form.querySelector("input[name='Images']");
+                    // if (imagesInput.files.length === 0) {
+                    //     event.preventDefault();
+                    //     toastr.warning("Please select at least one image.");
+                    // }
                 });
-          
-                if (!isValid) {
-                    event.preventDefault();
-                    toastr.warning("Please fill out all fields.");
-                }
-    
+            });
+        </script>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.querySelector("form[action='/admin/editProduct']");
                 const regularPriceInput = form.querySelector("input[name='Regularprice']");
                 const salePriceInput = form.querySelector("input[name='saleprice']");
-                const stockInput = form.querySelector("input[name='stock']");
-                const regex = /^\d+(\.\d+)?$/;
-          
-                if (!regex.test(regularPriceInput.value) || !regex.test(salePriceInput.value) || !regex.test(stockInput.value)) {
-                    event.preventDefault();
-                    toastr.warning("Please enter valid numbers in Regular price, Sale price, and Stock fields.");
-                }
-    
-                // const imagesInput = form.querySelector("input[name='Images']");
-                // if (imagesInput.files.length === 0) {
-                //     event.preventDefault();
-                //     toastr.warning("Please select at least one image.");
-                // }
+
+                form.addEventListener("submit", function (event) {
+                    const regularPrice = parseFloat(regularPriceInput.value);
+                    const salePrice = parseFloat(salePriceInput.value);
+
+                    if (salePrice > regularPrice) {
+                        event.preventDefault(); // Prevent form submission
+                        toastr.error("Regular price must be less than or equal to sale price."); // Display toastr error message
+                    }
+                });
             });
-        });
-    </script>
-  
-   
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.querySelector("form[action='/admin/editProduct']");
-        const regularPriceInput = form.querySelector("input[name='Regularprice']");
-        const salePriceInput = form.querySelector("input[name='saleprice']");
+        </script>
 
-        form.addEventListener("submit", function(event) {
-            const regularPrice = parseFloat(regularPriceInput.value);
-            const salePrice = parseFloat(salePriceInput.value);
-
-            if (salePrice > regularPrice) {
+        <script>
+            async function removeImage(productid, filename) {
                 event.preventDefault(); // Prevent form submission
-                toastr.error("Regular price must be less than or equal to sale price."); // Display toastr error message
+
+                try {
+                    const response = await fetch('/admin/removeImage', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ productid, filename })
+                    });
+
+                    if (response.ok) {
+                        // If removal is successful, remove the corresponding image from the DOM
+                        const data = await response.json();
+                        const index = data.index;
+
+                        // If removal is successful, remove the corresponding image from the DOM
+                        const imageItems = document.querySelectorAll('.image-item');
+                        if (imageItems[index]) {
+                            imageItems[index].remove();
+                        }
+                    } else {
+                        // Handle error response
+                        console.error('Error removing image');
+                    }
+                } catch (error) {
+                    console.error('Error removing image:', error);
+                }
             }
-        });
-    });
-</script>
 
-<script>
-    async function removeImage(productid,filename) {
-        event.preventDefault(); // Prevent form submission
 
-        try {
-            const response = await fetch('/admin/removeImage', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ productid,filename })
-            });
-            
-            if (response.ok) {
-                // If removal is successful, remove the corresponding image from the DOM
-                const data = await response.json();
-            const index = data.index;
+        </script>
 
-            // If removal is successful, remove the corresponding image from the DOM
-            const imageItems = document.querySelectorAll('.image-item');
-            if (imageItems[index]) {
-                imageItems[index].remove();
+        <script>
+
+            function handleImageSelection(event) {
+                previewImages(event); // Call the function to preview images
+                validateImages(event.target); // Call the function to validate images
             }
-            } else {
-                // Handle error response
-                console.error('Error removing image');
+
+            function previewImages(event) {
+                const previewContainer = document.getElementById('previewContainer');
+                const imageList = document.getElementById('imageList');
+
+                const files = event.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+
+                    reader.onload = function () {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = reader.result;
+                        imgElement.classList.add('img-thumbnail');
+
+                        const removeButton = document.createElement('button');
+
+
+                        const imagePreview = document.createElement('div');
+                        imagePreview.classList.add('image-preview');
+                        imagePreview.appendChild(imgElement);
+                        // imagePreview.appendChild(removeButton);
+
+                        const listItem = document.createElement('li');
+                        listItem.classList.add('image-item');
+                        listItem.appendChild(imagePreview);
+
+                        imageList.appendChild(listItem);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
             }
-        } catch (error) {
-            console.error('Error removing image:', error);
-        }
-    }
+            function validateImages(input) {
+                const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                const files = input.files;
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    if (!allowedExtensions.test(file.name)) {
+                        toastr.error('Please select only image files (JPEG, JPG, PNG).');
+                        input.value = ''; //
+                        return false; // entry ila
+                    }
+                }
+                return true;
+            }
 
-   
-</script>
-
-<script>
-
-function handleImageSelection(event) {
-    previewImages(event); // Call the function to preview images
-    validateImages(event.target); // Call the function to validate images
-}
-
-function previewImages(event) {
-        const previewContainer = document.getElementById('previewContainer');
-        const imageList = document.getElementById('imageList');
-
-        const files = event.target.files;
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function () {
-                const imgElement = document.createElement('img');
-                imgElement.src = reader.result;
-                imgElement.classList.add('img-thumbnail');
-                
-                const removeButton = document.createElement('button');
-                
-
-                const imagePreview = document.createElement('div');
-                imagePreview.classList.add('image-preview');
-                imagePreview.appendChild(imgElement);
-                // imagePreview.appendChild(removeButton);
-
-                const listItem = document.createElement('li');
-                listItem.classList.add('image-item');
-                listItem.appendChild(imagePreview);
-
-                imageList.appendChild(listItem);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    }
-function validateImages(input) {
-    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-    const files = input.files;
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!allowedExtensions.test(file.name)) {
-            toastr.error('Please select only image files (JPEG, JPG, PNG).');
-            input.value = ''; //
-            return false; // entry ila
-        }
-    }
-    return true;
-}  
-
-</script>
+        </script>
 
 
 
 
-    <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
-    <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="/public/admin-assets/js/vendors/select2.min.js"></script>
-    <script src="/public/admin-assets/js/vendors/perfect-scrollbar.js"></script>
-    <script src="/public/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
-    <!-- Main Script -->
-    <script src="/public/admin-assets/js/main.js" type="text/javascript"></script>
+        <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="/public/admin-assets/js/vendors/select2.min.js"></script>
+        <script src="/public/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="/public/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="/public/admin-assets/js/main.js" type="text/javascript"></script>
 </body>
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+
 </html>

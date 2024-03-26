@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
-  <head>
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
+<head>
     <meta charset="utf-8" />
     <title>ELYSIUM-BOOKS</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
@@ -12,31 +13,24 @@
     <meta property="og:url" content="" />
     <meta property="og:image" content="" />
     <!-- Favicon -->
-    <link
-      rel="shortcut icon"
-      type="image/x-icon"
-      href="/public/admin-assets/imgs/theme/favicon.svg"
-    />
+    <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/imgs/theme/favicon.svg" />
     <!-- Template CSS -->
-    <link
-      href="/public/admin-assets/css/main.css"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
 
 
     <style>
-        
         body {
             font-family: Arial, sans-serif;
             background-color: #f7f7f7;
             padding: 20px;
         }
+
         h2 {
             color: #333;
             text-align: center;
             margin-bottom: 20px;
         }
+
         #categoryForm {
             max-width: 500px;
             margin: 0 auto;
@@ -45,11 +39,13 @@
             border-radius: 8px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
+
         label {
             font-weight: bold;
             margin-bottom: 5px;
             display: block;
         }
+
         input[type="text"],
         textarea {
             width: 100%;
@@ -59,10 +55,12 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
+
         textarea {
             resize: vertical;
             height: 100px;
         }
+
         button[type="submit"] {
             background-color: #007bff;
             color: #fff;
@@ -74,26 +72,28 @@
             margin: 0 auto;
             transition: background-color 0.3s;
         }
+
         button[type="submit"]:hover {
             background-color: #0056b3;
         }
     </style>
-    
-  </head>
 
-  <body>
+</head>
+
+<body>
     <h2>Edit Category</h2>
     <% if (categories) { %>
-    <form id="categoryForm" method="post" action="/admin/editCategory">
-        <label for="categoryName">Category Name:</label>
-        <input type="text" id="categoryName" name="categoryName" value="<%= categories.categoryName %>"  required>
-        <label for="categoryDescription">Category Description:</label>
- <textarea name="Description" required><%= categories.Description %></textarea>
+        <form id="categoryForm" method="post" action="/admin/editCategory">
+            <label for="categoryName">Category Name:</label>
+            <input type="text" id="categoryName" name="categoryName" value="<%= categories.categoryName %>" required>
+            <label for="categoryDescription">Category Description:</label>
+            <textarea name="Description" required><%= categories.Description %></textarea>
 
-        <button type="submit">Update Category</button>
-    </form>
-    
-    <% } %>
+            <button type="submit">Update Category</button>
+        </form>
+
+        <% } %>
 </body>
-  <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
+
 </html>

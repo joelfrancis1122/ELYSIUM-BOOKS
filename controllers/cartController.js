@@ -1,9 +1,65 @@
 const User = require('../models/userModel')
 const Cart = require('../models/cartModel')
+const Product = require('../models/productModel')
+
 const Coupon = require('../models/couponModel')
 const Address = require('../models/addressModel')
 const Orders = require('../models/orderModel')
+const Razorpay = require('razorpay');
+const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
+let instance = new Razorpay({
+  key_id: RAZORPAY_ID_KEY,
+  key_secret: RAZORPAY_SECRET_KEY,
+});
+
+const onlinePay = async (req, res) => {
+  try {
+    const { amount, address } = req.body;
+    console.log(amount)
+    const userId = req.session.user
+    const cart = await Cart.findOne({ userId: userId });
+
+    // const address = await Address.findOne({ _id: req.body.address });
+
+    function generateOrderId() {
+        const timestamp = Date.now().toString();
+        const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let orderId = 'ORD';
+        while (orderId.length < 6) {
+            const randomIndex = Math.floor(Math.random() * randomChars.length);
+            orderId += randomChars.charAt(randomIndex);
+        }
+        return orderId + timestamp.slice(-6);
+    }
+
+    const newOrderId = generateOrderId();
+
+    const order = new Orders({
+        orderId: newOrderId,
+        userId: userId,
+        paymentMethod: req.body.paymentMethod,
+        totalAmount: req.body.amount,
+        product: cart.product,
+        address: address
+    });
+
+        await order.save()
+
+    
+    
+    let amounts = amount*84
+    const order2 = await instance.orders.create({
+        amount: amounts*100,
+        currency: "INR",
+        receipt: req.session.user,
+        })
+        res.json({order2})
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+};
 
 
 
@@ -135,9 +191,10 @@ const loadCheckOut = async (req, res) => {
 
 const placeOrder = async (req, res) => {
     try {
+        console.log("inside placeorder=++++++++++++++++++++")
         const userId = req.session.user
         const cart = await Cart.findOne({ userId: userId });
-        const address = await Address.findOne({ _id: req.body.addresss });
+        const address = await Address.findOne({ _id: req.body.address });
         function generateOrderId() {
             const timestamp = Date.now().toString();
             const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -148,7 +205,21 @@ const placeOrder = async (req, res) => {
             }
             return orderId + timestamp.slice(-6);
         }
+
+
         const newOrderId = generateOrderId();
+
+
+        const orderItems = cart.product;
+
+        // Update product stock for each item in the order
+        for (const item of orderItems) {
+            const product = await Product.findById(item.productId);
+            if (product) {
+                product.stock -= item.quantity; // Subtract order quantity from product stock
+                await product.save();
+            }
+        }
         const order = new Orders({
             orderId: newOrderId,
             userId: userId,
@@ -157,12 +228,16 @@ const placeOrder = async (req, res) => {
             product: cart.product,
             address: address
         });
+
+        
         await order.save()
         res.status(200).json({ message: "Order Placed Successfully" })
     } catch (error) {
         console.error(error);
     }
 };
+
+
 const addCoupon = async (req, res) => {
     try {
         const { couponName, couponCode, minimumPurchase, discountAmount, expirationDate } = req.body;
@@ -210,7 +285,35 @@ const ToggleblockCoupon = async (req, res) => {
         console.log(error.message)
     }
 }
- 
+const removeCoupon = async (req, res) => {
+    try {
+        const { couponCode } = req.body; // Assuming the coupon code is passed in the request body
+        const userId = req.session.user; // Assuming you have the user's ID in the session
+        console.log(userId,"userID")
+        console.log(couponCode,"Coupon")
+        // Find the coupon document based on the coupon code
+        const updatedCoupon = await Coupon.findOneAndUpdate(
+            { couponCode: couponCode },
+            { $pull: { redeemedUsers: { userId: userId } } }, // Pull the user ID from the redeemedUsers array
+            { new: true } // To return the updated document
+        );
+
+        if (updatedCoupon) {
+            console.log("Coupon updated successfully:", updatedCoupon);
+            // Handle success if needed
+        } else {
+            console.log("Coupon not found or user not redeemed it:", couponCode);
+            // Handle not found or user not redeemed the coupon
+        }
+
+        res.redirect('/admin/loadCoupon');
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
+
 
 
 const applyCoupon = async (req, res) => {
@@ -292,6 +395,8 @@ module.exports = {
     addCoupon,
     ToggleblockCoupon,
     clearCart,
-    applyCoupon
+    applyCoupon,
+    onlinePay,
+    removeCoupon
 }
 

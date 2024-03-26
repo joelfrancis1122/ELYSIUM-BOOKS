@@ -40,6 +40,7 @@ const isLogout = async (req, res, next) => {
 const isBlocked = async(req,res,next)=>{
     try {
         const user =await User.findById(req.session.user);
+        
         if(user.is_active){
             next()
         }else{

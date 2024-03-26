@@ -18,6 +18,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/public/assets/css/maind134.css?v=3.4">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
+
     <style>
         .search-form {
             display: flex;
@@ -394,20 +396,30 @@
                                                         <span>90%</span>
                                                     </span>
                                                 </div>
-                                                <div class="product-price">
-                                                    <span>$<%=product[i].saleprice%></span>
-                                                    <span class="old-price">$<%=product[i].Regularprice%></span>
-                                                </div>
-                                                <div class="product-action-1 show">
-                                                    <a aria-label="Add To Cart" class="action-btn hover-up"
-                                                        href="/addToCart?id=<%=product[i]._id%>"><i
-                                                            class="fi-rs-shopping-bag-add"></i></a>
-                                                </div>
+                                                <% if (product[i].stock == 0) { %>
+                                                    <div class="product-price">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   <span style="display: inline-block; padding: 2px 16px; background-color: #ff0000; color: #ffffff; font-weight: bold; border-radius: 4px;">Currently Unavailable</span>
+
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="product-price">
+                                                        <span>$<%= product[i].saleprice %></span>
+                                                        <span class="old-price">$<%= product[i].Regularprice %></span>
+                                                    </div>
+                                                    <div class="product-action-1 show">
+                                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="/addToCart?id=<%= product[i]._id %>">
+                                                            <i class="fi-rs-shopping-bag-add"></i>
+                                                        </a>
+                                                    </div>
+                                                <% } %>
+                                                
                                             </div>
                                         </div>
                                     </div>
                                     <%}%>
                             </div>
+
+               
 
 
 

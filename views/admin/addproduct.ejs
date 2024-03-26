@@ -160,8 +160,8 @@
                 const salePrice = parseFloat(salePriceInput.value);
     
                 if (salePrice > regularPrice) {
-                    event.preventDefault(); // Prevent form submission
-                    toastr.error("Regular price must be less than or equal to sale price."); // Display toastr error message
+                    event.preventDefault(); 
+                    toastr.error("Regular price must be less than or equal to sale price."); 
                 }
             });
         });
@@ -172,8 +172,7 @@
         document.addEventListener("DOMContentLoaded", function() {
           const form = document.querySelector("form[action='/admin/addProduct']");
           form.addEventListener("submit", function(event) {
-            const inputs = form.querySelectorAll("input[type='text'], textarea"); // Select text inputs and textareas
-      
+            const inputs = form.querySelectorAll("input[type='text'], textarea");
             let isValid = true;
       
             inputs.forEach(function(input) {
@@ -185,8 +184,8 @@
             });
       
             if (!isValid) {
-              event.preventDefault(); // Prevent form submission
-              toastr.warning("Please fill out all fields."); // Display an alert message
+              event.preventDefault();
+              toastr.warning("Please fill out all fields.");
             }
           });
         });
@@ -199,7 +198,6 @@
         const previewContainer = document.getElementById("previewContainer");
 
         imageInput.addEventListener("change", function() {
-            // Clear previous previews
             previewContainer.innerHTML = '';
 
             const files = imageInput.files;

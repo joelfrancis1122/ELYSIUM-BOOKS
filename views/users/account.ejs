@@ -18,6 +18,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/public/assets/css/maind134.css?v=3.4">
+    
     <style>
         #email:hover,
         #password:hover {
@@ -305,7 +306,7 @@
                                                                             <%= order.orderDate.toLocaleString() %>
                                                                         </td>
                                                                         <td style="padding: 10px;">
-                                                                            <%= order.totalAmount %>
+                                                                           $<%= order.totalAmount %>
                                                                         </td>
                                                                         <td style="padding: 10px;">
                                                                             <% if (order.orderStatus==='Order Placed' || order.orderStatus==='Pending' ) { %>
@@ -463,22 +464,11 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <h5>Account Details</h5>
-                                                <p>change username and password</p>
+                                                <p>change password</p>
                                             </div>
                                             <div class="card-body">
-                                                <form id="profileEditForm" action="profileEdit" method="post">
-                                                    <label for="name">Name:</label>
-                                                    <input type="text" id="name" name="name" value="<%= name %>" required>
-                                                    <label for="email">Email:</label>
-                                                    <input type="email" id="email" name="email" value="<%= email %>" required>
-                                                    <hr>
-                                                    <label for="password">
-                                                        <h4>Enter Your Original Password to Confirm:</h4>
-                                                    </label>
-                                                    <input type="password" id="password" name="password" required>
-                                                    <button type="submit">Update</button>
-                                                </form>
-                                                
+                                               
+                                                <a href="/profileEdit">CHANGE YOUR PASSWORD</a>
                                             </div>
 
                                         </div>

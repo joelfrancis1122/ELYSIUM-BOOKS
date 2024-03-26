@@ -10,7 +10,7 @@ const dashboardLoad  = async (req, res) => {
     try {
         res.render('admindashboard')
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -20,9 +20,10 @@ const adminLogin = async(req,res)=>{
     try{
 res.render('login')
     }catch{
-        console.log(error)
+        console.error(error)
     }
 }
+
 
 
 
@@ -36,7 +37,7 @@ const productslist = async(req,res)=>{
         }).populate('Categories').sort({ CreatedOn: -1 })
         res.render('productslist',{product:productData,search:search})
     }catch(error){
-console.log(error);
+console.error(error);
     }
 }
 
@@ -83,7 +84,7 @@ try {
     req.session.cateid=req.query.id
     res.render('editcategories',{categories})
 } catch (error) {
-    console.log(error)
+    console.error(error)
 }}
 
 
@@ -109,7 +110,7 @@ const ToggleblockCategories = async (req,res)=>{
         await categories.save()
         res.redirect('/admin/loadCategories');
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -120,7 +121,7 @@ const loaduserlist = async (req, res) => {
         const userData = await User.find({is_admin:false})
         res.render('userlist',{users:userData})
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -134,7 +135,7 @@ const ToggleblockUser = async (req,res)=>{
         await user.save()
         res.redirect('/admin/loaduserlist');
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -170,7 +171,7 @@ const loadCoupon = async (req, res) => {
         const couponData = await Coupon.find().sort({ Date: -1 })
         res.render('Coupon',{couponData})
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
@@ -181,7 +182,7 @@ const loadLogout = async (req, res) => {
         req.session.destroy()
         res.redirect('/')
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 }
 
