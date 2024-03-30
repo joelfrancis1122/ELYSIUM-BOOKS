@@ -64,6 +64,8 @@ userRoute.get("/categorySearch", Auth.isLogin, userControllers.categorySearch)
 userRoute.post('/applyCoupon', Auth.isLogin, cartControllers.applyCoupon)
 userRoute.post('/onlinepay',Auth.isLogin,cartControllers.onlinePay)
 userRoute.post('/removeCoupon',Auth.isLogin,cartControllers.removeCoupon)
+userRoute.post('/addTowallet',Auth.isLogin,userControllers.addTowallet)
+userRoute.get("/wishlist", Auth.isLogin, userControllers.wishlist)
 
 
 

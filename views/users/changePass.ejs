@@ -165,12 +165,14 @@
                 const data = await response.json();
             
                 if (data.success) {
-                    toastr.success(data.message);
-                window.location.href='/'
-                                    } else {
-                    toastr.error(data.message);
-                    // Additional error handling if needed
-                }
+    toastr.success(data.message, '', { timeOut: 2000 });
+    setTimeout(() => {
+        window.location.href = '/';
+    }, 2000); // Redirect after 2 seconds
+} else {
+    toastr.error(data.message, '', { timeOut: 2000 });
+}
+
                 });
             
                 const newPasswordInput = document.getElementById('newPassword');

@@ -130,19 +130,15 @@
         method: 'GET', // or 'POST' if needed
         headers: {
           'Content-Type': 'application/json'
-          // Add any other headers if needed
         },
-        // Add any additional options if needed
       })
         .then(response => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-          // You can process the response here if needed
         })
         .catch(error => {
           console.error('Fetch error:', error);
-          // Handle errors if any
         });
     }
 
