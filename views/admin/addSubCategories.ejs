@@ -26,7 +26,7 @@
         <section class="content-main">
           <div class="content-header">
             <div>
-              <h2 class="content-title card-title">Categories</h2>
+              <h2 class="content-title card-title">Sub-Categories</h2>
               <p>Add, edit or delete a category</p>
             </div>
           </div>
@@ -34,10 +34,10 @@
             <div class="card-body">
               <div class="row">
                 <div class="col-md-3">
-                  <form method="post" action="/admin/addCategories">
+                  <form method="post" action="/admin/addSubCategories">
                     <div class="mb-4">
-                      <label for="product_name" class="form-label">Category Name</label>
-                      <input type="text" placeholder="Type here" name="categoryName" class="form-control"
+                      <label for="product_name" class="form-label">Sub-Category Name</label>
+                      <input type="text" placeholder="Type here" name="subCategoryName" class="form-control"
                         id="product_name" />
                     </div>
 
@@ -47,7 +47,7 @@
                     </div>
                     <div class="d-grid">
                       <button class="btn btn-primary" type="submit">
-                        Create category
+                        Create Sub-category
                       </button>
                     </div>
                   </form>
@@ -78,7 +78,7 @@
                                 <%= i+1 %>
                               </td>
                               <td><b>
-                                  <%= categories[i].categoryName %>
+                                  <%= categories[i].subCategoryName %>
                                 </b></td>
                               <td><b>
                                   <%= categories[i].Description %>
@@ -91,12 +91,12 @@
                                     <% } %>
                               </td>
                               <td>
-                                <a href="/admin/loadeditCategory?id=<%=categories[i]._id%>"
+                                <!-- <a href="/admin/loadeditCategory?id=<%=categories[i]._id%>"
                                   class="btn btn-sm font-sm btn-light rounded"
                                   style="background-color: #007bff; color: #fff; margin-left: 5px;">
                                   <i class="material-icons md-edit"></i>
                                   Edit
-                                </a>
+                                </a> -->
                                 <% if (categories[i].is_Active) { %>
                                   <a href="#" onclick="confirmBlock('<%= categories[i]._id %>')"
                                     class="btn btn-sm font-sm btn-light rounded"
@@ -152,7 +152,7 @@
           confirmButtonText: 'Yes, block it!'
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.href = `/admin/ToggleblockCategories?catid=${categoryId}`;
+            window.location.href = `/admin/ToggleblockSubCategories?catid=${categoryId}`;
           }
         });
       }
@@ -168,7 +168,7 @@
           confirmButtonText: 'Yes, Unblock it!'
         }).then((result) => {
           if (result.isConfirmed) {
-            window.location.href = `/admin/ToggleblockCategories?catid=${categoryId}`;
+            window.location.href = `/admin/ToggleblockSubCategories?catid=${categoryId}`;
           }
         });
       }

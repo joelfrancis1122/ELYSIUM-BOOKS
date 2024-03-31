@@ -99,7 +99,27 @@
                                                             </option>
                                                             <% } %>
                                                     </select>
+
                                                 </div>
+                                                <label class="form-label">Sub-Categories</label>
+
+                                                <div>
+                                                    <select class="form-select" name="subCategories">
+                                                        <% if (product.subCategories && product.Categories) { %>
+                                                            <option value="<%= product.subCategories._id %>">
+                                                                <%=product.subCategories.subCategoryName%>
+                                                            </option>
+                                                        
+                                                        <% } %>
+                                                        <% for (let i = 0; i < subCat.length; i++) { %>
+                                                            <option value="<%= subCat[i]._id %>">
+                                                                <%= subCat[i].subCategoryName %>
+                                                            </option>
+                                                        <% } %>
+                                                    </select>
+                                                </div>
+                                                
+
                                             </div> <!-- col.// -->
                                         </div> <!-- row.// -->
                                         <hr class="mb-4 mt-0">
@@ -110,7 +130,8 @@
                                             <div class="col-md-9">
                                                 <div class="mb-4">
                                                     <label class="form-label">Cost in USD</label>
-                                                    <input type="text" name="Regularprice" pattern="\d+(\.\d{1,2})?"
+                                                    <input type="text" name="Regularprice" pattern="^[1-9][0-9]*(.[0-9]+)?$"
+                                                    
                                                         value="<%=product.Regularprice%>" placeholder="$00.0"
                                                         class="form-control">
                                                 </div>
@@ -121,7 +142,7 @@
                                             <div class="col-md-9">
                                                 <div class="mb-4">
                                                     <label class="form-label">Cost in USD</label>
-                                                    <input type="text" name="saleprice" pattern="\d+(\.\d{1,2})?"
+                                                    <input type="text" name="saleprice" pattern="^[1-9][0-9]*(.[0-9]+)?$"
                                                         value="<%=product.saleprice%>" placeholder="$00.0"
                                                         class="form-control">
                                                 </div>
@@ -132,7 +153,7 @@
                                             <div class="col-md-9">
                                                 <div class="mb-4">
                                                     <label class="form-label">Stock</label>
-                                                    <input type="text" name="stock" pattern="[1-9][0-9]*"
+                                                    <input type="text" name="stock" pattern="^[1-9][0-9]*(.[0-9]+)?$"
                                                         value="<%=product.stock%>" placeholder="0" class="form-control">
                                                 </div>
                                             </div>

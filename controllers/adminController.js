@@ -3,7 +3,7 @@ const Category = require('../models/categoryModel')
 const User = require('../models/userModel')
 const Coupon = require('../models/couponModel')
 const Orders = require('../models/orderModel')
-
+const SubCategory = require('../models/subcategoryModel')
 
 
 const dashboardLoad  = async (req, res) => {
@@ -54,6 +54,16 @@ const loadCategories = async(req,res)=>{
     }
 }
 
+const loadSubCategories = async(req,res)=>{
+    try {
+        const catData = await SubCategory.find()
+           if(catData){
+          res.render('addSubCategories',{categories : catData})
+           }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 const addCategories = async (req, res) => {
@@ -69,7 +79,28 @@ const addCategories = async (req, res) => {
             Description: Description,
         });
         const categoryData = await categories.save();
-        res.redirect('/admin/loadCategories');
+        res.redirect('/admin/loadSubCategories');
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send('Server Error');
+    }
+};
+
+
+const addSubCategories = async (req, res) => {
+    try {
+        const { subCategoryName, Description } = req.body;
+        const catData = await SubCategory.find()
+        const existingCategory = await SubCategory.findOne({ subCategoryName: { $regex: new RegExp('^' + subCategoryName + '$', 'i') } });
+        if (existingCategory) {
+            return res.render('addcategories', { categoriesExists: true ,categories : catData}); // Pass flag to indicate category exists
+        }
+        const categories = new SubCategory({
+            subCategoryName: subCategoryName,
+            Description: Description,
+        });
+        const categoryData = await categories.save();
+        res.redirect('/admin/loadSubCategories');
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Server Error');
@@ -92,9 +123,16 @@ try {
 const editCategory = async(req,res)=>{
     try{
         const { categoryName,Description} = req.body
-        const updated = await Category.findByIdAndUpdate({ _id:  req.session.cateid }, { $set: {  categoryName, Description } })
-        res.redirect("/admin/loadCategories")
-        console.log(updated)
+        const existingCategory = await Category.findOne({categoryName:categoryName})
+        if(existingCategory){
+            return res.json({ success: false, error: 'Category name must be unique' });       
+         }else{
+             res.json({ success: true, error: 'Category name changed successfull' });       
+
+             const updated = await Category.findByIdAndUpdate({ _id:  req.session.cateid }, { $set: {  categoryName, Description } })
+             res.redirect("/admin/loadCategories")
+             console.log(updated)
+         }
     }catch(error){
         console.log(error.message)
     }
@@ -114,6 +152,19 @@ const ToggleblockCategories = async (req,res)=>{
     }
 }
 
+
+
+const ToggleblockSubCategories = async (req,res)=>{
+    try{
+        const catid= req.query.catid
+        const categories = await SubCategory.findOne({_id:catid}); 
+        categories. is_Active=!categories. is_Active
+        await categories.save()
+        res.redirect('/admin/loadSubCategories');
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 
 const loaduserlist = async (req, res) => {
@@ -266,7 +317,9 @@ module.exports = {
     adminOrderPending,
     loadeditCategory,
     editCategory,
-    adminOrderCancelled
-
+    adminOrderCancelled,
+    loadSubCategories,
+    ToggleblockSubCategories,
+    addSubCategories
 
 }

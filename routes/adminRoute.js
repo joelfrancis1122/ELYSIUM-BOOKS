@@ -26,6 +26,7 @@ adminRoute.post('/addProduct', Auth.isLogin, MulterImage.upload.array('Images', 
 
 adminRoute.get('/loadeditProduct', Auth.isLogin, productControllers.loadeditProduct)
 adminRoute.post('/editProduct', Auth.isLogin, MulterImage.upload.array('Images', 5), productControllers.editProduct)
+adminRoute.get('/ToggleblockSubCategories', Auth.isLogin, adminControllers.ToggleblockSubCategories)
 
 adminRoute.get('/ToggleblockProduct', Auth.isLogin, productControllers.ToggleblockProduct)
 adminRoute.get('/ToggleblockUser', Auth.isLogin, adminControllers.ToggleblockUser)
@@ -33,7 +34,12 @@ adminRoute.get('/ToggleblockCategories', Auth.isLogin, adminControllers.Togglebl
 
 
 adminRoute.get('/loadCategories', Auth.isLogin, adminControllers.loadCategories)
+adminRoute.get('/loadSubCategories', Auth.isLogin, adminControllers.loadSubCategories)
+
 adminRoute.post('/addCategories', Auth.isLogin, adminControllers.addCategories)
+adminRoute.post('/addSubCategories', Auth.isLogin, adminControllers.addSubCategories)
+
+
 adminRoute.get('/loadeditCategory',Auth.isLogin,adminControllers.loadeditCategory)
 adminRoute.post('/editCategory',Auth.isLogin,adminControllers.editCategory)
 
@@ -44,6 +50,7 @@ adminRoute.get('/loadOrderDetails', Auth.isLogin, adminControllers.loadOrderDeta
 adminRoute.get('/loadCoupon', Auth.isLogin, adminControllers.loadCoupon)
 adminRoute.post('/addCoupon', Auth.isLogin, cartControllers.addCoupon)
 adminRoute.get('/ToggleblockCoupon', Auth.isLogin, cartControllers.ToggleblockCoupon)
+
 adminRoute.post('/removeImage', Auth.isLogin, productControllers.removeImage)
 
 

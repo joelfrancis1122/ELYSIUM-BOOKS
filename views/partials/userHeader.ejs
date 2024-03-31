@@ -85,12 +85,22 @@
                     </div>
                     <div class="header-action-right">
                         <div class="header-action-2">
+                            <%if(locals.wishlistLength){%>
+
                             <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
+                                <a href="getWishlist">
                                     <img class="svgInject" alt="Evara" src="/public/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count blue">0</span>
+                                    <span class="pro-count blue"><%= wishlistLength %></span>
                                 </a>
                             </div>
+                            <%}else{%>
+                                <div class="header-action-icon-2">
+                                    <a href="getWishlist">
+                                        <img class="svgInject" alt="Evara" src="/public/assets/imgs/theme/icons/icon-heart.svg">
+                                        <span class="pro-count blue">0</span>
+                                    </a>
+                                </div>
+                                <%}%>
                             <%if(locals.cartLength){ %>
                             <div class="header-action-icon-2">
                                 <div class="header-action-icon-2">
@@ -136,13 +146,13 @@
                                 <li><a href="/loadShop">Shop</i></a>
                           
                                 </li>
-                                <li class="position-static"><a href="#">Mega menu</i></a>
+                                <!-- <li class="position-static"><a href="#">Mega menu</i></a> -->
                                     
                                 </li>
-                                <li><a href="blog-category-grid.html">Blog</i></a>
+                                <!-- <li><a href="blog-category-grid.html">Blog</i></a> -->
                                   
                                 </li>
-                                <li><a href="#">Pages</i></a>
+                                <!-- <li><a href="#">Pages</i></a> -->
                                    
                                 </li>
                                 <li>
@@ -159,7 +169,7 @@
                 <div class="header-action-right d-block d-lg-none">
                     <div class="header-action-2">
                         <div class="header-action-icon-2">
-                            <a href="shop-wishlist.html">
+                            <a href="/getWishlist">
                                 <img alt="Evara" src="/public/assets/imgs/theme/icons/icon-heart.svg">
                                 <span class="pro-count white">4</span>
                             </a>

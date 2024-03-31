@@ -1,5 +1,7 @@
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModel')
+const SubCategory = require('../models/subcategoryModel')
+
 const { v4: uuidv4 } = require("uuid")
 const sharp = require('sharp')
 const fs = require('fs')
@@ -9,7 +11,8 @@ const fs = require('fs')
 const loadaddproduct = async (req, res) => {
     try {
         const categories = await Category.find();
-        res.render('addproduct', { categories });
+        const sub = await SubCategory.find()
+        res.render('addproduct', { categories ,subCat:sub});
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -20,8 +23,10 @@ const loadaddproduct = async (req, res) => {
 
 const addProduct = async (req, res) => {
     try {
-        const { Bookname, Description, Categories, Regularprice, stock, saleprice } = req.body;
+        const { Bookname, Description, Categories, Regularprice, stock, saleprice,subCategories } = req.body;
         const imageUrls = [];
+       
+
         for (const file of req.files) {
             const filename = `${uuidv4()}.jpg`;
             try {
@@ -47,6 +52,7 @@ const addProduct = async (req, res) => {
             Bookname: Bookname,
             Description: Description,
             Categories: Categories,
+            subCategories :subCategories,
             Regularprice: Regularprice,
             stock: stock,
             saleprice: saleprice,
@@ -71,9 +77,11 @@ const loadeditProduct = async (req, res) => {
     try {
         const id = req.query.id
         req.session.editProductId = id;
-        const product = await Product.findById(id).populate('Categories');
+        const sub = await SubCategory.find()
+
+        const product = await Product.findById(id).populate('Categories').populate('subCategories')
         const categories = await Category.find({ is_Active: true })
-        res.render('editproduct', { product, categories })
+        res.render('editproduct', { product, categories,subCat:sub })
     } catch (error) {
         console.error(error);
     }
@@ -83,7 +91,7 @@ const loadeditProduct = async (req, res) => {
 
 const editProduct = async (req, res) => {
     try {
-        const { Bookname, Description, Regularprice, saleprice, stock, Categories } = req.body;
+        const { Bookname, Description, Regularprice, saleprice, stock, Categories ,subCategories} = req.body;
         const images = req.files;
         const editProduct = await Product.findOne({ _id: req.session.editProductId });
         editProduct.Bookname = Bookname;
@@ -92,6 +100,7 @@ const editProduct = async (req, res) => {
         editProduct.saleprice = saleprice;
         editProduct.stock = stock;
         editProduct.Categories = Categories;
+        editProduct.subCategories = subCategories;
         if (images && images.length > 0) {
             for (const file of images) {
                 const filename = `${uuidv4()}.jpg`;

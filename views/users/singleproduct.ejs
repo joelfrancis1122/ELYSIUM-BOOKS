@@ -27,6 +27,8 @@
   <!-- magic zoom cdn  -->
   <link rel="stylesheet" href="/public/assets/magiczoomplus/magiczoomplus.css">
   <script src="/public/assets/magiczoomplus/magiczoomplus.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     .out-of-stock {
     color: red;
@@ -361,7 +363,7 @@
                       </ul>
                     </div>
                     <% if (product.stock > 0) { %>
-                      <a href="/addToCart?id=<%=product._id%>" class="button button-add-to-cart" style="color: rgb(255, 255, 255);">
+                      <a class="button button-add-to-cart" style="color: rgb(255, 255, 255);"  onclick="addToCart('<%= product._id %>')">
                           Add to cart <i class="fa-solid fa-cart-shopping fa-shake"></i>
                       </a>
                   <% } else { %>
@@ -933,6 +935,46 @@
       new MagicZoom('product-image');
     });
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    async function addToCart(productId) {
+        try {
+            const response = await fetch(`/addToCart?id=${productId}`, {
+                method: 'GET',
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                // Product added to cart successfully
+                toastr.success('Product added to cart');
+
+                // Update the cart count in the UI
+                const cartCountSpan = document.getElementById('cart-count');
+                if (cartCountSpan) {
+                    cartCountSpan.textContent = parseInt(cartCountSpan.textContent) + 1;
+                }
+            } else {
+                // Product out of stock or other error
+                toastr.error(data.error);
+            }
+        } catch (error) {
+            // Error occurred during fetch operation
+            toastr.error('Error adding product to cart');
+            console.error('Error adding product to cart:', error);
+        }
+    }
+</script>
+
+  
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+         <script src="/public/assets/js/vendor/modernizr-3.6.0.min.js"></script>
+  <script src="public/assets/js/vendor/jquery-3.6.0.min.js"></script>
   <script src="public/assets/js/vendor/modernizr-3.6.0.min.js"></script>
   <script src="public/assets/js/vendor/jquery-3.6.0.min.js"></script>
   <script src="public/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>

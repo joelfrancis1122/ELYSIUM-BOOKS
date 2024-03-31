@@ -22,7 +22,7 @@ const loadGuest = async (req, res) => {
             {
                 $match: {
                     is_Active: true,
-                    Bookname: { $regex: new RegExp(search, "i") }
+                    Bookname: { $regex: new RegExp(search, "i") },
                 }
             },
             {
@@ -38,13 +38,28 @@ const loadGuest = async (req, res) => {
             },
             {
                 $match: { 'Categories.is_Active': true }
+            },
+            {
+                $lookup: {
+                    from: 'subcategories',
+                    localField: 'subCategories',
+                    foreignField: '_id',
+                    as: 'subCategories'
+                }
+            },
+            {
+                $unwind: '$subCategories'
+            },
+            {
+                $match: { 'subCategories.is_Active': true }
             }
-        ]);
+        ]).limit(12)
         res.render('home', { name: null, search: null, product: productData, search: search }); 
     } catch (error) {
         console.error(error);
     }
 }
+
 
 
 
@@ -57,13 +72,17 @@ const loadlogin = async (req, res) => {
 }
 
 
-
 const loadHome = async (req, res) => {
     try {
         let search = req.query.query || "";
         let userId = req.session.user;
-        const cartData= await Cart.findOne({userId:userId})
-        const cartLength = cartData ? cartData.product.length : 0
+        
+        const cartData = await Cart.findOne({ userId: userId });
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId');
+
+        const cartLength = cartData ? cartData.product.length : 0;
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0;
+
         const productData = await Product.aggregate([
             {
                 $match: {
@@ -71,7 +90,6 @@ const loadHome = async (req, res) => {
                     Bookname: { $regex: new RegExp(search, "i") }
                 }
             },
-            
             {
                 $lookup: {
                     from: 'categories',
@@ -85,10 +103,24 @@ const loadHome = async (req, res) => {
             },
             {
                 $match: { 'Categories.is_Active': true }
+            },
+            {
+                $lookup: {
+                    from: 'subcategories',
+                    localField: 'subCategories',
+                    foreignField: '_id',
+                    as: 'subCategories'
+                }
+            },
+            {
+                $unwind: '$subCategories'
+            },
+            {
+                $match: { 'subCategories.is_Active': true }
             }
-        ]);
+        ]).limit(12);
         const userData = await User.findOne({ _id: userId });
-        res.render('home', { product: productData, name: userData.name, search: search ,cartLength});
+        res.render('home', { product: productData, name: userData.name, search: search, cartLength, wishlistLength });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -244,7 +276,11 @@ const shopProduct = async (req, res) => {
         const userData = await User.findOne({ _id: userId });
         const cartData= await Cart.findOne({userId:userId})
         const cartLength = cartData ? cartData.product.length : 0
-        res.render('singleproduct', { product: productData, name: userData.name,relatedProducts,cartLength})
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0
+
+        res.render('singleproduct', { product: productData, name: userData.name,relatedProducts,cartLength,wishlistLength})
     } catch (error) {
         console.error(error)
         res.render('error',{error})
@@ -263,8 +299,12 @@ const loadProfile = async (req, res) => {
         const wallet = await Wallet.findOne({userId});
 
         const cartData= await Cart.findOne({userId:userId})
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+
         const cartLength = cartData ? cartData.product.length : 0
-        res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order,cartLength ,coupons,wallet});
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0
+
+        res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order,cartLength ,coupons,wallet,wishlistLength});
     } catch (error) {
         console.error(error);
         res.redirect('/'); 
@@ -282,8 +322,12 @@ const loadOrderDetails = async (req,res)=>{
         const userData = await User.findOne({ orderId: productID });
         const addressData = await Address.findOne({ userId : userId });
         const cartData= await Cart.findOne({userId:userId})
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+
         const cartLength = cartData ? cartData.product.length : 0
-        res.render("ordersdetail",{orders,user:userData,address:addressData,cartData,cartLength:cartLength,orderData})
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0
+
+        res.render("ordersdetail",{orders,user:userData,address:addressData,cartData,cartLength:cartLength,orderData,wishlistLength})
     } catch (error) {
         console.error(error)  
     }
@@ -306,7 +350,6 @@ const loadInvoice =  async(req,res)=>{
 }
 
 
-
 const loadShop = async (req, res) => {
     try {
         const categories = await Category.find();
@@ -314,10 +357,13 @@ const loadShop = async (req, res) => {
         const search = req.query.query || "";
         const userData = await User.findOne({ _id: userId });
         const regex = new RegExp(search, 'i');
-        const cartData= await Cart.findOne({userId:userId})
-        const cartLength = cartData ? cartData.product.length : 0
+        const cartData = await Cart.findOne({ userId: userId });
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId');
+        const cartLength = cartData ? cartData.product.length : 0;
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0;
+
         if (req.query.filter) {
-            let products
+            let products;
             if (req.query.filter == 'low-high') {
                 products = await Product.find({ is_Active: true }).sort({ saleprice: 1 });
             } else if (req.query.filter == 'high-low') {
@@ -345,9 +391,23 @@ const loadShop = async (req, res) => {
                 },
                 {
                     $match: { 'Categories.is_Active': true }
+                },
+                {
+                    $lookup: {
+                        from: 'subcategories',
+                        localField: 'subCategories',
+                        foreignField: '_id',
+                        as: 'subCategories'
+                    }
+                },
+                {
+                    $unwind: '$subCategories'
+                },
+                {
+                    $match: { 'subCategories.is_Active': true }
                 }
             ]);
-            res.render('shop', { product: products, categories, name: userData.name, search: search ,cartLength});
+            res.render('shop', { product: products, categories, name: userData.name, search: search, cartLength, wishlistLength });
         }
     } catch (error) {
         console.error(error);
@@ -645,8 +705,13 @@ const addTowallet = async (req, res) => {
 
 const getWishlist = async (req,res)=>{
     try{
+        const userId = req.session.user
+        const userData = await User.findOne({ _id: userId });
+        let product = await Product.findOne({userId})
 
-        res.render("wishlist")
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0
+        res.render("wishlist",{wishlistData,name:userData.name,wishlistLength})
     }catch(error){
         console.error(error)
     }
@@ -669,10 +734,33 @@ const wishlist = async (req, res) => {
             wishlist.product.push({ productId, quantity: 1 });
         }
         await wishlist.save();
-        res.redirect('/wishlist');
+        res.redirect('/getWishlist');
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
+    
+    }
+};
+
+
+const removeWish = async (req, res) => {
+    try {
+        const { productId } = req.body;
+        const userId = req.session.user;
+        let wishlist = await Wishlist.findOne({ userId });
+        if (!wishlist) {
+            console.log("wishlist not found")
+        }
+        const productIndex = wishlist.product.findIndex(item => item.productId.toString() === productId);
+        if (productIndex !== -1) {
+            wishlist.product.splice(productIndex, 1);
+            const updateCart = await wishlist.save();
+            return res.status(200).send('Product removed from the wishlist');
+        } else {
+            return res.status(404).send('Product not found in the wishlist');
+        }
+    } catch (error) {
+        console.error(error.message);
     }
 };
 
@@ -710,6 +798,7 @@ module.exports = {
     loadInvoice,
     addTowallet,
     getWishlist,
-    wishlist
+    wishlist,
+    removeWish
 
 }

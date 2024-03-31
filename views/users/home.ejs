@@ -18,6 +18,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/public/assets/css/maind134.css?v=3.4">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
     <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
 
     <style>
@@ -134,7 +136,7 @@
                                             </ul>
                                         </li>
                                         <li><a href="shop-filter.html">Shop – Filter</a></li>
-                                        <li><a href="shop-wishlist.html">Shop – Wishlist</a></li>
+                                        <li><a href="getWishlist">Shop – Wishlist</a></li>
                                         <li><a href="shop-cart.html">Shop – Cart</a></li>
                                         <li><a href="shop-checkout.html">Shop – Checkout</a></li>
                                         <li><a href="shop-compare.html">Shop – Compare</a></li>
@@ -407,9 +409,10 @@
                                                         <span class="old-price">$<%= product[i].Regularprice %></span>
                                                     </div>
                                                     <div class="product-action-1 show">
-                                                        <a aria-label="Add To Cart" class="action-btn hover-up" href="/addToCart?id=<%= product[i]._id %>">
-                                                            <i class="fi-rs-shopping-bag-add"></i>
-                                                        </a>
+                                                        <a aria-label="Add To Cart" class="action-btn hover-up"
+                                                        onclick="addToCart('<%= product[i]._id %>')">
+                                                        <i class="fi-rs-shopping-bag-add"></i>
+                                                    </a>
                                                     </div>
                                                 <% } %>
                                                 
@@ -639,6 +642,38 @@
             </div>
             <!-- Vendor JS-->
             
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            <script>
+                async function addToCart(productId) {
+                    try {
+                        const response = await fetch(`/addToCart?id=${productId}`, {
+                            method: 'GET',
+                        });
+            
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+            
+                        const data = await response.json();
+                        if (data.success) {
+                            // Product added to cart successfully
+                            toastr.success('Product added to cart');
+                        } else {
+                            toastr.error(data.error);
+                        }
+                    } catch (error) {
+                        toastr.error('Stock limit exeeded');
+                        console.error('Error adding product to cart:', error);
+                    }
+                }
+            </script>
+            
+            
+            
+            
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
             <script src="/public/assets/js/vendor/modernizr-3.6.0.min.js"></script>
             <script src="/public/assets/js/vendor/jquery-3.6.0.min.js"></script>
             <script src="/public/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>

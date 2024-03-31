@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const Cart = require('../models/cartModel')
 const Product = require('../models/productModel')
+const Wishlist = require('../models/wishlistModel')
 
 const Coupon = require('../models/couponModel')
 const Address = require('../models/addressModel')
@@ -67,38 +68,58 @@ const getCart = async (req, res) => {
     try {
         const userId = req.session.user
         const userData = await User.findOne({ _id: userId });
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+
         const cartData = await Cart.findOne({ userId: userId }).populate('product.productId')
         const cartLength = cartData ? cartData.product.length : 0
-        res.render("cart", { cartData, name: userData.name, cartLength })
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0
+
+        res.render("cart", { cartData, name: userData.name, cartLength ,wishlistLength})
     } catch (error) {
         console.log(error.message)
     }
 }
 
 
-
 const addToCart = async (req, res) => {
     try {
         const productId = req.query.id;
         const userId = req.session.user;
+
+        // Check if the product exists and is in stock
+        const product = await Product.findById(productId);
+        if (!product || product.stock === 0) {
+            return res.status(404).json({ success: false, error: 'Product is out of stock' });
+        }
+
         let cart = await Cart.findOne({ userId });
         if (!cart) {
             cart = new Cart({ userId, product: [] });
         }
+
+        // Check if the product is already in the cart and quantity exceeds stock
         const existingProductIndex = cart.product.findIndex(item => item.productId.toString() === productId);
         if (existingProductIndex !== -1) {
-            cart.product[existingProductIndex].quantity += 1;
+            const totalQuantity = cart.product[existingProductIndex].quantity + 1;
+            if (totalQuantity > product.stock) {
+                return res.status(400).json({ success: false, error: 'Cannot add more items than available stock' });
+            }
+            cart.product[existingProductIndex].quantity = totalQuantity;
         } else {
             cart.product.push({ productId, quantity: 1 });
         }
+
         await cart.save();
-        res.redirect('/cart');
+
+        // Send a response indicating success along with the updated cart length
+        const cartLength = cart.product.reduce((total, item) => total + item.quantity, 0);
+        res.status(200).json({ success: true, message: 'Product added to cart successfully', cartLength });
     } catch (error) {
-        console.log(error.message);
+        console.error(error.message);
         res.status(500).send('Internal Server Error');
     }
 };
-
+    
 
 
 const updateCart = async (req, res) => {
@@ -179,9 +200,14 @@ const loadCheckOut = async (req, res) => {
         const cart = await Cart.findOne({ userId });
         const userData = await User.findOne({ _id: userId });
         const addressData = await Address.find({ userId: userId });
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+
         const cartData = await Cart.findOne({ userId: userId }).populate('product.productId')
         const cartLength = cartData ? cartData.product.length : 0
-        res.render('checkout', { name: userData.name, cartData, addresses: addressData, cartLength })
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0
+        
+
+        res.render('checkout', { name: userData.name, cartData, addresses: addressData, cartLength,wishlistLength })
     } catch (error) {
         console.log(error)
     }
