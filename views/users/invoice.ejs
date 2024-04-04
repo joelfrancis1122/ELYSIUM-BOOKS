@@ -72,11 +72,13 @@
                                     </span> <br>
                                     <small class="text-muted">Order ID: <%=orders.orderId%></small>
                                 </div>
-                                <div class="col-lg-6 col-md-6 ms-auto text-md-end">
-                                    <a class="btn btn-primary" href="#" onclick="window.print()">
+                                <div class="col-lg-6 col-md-6 ms-auto text-md-end" id="printButtonContainer">
+                                    <a class="btn btn-primary" href="#" onclick="printAndRemoveButton()" id="printButton">
                                         Print <i class="icon material-icons md-print"></i>
                                     </a>
                                 </div>
+                                
+                                
                             </div>
                         </header> <!-- card-header end// -->
                         <div class="card-body">
@@ -176,6 +178,21 @@
             </div>
         </div>
     </footer>
+    <script type="text/javascript">
+        function printAndRemoveButton() {
+            var printButton = document.getElementById("printButton");
+            printButton.style.display = "none"; // Hide the print button
+    
+            // Initiating PDF download
+            window.print();
+    
+            // Restore the print button after a short delay to ensure it's printed first
+            setTimeout(function() {
+                printButton.style.display = ""; // Restore the print button
+            }, 100);
+        }
+    </script>
+    
 
     <script src="public/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="public/assets/js/vendors/bootstrap.bundle.min.js"></script>

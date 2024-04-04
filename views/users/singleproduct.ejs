@@ -366,6 +366,9 @@
                       <a class="button button-add-to-cart" style="color: rgb(255, 255, 255);"  onclick="addToCart('<%= product._id %>')">
                           Add to cart <i class="fa-solid fa-cart-shopping fa-shake"></i>
                       </a>
+                      <a  href="/loadCheckOut1?id=<%=product.id%>" class="button button-add-to-cart" style="color: rgb(255, 255, 255);" >
+                        Buy Now
+                    </a>
                   <% } else { %>
                     <div style="background-color: rgb(130, 15, 15); border: none; border-radius: 5px; padding: 10px 20px; display: inline-block; cursor: not-allowed;">
                       <h3 style="color: white; margin: 0;"><strong>Currently Unavailable</strong></h3>

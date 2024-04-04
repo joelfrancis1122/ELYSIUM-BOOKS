@@ -17,7 +17,15 @@
   <!-- Template CSS -->
   <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      new DataTable('#example');
 
+    })
+  </script>
   <style>
     /* Custom styling for the table */
     #example {
@@ -103,8 +111,7 @@
                             <td class="align-middle">
                               <a class="itemside" href="#">
                                 <div class="left">
-                                  <img src="/public/uploads/<%=product[i].Images[0]%>" width="100px" alt="Please add a Image
-                                  " />
+                                  <img src="/public/uploads/<%=product[i].Images[0]%>" width="100px" alt="Please add a Image" />
                                 </div>
                               </a>
                             </td>
@@ -194,9 +201,31 @@
           text: "You are be able to revert this!",
           icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
+          confirmButtonColor: " #088178;",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, block it!",
+          confirmButtonText: "Yes, unblock it!",
+          showCancelButton: true,
+    confirmButtonColor: '#00d9ff', // Neon blue confirm button
+    cancelButtonColor: '#888', // Gray cancel button
+    confirmButtonText: 'Yes, block it!',
+    cancelButtonText: 'No, keep it',
+    background: 'rgba(30, 30, 30, 0.7)', // Semi-transparent light background
+    color: '#fff', // White text color
+    iconColor: '#f27474', // Custom icon color (reddish)
+    backdrop: `
+      rgba(0,0,0,0.6)
+      url("path/to/your/loading-spinner.gif")
+      left top
+      no-repeat
+    `, // Semi-transparent backdrop with a loading spinner
+    width: '900px', 
+    padding: '2rem', 
+    heightAuto: false, 
+    height: '400px', 
+    customClass: {
+      popup: 'custom-swal-popup premium-modal',
+      loader: 'custom-swal-loader',
+    }
         }).then((result) => {
           if (result.isConfirmed) {
             // If user confirms, redirect to blockProduct route with productId
@@ -213,9 +242,31 @@
           text: "You want to unblock this user?",
           icon: "warning",
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
+          confirmButtonColor: " #088178;",
           cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, unblock it!",
+          confirmButtonText: "Yes, Unblock it!",
+          showCancelButton: true,
+    confirmButtonColor: '#00d9ff', // Neon blue confirm button
+    cancelButtonColor: '#888', // Gray cancel button
+    confirmButtonText: 'Yes, Unblock it!',
+    cancelButtonText: 'No, keep it',
+    background: 'rgba(30, 30, 30, 0.7)', // Semi-transparent light background
+    color: '#fff', // White text color
+    iconColor: '#f27474', // Custom icon color (reddish)
+    backdrop: `
+      rgba(0,0,0,0.6)
+      url("path/to/your/loading-spinner.gif")
+      left top
+      no-repeat
+    `, // Semi-transparent backdrop with a loading spinner
+    width: '900px', 
+    padding: '2rem', 
+    heightAuto: false, 
+    height: '400px', 
+    customClass: {
+      popup: 'custom-swal-popup premium-modal',
+      loader: 'custom-swal-loader',
+    }
         }).then((result) => {
           if (result.isConfirmed) {
             // If user confirms, redirect to unblockuser route with userId
@@ -224,15 +275,7 @@
         });
       }
     </script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        new DataTable('#example');
 
-      })
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 

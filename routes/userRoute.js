@@ -54,6 +54,7 @@ userRoute.get('/addToCart', Auth.isLogin, Auth.isBlocked, cartControllers.addToC
 userRoute.post("/updateCart", Auth.isLogin, cartControllers.updateCart)
 userRoute.post("/removeItem", Auth.isLogin, cartControllers.removeItem)
 userRoute.get("/loadCheckOut", Auth.isLogin, cartControllers.isCartEmpty, cartControllers.loadCheckOut)
+userRoute.get("/loadCheckOut1", Auth.isLogin,cartControllers.loadCheckOut1)
 userRoute.post("/placeOrder", Auth.isLogin, cartControllers.placeOrder)
 userRoute.post('/removeAddress', Auth.isLogin, userControllers.removeAddress)
 userRoute.post('/clearCart', Auth.isLogin, cartControllers.clearCart)
@@ -68,6 +69,7 @@ userRoute.post('/addTowallet',Auth.isLogin,userControllers.addTowallet)
 userRoute.get("/wishlist", Auth.isLogin, userControllers.wishlist)
 userRoute.get("/getWishlist", Auth.isLogin, userControllers.getWishlist)
 userRoute.post("/removeWish", Auth.isLogin, userControllers.removeWish)
+userRoute.get("/orderSuccess", Auth.isLogin, userControllers.orderSuccess)
 
 
 

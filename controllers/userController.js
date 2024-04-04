@@ -288,7 +288,6 @@ const shopProduct = async (req, res) => {
 }
 
 
-
 const loadProfile = async (req, res) => {
     try {
         const userId = req.session.user;
@@ -296,18 +295,21 @@ const loadProfile = async (req, res) => {
         const Order = await Orders.find({ userId: userId }).populate('userId');
         const addressData = await Address.find({ userId: userId });
         const coupons = await Coupon.find();
-        const wallet = await Wallet.findOne({userId});
+        let wallet = await Wallet.findOne({ userId });
+        if (!wallet) {
+            wallet = new Wallet({ userId, balance: 0 });
+            await wallet.save();
+        }
+        const cartData = await Cart.findOne({ userId: userId });
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId');
 
-        const cartData= await Cart.findOne({userId:userId})
-        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+        const cartLength = cartData ? cartData.product.length : 0;
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0;
 
-        const cartLength = cartData ? cartData.product.length : 0
-        const wishlistLength = wishlistData ? wishlistData.product.length : 0
-
-        res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order,cartLength ,coupons,wallet,wishlistLength});
+        res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order, cartLength, coupons, wallet, wishlistLength });
     } catch (error) {
         console.error(error);
-        res.redirect('/'); 
+        res.redirect('/');
     }
 }
 
@@ -579,26 +581,48 @@ const removeAddress = async (req, res) => {
 };
 
 
-
 const OrderCancelled = async (req, res) => {
     try {
-        const orderId = req.query.id
-        const orderReturned = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Cancelled' } })
-        res.redirect('/loadProfile')
+        const orderId = req.query.id;
+        const userId = req.session.user;
+        const orderCancelled = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Cancelled' } });
+        const wallet = await Wallet.findOne({ userId: userId });
+        const cancelledOrder = await Orders.findById(orderId);
+        if (cancelledOrder && wallet) {
+            const totalAmount = parseFloat(cancelledOrder.totalAmount);
+            wallet.balance += totalAmount;
+            await wallet.save();
+            res.redirect('/loadProfile');
+        } else {
+            throw new Error('Cancelled order or user wallet not found');
+        }
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
+
 
 
 
 const orderReturn = async (req, res) => {
     try {
-        const orderId = req.query.id
-        const orderReturned = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Returned' } })
-        res.redirect('/loadProfile')
+        const orderId = req.query.id;
+        const userId = req.session.user;
+        const orderReturned = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Returned' } });
+        const wallet = await Wallet.findOne({ userId: userId });
+        const returnedOrder = await Orders.findById( orderId );
+        if (returnedOrder && wallet) {
+            const totalAmount = parseFloat(returnedOrder.totalAmount);
+            wallet.balance += totalAmount;
+            await wallet.save();
+            res.redirect('/loadProfile');
+        } else {
+            throw new Error('Returned order or user wallet not found');
+        }
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -673,28 +697,17 @@ const addTowallet = async (req, res) => {
     try {
         const { amount } = req.body;
         const userId = req.session.user;
-
-        // Find the wallet document for the user
         let wallet = await Wallet.findOne({ userId });
-
-        // If the wallet document doesn't exist, create a new one
         if (!wallet) {
             wallet = new Wallet({ userId, balance: amount });
         } else {
-            // Increment the balance
             wallet.balance += parseFloat(amount);
         }
-
-        // Save the updated wallet document
         await wallet.save();
-
         console.log(amount, "amount added to wallet");
-
-        // Redirect to profile page or send response as needed
         res.redirect('/loadProfile');
     } catch (error) {
         console.error(error);
-        // Handle errors appropriately
         res.status(500).send('Internal Server Error');
     }
 };
@@ -765,6 +778,13 @@ const removeWish = async (req, res) => {
 };
 
 
+const orderSuccess = async(req,res)=>{
+    try{
+res.render("orderSuccess")
+    }catch(error){
+        console.error(error)
+    }
+}
 
 module.exports = {
     loadGuest,
@@ -799,6 +819,7 @@ module.exports = {
     addTowallet,
     getWishlist,
     wishlist,
-    removeWish
+    removeWish,
+    orderSuccess
 
 }

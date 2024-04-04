@@ -6,13 +6,17 @@ const Orders = require('../models/orderModel')
 const SubCategory = require('../models/subcategoryModel')
 
 
-const dashboardLoad  = async (req, res) => {
+const dashboardLoad = async (req, res) => {
     try {
-        res.render('admindashboard')
+        const orders = await Orders.find();
+        const order = await Orders.find().populate('product.productId');
+        const categories = await Category.find()
+        res.render('admindashboard', { orders,order,categories }); // Pass orders instead of order
+
     } catch (error) {
-        console.error(error)
+        console.error(error);
     }
-}
+};
 
 
 
@@ -29,12 +33,14 @@ res.render('login')
 
 const productslist = async(req,res)=>{ 
     try{
+        console.log('worked ')
         let search = req.query.search ? req.query.search : "" 
         const productData = await Product.find({
             $and:[{
             Bookname: { $regex: new RegExp(search, "i") } },
             ],
         }).populate('Categories').sort({ CreatedOn: -1 })
+        console.log('k',productData)
         res.render('productslist',{product:productData,search:search})
     }catch(error){
 console.error(error);
@@ -73,13 +79,23 @@ const addCategories = async (req, res) => {
         const existingCategory = await Category.findOne({ categoryName: { $regex: new RegExp('^' + categoryName + '$', 'i') } });
         if (existingCategory) {
             return res.render('addcategories', { categoriesExists: true ,categories : catData}); // Pass flag to indicate category exists
-        }
-        const categories = new Category({
-            categoryName: categoryName,
-            Description: Description,
-        });
-        const categoryData = await categories.save();
-        res.redirect('/admin/loadSubCategories');
+        }else if(!existingCategory){
+            
+            
+            
+            const categories = new Category({
+                categoryName: categoryName,
+                Description: Description,
+            });
+            const categoryData = await categories.save();
+            return res.render('addcategories', { categoriesExistss:true ,categories : catData}); // Pass flag to indicate category exists
+
+            
+         
+         
+         
+    }
+
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Server Error');
@@ -123,7 +139,7 @@ try {
 const editCategory = async(req,res)=>{
     try{
         const { categoryName,Description} = req.body
-        const existingCategory = await Category.findOne({categoryName:categoryName})
+        const existingCategory = await Category.findOne({ categoryName: { $regex: new RegExp('^' + categoryName + '$', 'i') } });
         if(existingCategory){
             return res.json({ success: false, error: 'Category name must be unique' });       
          }else{
@@ -242,7 +258,7 @@ const loadLogout = async (req, res) => {
 const adminOrderPending= async(req,res)=>{
     try {
         const orderId= req.query.id
-        const orderPending= await Orders.findByIdAndUpdate(orderId,{$set:{orderStatus:"Pending"}})
+        const orderPending= await Orders.findByIdAndUpdate(orderId,{$set:{orderStatus:"Order Placed"}})
         res.redirect('/admin/loadOrders')
     } catch (error) {
         console.log(error.message)
@@ -297,6 +313,57 @@ const adminOrderCancelled=async(req,res)=>{
 }
 
 
+const salesReport = async(req,res)=>{
+    try {
+
+        const orderList = await Orders.find().populate("userId")
+        const coupon = await Coupon.find()
+        res.render("salesReport",{orderList,coupon})
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+
+const salesreportsearch = async(req,res)=>{
+    try{
+        
+  
+    const {start,end}= req.body;
+    const endOfDay = new Date(end);
+    endOfDay.setHours(23,59,59,999);
+    const orderList = await Orders.find({
+        orderDate:{$gte:new Date(start),$lte:endOfDay}
+
+    }).populate('userId')
+    res.render('salesReport',{orderList,start,end})
+
+
+
+    }catch(error){
+        console.error(error)
+    }
+
+}
+const couponDelete = async (req, res) => {
+    try {
+        const couponId = req.query.id;
+
+        console.log("couponId------------",couponId)
+        const deletedCoupon = await Coupon.findOneAndDelete({ _id: couponId });
+
+        if (deletedCoupon) {
+            return res.json({ success: true, message: "Coupon deleted successfully" });
+        } else {
+            return res.json({ success: false, message: "Coupon not found" });
+        }
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
 
 module.exports = {
     dashboardLoad,
@@ -320,6 +387,9 @@ module.exports = {
     adminOrderCancelled,
     loadSubCategories,
     ToggleblockSubCategories,
-    addSubCategories
+    addSubCategories,
+    salesReport,
+    salesreportsearch,
+    couponDelete
 
 }

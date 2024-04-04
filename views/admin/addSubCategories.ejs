@@ -91,12 +91,11 @@
                                     <% } %>
                               </td>
                               <td>
-                                <!-- <a href="/admin/loadeditCategory?id=<%=categories[i]._id%>"
+                                <a href="#"
                                   class="btn btn-sm font-sm btn-light rounded"
                                   style="background-color: #007bff; color: #fff; margin-left: 5px;">
-                                  <i class="material-icons md-edit"></i>
-                                  Edit
-                                </a> -->
+                                  Apply offer
+                                </a>
                                 <% if (categories[i].is_Active) { %>
                                   <a href="#" onclick="confirmBlock('<%= categories[i]._id %>')"
                                     class="btn btn-sm font-sm btn-light rounded"
@@ -146,10 +145,32 @@
           title: 'Are you sure?',
           text: "You are about to block this category!",
           icon: 'warning',
+           showCancelButton: true,
+          confirmButtonColor: " #088178;",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, block it!",
           showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Yes, block it!'
+    confirmButtonColor: '#00d9ff', // Neon blue confirm button
+    cancelButtonColor: '#888', // Gray cancel button
+    confirmButtonText: 'Yes, block it!',
+    cancelButtonText: 'No, keep it',
+    background: 'rgba(30, 30, 30, 0.7)', // Semi-transparent light background
+    color: '#fff', // White text color
+    iconColor: '#f27474', // Custom icon color (reddish)
+    backdrop: `
+      rgba(0,0,0,0.6)
+      url("path/to/your/loading-spinner.gif")
+      left top
+      no-repeat
+    `, // Semi-transparent backdrop with a loading spinner
+    width: '900px', 
+    padding: '2rem', 
+    heightAuto: false, 
+    height: '400px', 
+    customClass: {
+      popup: 'custom-swal-popup premium-modal',
+      loader: 'custom-swal-loader',
+    }
         }).then((result) => {
           if (result.isConfirmed) {
             window.location.href = `/admin/ToggleblockSubCategories?catid=${categoryId}`;
@@ -163,9 +184,31 @@
           text: "You are about to Unblock this category!",
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Yes, Unblock it!'
+          confirmButtonColor: " #088178;",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, unblock it!",
+          showCancelButton: true,
+    confirmButtonColor: '#00d9ff', // Neon blue confirm button
+    cancelButtonColor: '#888', // Gray cancel button
+    confirmButtonText: 'Yes, block it!',
+    cancelButtonText: 'No, keep it',
+    background: 'rgba(30, 30, 30, 0.7)', // Semi-transparent light background
+    color: '#fff', // White text color
+    iconColor: '#f27474', // Custom icon color (reddish)
+    backdrop: `
+      rgba(0,0,0,0.6)
+      url("path/to/your/loading-spinner.gif")
+      left top
+      no-repeat
+    `, // Semi-transparent backdrop with a loading spinner
+    width: '900px', 
+    padding: '2rem', 
+    heightAuto: false, 
+    height: '400px', 
+    customClass: {
+      popup: 'custom-swal-popup premium-modal',
+      loader: 'custom-swal-loader',
+    }
         }).then((result) => {
           if (result.isConfirmed) {
             window.location.href = `/admin/ToggleblockSubCategories?catid=${categoryId}`;

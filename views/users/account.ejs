@@ -392,10 +392,15 @@
                                                                                     class="badge bg-info">
                                                                                     <%= order.orderStatus%>
                                                                                 </span></td>
-                                                                            <td style="padding: 10px;"><span
-                                                                                    class="badge bg-warning text-dark">
-                                                                                    <%= order.paymentStatus%>
-                                                                                </span></td>
+                                                                                <td style="padding: 10px;">
+                                                                                    <span class="badge <%= order.paymentStatus === 'Received' ? 'bg-success text-dark' : 'bg-warning text-dark' %>">
+                                                                                        <%= order.paymentStatus %>
+                                                                                    </span>
+                                                                                    
+                                                                                    
+                                                                                </td>
+                                                                                
+                                                                                
                                                                             <td style="padding: 10px;">
                                                                                 <%= order.orderDate.toLocaleString() %>
                                                                             </td>
@@ -651,7 +656,7 @@
                                             <div class="card-body">
                                                 <div class="wallet-info" style="padding-bottom: 15px;">
                                                     <h6 style="margin-bottom: 0; font-size: 18px;">Available Balance:</h6>
-                                                    <p id="balanceAmount" style="margin-top: 5px; font-size: 24px; font-weight: bold;">$<%=wallet.balance%></p> <!-- Replace $100 with the actual balance from your server -->
+                                                    <p id="balanceAmount" style="margin-top: 5px; font-size: 24px; font-weight: bold;">$<%= wallet.balance.toFixed(2) %></p>
                                                 </div>
                                                 <!-- Add Funds Form -->
                                                 <div class="add-funds-form" style="margin-top: 20px;">

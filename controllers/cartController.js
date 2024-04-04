@@ -36,10 +36,20 @@ const onlinePay = async (req, res) => {
 
     const newOrderId = generateOrderId();
 
+    const orderItems = cart.product;
+
+    for (const item of orderItems) {
+        const product = await Product.findById(item.productId);
+        if (product) {
+            product.stock -= item.quantity; // Subtract order quantity from product stock
+            await product.save();
+        }
+    }
     const order = new Orders({
         orderId: newOrderId,
         userId: userId,
         paymentMethod: req.body.paymentMethod,
+        paymentStatus:req.body.paymentStatus,
         totalAmount: req.body.amount,
         product: cart.product,
         address: address
@@ -213,12 +223,36 @@ const loadCheckOut = async (req, res) => {
     }
 }
 
+const loadCheckOut1 = async (req, res) => {
+    try {
+        let userId = req.session.user;
+        let id = req.query.id
+        console.log("id:",id)
+        const product = await Product.findOne({_id:id})
+        const userData = await User.findOne({ _id: userId });
+        const addressData = await Address.find({ userId: userId });
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+        const cartData = await Cart.findOne({ userId: userId }).populate('product.productId')
+
+        const cartLength = cartData ? cartData.product.length : 0
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0
+        
+
+        res.render('checkout', { name: userData.name, addresses: addressData,product, cartLength,wishlistLength })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 
 const placeOrder = async (req, res) => {
     try {
         console.log("inside placeorder=++++++++++++++++++++")
         const userId = req.session.user
+        const { couponCode } = req.body;
+        const coupon = await Coupon.findOne({ couponCode: couponCode, isActive: true , expirationDate: { $gte: Date.now() } });
+        
         const cart = await Cart.findOne({ userId: userId });
         const address = await Address.findOne({ _id: req.body.address });
         function generateOrderId() {
@@ -237,7 +271,7 @@ const placeOrder = async (req, res) => {
 
 
         const orderItems = cart.product;
-
+console.log("coupon",coupon)
         // Update product stock for each item in the order
         for (const item of orderItems) {
             const product = await Product.findById(item.productId);
@@ -246,18 +280,33 @@ const placeOrder = async (req, res) => {
                 await product.save();
             }
         }
+        if(!coupon){
+            const order = new Orders({
+                orderId: newOrderId,
+                userId: userId,
+                paymentMethod: req.body.paymentMethod,
+                totalAmount: req.body.amount,
+                product: cart.product,
+                address: address,
+            })
+            await order.save()
+        }else{
+
         const order = new Orders({
             orderId: newOrderId,
             userId: userId,
             paymentMethod: req.body.paymentMethod,
             totalAmount: req.body.amount,
             product: cart.product,
-            address: address
+            address: address,
+            couponDiscount:coupon.discountAmount
         });
-
-        
         await order.save()
+    }
+        
+  
         res.status(200).json({ message: "Order Placed Successfully" })
+        res.render("orderSuccess")
     } catch (error) {
         console.error(error);
     }
@@ -269,26 +318,27 @@ const placeOrder = async (req, res) => {
 const addCoupon = async (req, res) => {
     try {
         const { couponName, couponCode, minimumPurchase, discountAmount, expirationDate } = req.body;
-            console.log("exsisting COupon:",req.body)
-        // Check if the coupon name already exists in the database
         const existingCoupon = await Coupon.findOne({ couponCode: couponCode });
-        const couponData = await Coupon.find().sort({ Date: -1 })
-        if (existingCoupon) {
-            return res.render('Coupon', { couponExists: true ,couponData}); 
-        
+        const couponData = await Coupon.find().sort({ Date: -1 });
+
+        // Check if the expiration date is in the past
+        const today = new Date();
+        const expiryDate = new Date(expirationDate);
+        if (expiryDate <= today) {
+            return res.render('Coupon', { expiredDate: true, couponData }); // Render page with expiredDate flag
         }
 
-        // If the coupon name is unique, proceed to save the coupon
+        if (existingCoupon) {
+            return res.render('Coupon', { couponExists: true, couponData }); 
+        }
+
         const coupon = new Coupon({
             couponName: couponName,
             couponCode: couponCode,
             minimumPurchase: minimumPurchase,
             discountAmount: discountAmount,
-            // maximumUses: maximumUses,
             expirationDate: expirationDate
         });
-
-        // Save the coupon to the database
         const savedCoupon = await coupon.save();
 
         if (savedCoupon) {
@@ -419,6 +469,7 @@ module.exports = {
     removeItem,
     isCartEmpty,
     loadCheckOut,
+    loadCheckOut1,
     placeOrder,
     addCoupon,
     ToggleblockCoupon,

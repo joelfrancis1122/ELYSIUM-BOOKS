@@ -393,7 +393,23 @@ body {
                                                 <th>Total</th>
                                                 <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900" id="GrandTotal" >$<%= total.toFixed(2) %></span></td>
                                             </tr>   
-                                        <% } %>
+                                        <% }else{%>
+                                                <tr>
+                                                    <td class="image product-thumbnail">
+                                                        <img src="/public/uploads/<%=product.Images[0] %>" alt="#">
+                                                    </td>
+                                                    <td>
+                                                        <h5><a href="shop-product-full.html"><%= product.Bookname %></a></h5>
+                                                        <span class="product-qty"></span>
+                                                    </td>
+                                                    <td>$<%=product.saleprice %></td>
+                                                </tr>
+                                            <tr>
+                                                <th>Total</th>
+                                                <td colspan="2" class="product-subtotal"><span class="font-xl text-brand fw-900" id="GrandTotal" > $<%=product.saleprice.toFixed(2) %></span></td>
+                                            </tr>  
+                                            <% } %>
+
                                     </tbody>
                                     
 
@@ -609,6 +625,8 @@ body {
 
     <script>
         function placeOrder() {
+            const couponCode = document.getElementById('couponCode').value;
+
             console.log("place order worked");
             let selectedRadioButton = document.querySelector('input[name="payment_option"]:checked');
             if (!selectedRadioButton) {
@@ -632,13 +650,16 @@ body {
             const totalAmount = parseFloat(totalAmountWithSymbol.replace('$', ''));
             const orderData = {
                 paymentMethod: selectedRadioButtons,
+                paymentStatus:"Received",
                 amount: totalAmount,
-                address: selectedAddress
+                address: selectedAddress,
+                couponCode:couponCode
             };
     
             let url = '';
             if (selectedRadioButtons === 'Razorpay') {
                 // If payment method is Razorpay, make a fetch request to '/onlinepay' endpoint
+                
                 url = '/onlinepay';
                 fetch(url, {
                     method: 'POST',
@@ -665,7 +686,7 @@ body {
                                 showConfirmButton: false,
                                 timer: 2000
                             }).then(() => {
-                                window.location.href = '/';
+                                window.location.href = '/orderSuccess';
                             });
                             removeItem();
                         },
@@ -709,7 +730,7 @@ body {
                         showConfirmButton: false,
                         timer: 2000
                     }).then(() => {
-                        window.location.href = '/';
+                        window.location.href = '/orderSuccess';
                     });
                     removeItem();
                 })

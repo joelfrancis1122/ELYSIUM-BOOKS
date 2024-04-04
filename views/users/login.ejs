@@ -178,9 +178,6 @@
     });
     
   }
-//   Swal.fire({
-  
-// });
 
   if (errMessage.trim() !== '') {
     Swal.fire({
@@ -206,34 +203,27 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
- 
-
     <script>
       function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('ID: ' + profile.getId()); 
   console.log('Name: ' + profile.getName());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  console.log('Email: ' + profile.getEmail());
 }
     </script>
     <script>  
-      // Function to display Toastr notification on page load
       function displayToastrOnLoad() {
         toastr.success('<img src="/public/cru.gif" alt="Crying Emoji" style="width: 35px; height: 35px;">', 'Please Login or Signup ', {
-                closeButton: true,  // Show close button 
-                progressBar: true,  // Show progress bar
-                positionClass: 'toast-top-right',  // Position the notification at the top-right corner
-                timeOut: 5000,  // Duration before the notification automatically closes (in milliseconds)
-                extendedTimeOut: 2000,  // Additional duration if the user hovers over the notification (in milliseconds)
-                preventDuplicates: true,  // Prevent duplicate notifications
-                // You can add more options here as needed
+                closeButton: true,  
+                progressBar: true,
+                positionClass: 'toast-top-right',  
+                timeOut: 5000,  
+                extendedTimeOut: 2000,  
+                preventDuplicates: true,  
             })
       }
-      // Attach the displayToastrOnLoad function to the window.onload event
       window.onload = displayToastrOnLoad;
-  </script>
-  
-  
+  </script>  
 </body>
 </html>
  

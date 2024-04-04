@@ -60,7 +60,7 @@ const addProduct = async (req, res) => {
         });
         const productData = await product.save();
         if (productData) {
-            res.render('admindashboard');
+            res.redirect('/admin/productslist');
         } else {
             console.log("Error saving product.");
             res.status(500).send("Error saving product.");
@@ -124,8 +124,8 @@ const editProduct = async (req, res) => {
         }
         const productUpdateddata = await editProduct.save();
         if (productUpdateddata) {
-            res.redirect("/admin/dashboard");
-        } else {
+            res.redirect('/admin/productslist');
+``        } else {
             console.log("Error updating product.");
             res.status(500).send("Error updating product.");
         }

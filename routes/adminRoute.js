@@ -60,7 +60,9 @@ adminRoute.get('/adminOrderShipped', Auth.isLogin, adminControllers.adminOrderSh
 adminRoute.get('/adminOrderDelivered', Auth.isLogin, adminControllers.adminOrderDelivered)
 adminRoute.get('/adminOrderReturned', Auth.isLogin, adminControllers.adminOrderReturned)
 adminRoute.get('/adminOrderCancelled', Auth.isLogin, adminControllers.adminOrderCancelled)
-
+adminRoute.get('/salesReport', Auth.isLogin, adminControllers.salesReport)
+adminRoute.post('/salesreportsearch', Auth.isLogin, adminControllers.salesreportsearch)
+adminRoute.post('/couponDelete', Auth.isLogin, adminControllers.couponDelete)
 
 
 

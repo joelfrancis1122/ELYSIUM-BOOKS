@@ -16,6 +16,26 @@
   <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/imgs/theme/favicon.svg" />
   <!-- Template CSS -->
   <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+  <style>
+   .premium-modal {
+  border-radius: 20px; /* Increased rounded corners */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Softer shadow */
+  backdrop-filter: blur(10px); /* Reduced blur effect */
+  background: linear-gradient(to right, rgba(30, 30, 30, 0.7) 80%, rgba(30, 30, 30, 0.4)); /* Gradient background with lighter colors */
+  animation: fadeInModal 0.5s ease-in-out; /* Animation for modal entrance */
+}
+
+@keyframes fadeInModal {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+  </style>
 </head>
 
 <body>
@@ -37,8 +57,8 @@
                   <form method="post" action="/admin/addCategories">
                     <div class="mb-4">
                       <label for="product_name" class="form-label">Category Name</label>
-                      <input type="text" placeholder="Type here" name="categoryName" class="form-control"
-                        id="product_name" />
+                      <input type="text" placeholder="Type here" name="categoryName" class="form-control" id="product_name" pattern="[A-Za-z]+" title="Please enter only alphabets" />
+                      
                     </div>
 
                     <div class="mb-4">
@@ -141,37 +161,72 @@
     </main>
 
     <script>
-      function confirmBlock(categoryId) {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "You are about to block this category!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Yes, block it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = `/admin/ToggleblockCategories?catid=${categoryId}`;
-          }
-        });
-      }
-   
-      function confirmUnBlock(categoryId) {
-        Swal.fire({
-          title: 'Are you sure?',
-          text: "You are about to Unblock this category!",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Yes, Unblock it!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            window.location.href = `/admin/ToggleblockCategories?catid=${categoryId}`;
-          }
-        });
-      }
+function confirmBlock(categoryId) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You are about to block this category!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#00d9ff', // Neon blue confirm button
+    cancelButtonColor: '#888', // Gray cancel button
+    confirmButtonText: 'Yes, block it!',
+    cancelButtonText: 'No, keep it',
+    background: 'rgba(30, 30, 30, 0.7)', // Semi-transparent light background
+    color: '#fff', // White text color
+    iconColor: '#f27474', // Custom icon color (reddish)
+    backdrop: `
+      rgba(0,0,0,0.6)
+      url("path/to/your/loading-spinner.gif")
+      left top
+      no-repeat
+    `, // Semi-transparent backdrop with a loading spinner
+    width: '900px', 
+    padding: '2rem', 
+    heightAuto: false, 
+    height: '400px', 
+    customClass: {
+      popup: 'custom-swal-popup premium-modal',
+      loader: 'custom-swal-loader',
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = `/admin/ToggleblockCategories?catid=${categoryId}`;
+    }
+  });
+}
+function confirmUnBlock(categoryId) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "You are about to Unblock this category!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#00d9ff', // Neon blue confirm button
+    cancelButtonColor: '#888', // Gray cancel button
+    confirmButtonText: 'Yes, Unblock it!',
+    cancelButtonText: 'No, keep it blocked',
+    background: 'rgba(30, 30, 30, 0.7)', // Semi-transparent light background
+    color: '#fff', // White text color
+    iconColor: '#f27474', // Custom icon color (reddish)
+    backdrop: `
+      rgba(0,0,0,0.6)
+      url("path/to/your/loading-spinner.gif")
+      left top
+      no-repeat
+    `, // Semi-transparent backdrop with a loading spinner
+    width: '900px', 
+    padding: '2rem', 
+    heightAuto: false, 
+    height: '400px', 
+    customClass: {
+      popup: 'custom-swal-popup premium-modal',
+      loader: 'custom-swal-loader',
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = `/admin/ToggleblockCategories?catid=${categoryId}`;
+    }
+  });
+}
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -210,16 +265,45 @@
 
     <%if(locals.categoriesExists){%>
       <script>
-        Swal.fire({
-          icon: 'warning',
-          title: 'category already exists!',
-        })
-      </script>
-      <%}%>
+        toastr.error("category Exists");
+</script>
+<%}if(locals.categoriesExistss){%>
+  <script>
+  Swal.fire({
+    icon: 'success',
+    title: 'Category created!',
+    color: '#fff', // White text color
+    iconColor: '#4caf50', // Green icon color
+    backdrop: `
+      rgba(0, 0, 0, 0.8)
+      url("path/to/your/loading-spinner.gif")
 
+      left top
+      no-repeat
+    `, 
+    width: '600px', 
+    padding: '2rem',     
+    customClass: {
+      popup: 'custom-swal-popup premium-modal',
+    }
+}).then((result) => {
+    // If user clicks on "OK", perform action
+    if (result.isConfirmed) {
+        // Redirect to the desired link
+        window.location.href = '/admin/loadCategories';
+    }
+});
+
+
+  </script>
+  <%}%>
 
 
 </body>
+
+
+
+
 
 
 </html>

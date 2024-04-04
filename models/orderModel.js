@@ -23,7 +23,7 @@ const OrderSchema = mongoose.Schema({
     orderDate: { type: Date, default: Date.now },
     totalAmount: { type: String },
     paymentMethod: { type: String },
-    paymentStatus: { type: String, enum: ['Pending', 'Recieved', 'Failed', 'Refund'], default: "Pending" },
+    paymentStatus: { type: String, enum: ['Pending', 'Received', 'Failed', 'Refund'], default: "Pending" },
     orderStatus: { type: String, enum: ['Order Placed', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled', 'Returned'], default: "Order Placed" },
     couponDiscount: { type: Number },
     deliveryStatus: { type: Number, default: 0 },

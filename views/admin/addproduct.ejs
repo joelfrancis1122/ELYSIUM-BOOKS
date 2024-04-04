@@ -65,6 +65,7 @@
                                                 <% for(let i = 0 ; i < categories.length ; i++) { %>
                                                     <option value="<%=categories[i]._id%>"><%=categories[i].categoryName%></option>
                                                 <% } %>
+                                                
                                             </select>
                                         </div>
                                         <div class="mb-4">
@@ -240,6 +241,7 @@
                                 previewContainer.removeChild(img);
                                 previewContainer.removeChild(removeBtn);
                             } else {
+                                
                                 console.error('Failed to remove image from database');
                             }
                         })
@@ -255,12 +257,12 @@
 </script>
 <script>
     function validateImages(input) {
-    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
     const files = input.files;
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
         if (!allowedExtensions.test(file.name)) {
-            toastr.error('Please select only image files (JPEG, JPG, PNG).');
+            toastr.error('Please select only image files (JPEG, JPG, PNG,.webp).');
             input.value = ''; //
             return false; // entry ila
         }
