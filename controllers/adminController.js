@@ -4,6 +4,7 @@ const User = require('../models/userModel')
 const Coupon = require('../models/couponModel')
 const Orders = require('../models/orderModel')
 const SubCategory = require('../models/subcategoryModel')
+const cron = require('node-cron');
 
 
 const dashboardLoad = async (req, res) => {
@@ -365,6 +366,86 @@ const couponDelete = async (req, res) => {
 }
 
 
+
+const adminOffers = async(req,res)=>{
+    try {
+        
+        const catData = await Category.find()
+        const product = await Product.find()
+           if(catData){
+          res.render('adminOffer',{categories : catData,product})
+           }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const applyAdminOffers = async(req,res)=>{
+    try{
+        const { categoryId, discount, expiry } = req.body;
+        const updatedCategory = await Category.findByIdAndUpdate(
+          categoryId,
+          { offer: discount, expirationDate: expiry, OfferisActive: true },
+          { new: true } 
+        );
+        if (!updatedCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+          }
+
+          const productsToUpdate = await Product.find({ Categories: categoryId });
+          if (!productsToUpdate) {
+            console.log("============================================================")
+            return res.status(404).json({ message: 'product not found' });
+          }
+          console.log("productsToUpdate++++++++++++++++++++++++++",productsToUpdate)
+          for (const product of productsToUpdate) {
+          const updatedPrice = Math.round(product.saleprice * ((100 - discount) / 100));
+          product.saleprice = updatedPrice;
+          console.log(updatedPrice,"++++++++++++++++ssadhgsadhsadghdsghasdghhdashsadhashhgasdhhgasdhgasdghgasghaahdhgadhj")
+          await product.save();
+         }
+
+          res.status(200).json({ message: 'Offer applied successfully', category: updatedCategory });
+          
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
+
+
+const checkingAdminOffers = async () => {
+    try {
+    
+    const expiredCategories = await Category.find({ expirationDate: { $lte: new Date() }, OfferisActive: true });
+
+    for (const category of expiredCategories) {
+      
+        category.offer = 0;
+        category.expirationDate = null;
+        category.OfferisActive = false;
+        await category.save();
+
+       
+        const productsToUpdate = await Product.find({Categories:category._id});
+        for (const product of productsToUpdate) {
+            product.saleprice = product.Regularprice;
+            await product.save();
+        }
+    }
+
+        console.log('Expired offers checked and reset successfully.');
+
+        
+    } catch (error) {
+     console.error('Error checking and resetting expired offers:', error);
+   }
+};
+
+ cron.schedule('0 0 * * *', checkingAdminOffers);
+
+
+
 module.exports = {
     dashboardLoad,
     adminLogin,
@@ -390,6 +471,8 @@ module.exports = {
     addSubCategories,
     salesReport,
     salesreportsearch,
-    couponDelete
+    couponDelete,
+    adminOffers,
+    applyAdminOffers
 
 }

@@ -20,12 +20,16 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
   <script>
-    $(document).ready(function () {
-      new DataTable('#example');
-
-    })
+   new DataTable('#example', {
+    order: [[3, 'desc']]
+});
   </script>
+  
   <style>
     /* Custom styling for the table */
     #example {
@@ -93,7 +97,7 @@
                   <div class="d-flex justify-content-center">
 
 
-                    <table class="table text-center" id="example">
+                    <table id="example" class="display" style="width:1100px";>
                       <thead style="background-color:#f8f9fa; color: black">
                         <tr>
                           <th>Book Image</th>
@@ -126,7 +130,7 @@
                                   <% }%>
                             </td>
                             <td class="align-middle">
-                              <%=product[i].stock%>
+                              <%=product[i].stock%> Books left
                             </td>
                             <td class="align-middle price-cell">
                               <span class="price-symbol">$</span>
@@ -276,9 +280,14 @@
       }
     </script>
 
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
+<script>
+  new DataTable('#example', {
+    order: [[3, 'desc']]
+});
+</script>
     <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/public/admin-assets/js/vendors/select2.min.js"></script>

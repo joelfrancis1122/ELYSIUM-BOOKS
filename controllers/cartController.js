@@ -10,66 +10,80 @@ const Razorpay = require('razorpay');
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
 let instance = new Razorpay({
-  key_id: RAZORPAY_ID_KEY,
-  key_secret: RAZORPAY_SECRET_KEY,
+    key_id: RAZORPAY_ID_KEY,
+    key_secret: RAZORPAY_SECRET_KEY,
 });
 
+
+
 const onlinePay = async (req, res) => {
-  try {
-    const { amount, address } = req.body;
-    console.log(amount)
-    const userId = req.session.user
-    const cart = await Cart.findOne({ userId: userId });
+    try {
+        const userId = req.session.user;
+        const cart = await Cart.findOne({ userId: userId });
+        const address = await Address.findOne({ _id: req.body.address });
 
-    // const address = await Address.findOne({ _id: req.body.address });
-
-    function generateOrderId() {
-        const timestamp = Date.now().toString();
-        const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let orderId = 'ORD';
-        while (orderId.length < 6) {
-            const randomIndex = Math.floor(Math.random() * randomChars.length);
-            orderId += randomChars.charAt(randomIndex);
+        function generateOrderId() {
+            const timestamp = Date.now().toString();
+            const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let orderId = 'ORD';
+            while (orderId.length < 6) {
+                const randomIndex = Math.floor(Math.random() * randomChars.length);
+                orderId += randomChars.charAt(randomIndex);
+            }
+            return orderId + timestamp.slice(-6);
         }
-        return orderId + timestamp.slice(-6);
-    }
 
-    const newOrderId = generateOrderId();
+        const newOrderId = generateOrderId();
 
-    const orderItems = cart.product;
+        let productDataToSave;
 
-    for (const item of orderItems) {
-        const product = await Product.findById(item.productId);
-        if (product) {
-            product.stock -= item.quantity; // Subtract order quantity from product stock
-            await product.save();
+        if (req.session.buyNowProductId) {
+            productDataToSave = [{
+                productId: req.session.buyNowProductId,
+                quantity: 1
+            }];
+            delete req.session.buyNowProductId;
+            await req.session.save();
+        } else {
+            productDataToSave = cart.product;
         }
+
+        if (!Array.isArray(productDataToSave)) {
+            productDataToSave = [productDataToSave]; // Convert to array if it's not already
+        }
+
+        for (const item of productDataToSave) {
+            const product = await Product.findById(item.productId);
+            if (product) {
+                product.stock -= item.quantity;
+                await product.save();
+            }
+        }
+
+        const order = new Orders({
+            orderId: newOrderId,
+            userId: userId,
+            paymentMethod: req.body.paymentMethod,
+            paymentStatus: req.body.paymentStatus,
+            totalAmount: req.body.amount,
+            product: productDataToSave,
+            address: address
+        });
+
+        await order.save();
+
+        let amounts = req.body.amount * 84;
+        const order2 = await instance.orders.create({
+            amount: amounts * 100,
+            currency: "INR",
+            receipt: req.session.user
+        });
+
+        res.json({ order2 });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
     }
-    const order = new Orders({
-        orderId: newOrderId,
-        userId: userId,
-        paymentMethod: req.body.paymentMethod,
-        paymentStatus:req.body.paymentStatus,
-        totalAmount: req.body.amount,
-        product: cart.product,
-        address: address
-    });
-
-        await order.save()
-
-    
-    
-    let amounts = amount*84
-    const order2 = await instance.orders.create({
-        amount: amounts*100,
-        currency: "INR",
-        receipt: req.session.user,
-        })
-        res.json({order2})
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  }
 };
 
 
@@ -84,12 +98,11 @@ const getCart = async (req, res) => {
         const cartLength = cartData ? cartData.product.length : 0
         const wishlistLength = wishlistData ? wishlistData.product.length : 0
 
-        res.render("cart", { cartData, name: userData.name, cartLength ,wishlistLength})
+        res.render("cart", { cartData, name: userData.name, cartLength, wishlistLength })
     } catch (error) {
         console.log(error.message)
     }
 }
-
 
 const addToCart = async (req, res) => {
     try {
@@ -129,7 +142,7 @@ const addToCart = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-    
+
 
 
 const updateCart = async (req, res) => {
@@ -215,9 +228,9 @@ const loadCheckOut = async (req, res) => {
         const cartData = await Cart.findOne({ userId: userId }).populate('product.productId')
         const cartLength = cartData ? cartData.product.length : 0
         const wishlistLength = wishlistData ? wishlistData.product.length : 0
-        
 
-        res.render('checkout', { name: userData.name, cartData, addresses: addressData, cartLength,wishlistLength })
+
+        res.render('checkout', { name: userData.name, cartData, addresses: addressData, cartLength, wishlistLength })
     } catch (error) {
         console.log(error)
     }
@@ -227,8 +240,12 @@ const loadCheckOut1 = async (req, res) => {
     try {
         let userId = req.session.user;
         let id = req.query.id
-        console.log("id:",id)
-        const product = await Product.findOne({_id:id})
+        req.session.buyNowProductId = id
+        req.session.save()
+        console.log("Req buy now id :", req.session)
+        console.log("direct product buy id :", id)
+        const product = await Product.findOne({ _id: id })
+        console.log("The product found : ", product)
         const userData = await User.findOne({ _id: userId });
         const addressData = await Address.find({ userId: userId });
         const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
@@ -236,14 +253,13 @@ const loadCheckOut1 = async (req, res) => {
 
         const cartLength = cartData ? cartData.product.length : 0
         const wishlistLength = wishlistData ? wishlistData.product.length : 0
-        
 
-        res.render('checkout', { name: userData.name, addresses: addressData,product, cartLength,wishlistLength })
+
+        res.render('checkout', { name: userData.name, addresses: addressData, product, cartLength, wishlistLength })
     } catch (error) {
         console.log(error)
     }
 }
-
 
 
 const placeOrder = async (req, res) => {
@@ -251,8 +267,8 @@ const placeOrder = async (req, res) => {
         console.log("inside placeorder=++++++++++++++++++++")
         const userId = req.session.user
         const { couponCode } = req.body;
-        const coupon = await Coupon.findOne({ couponCode: couponCode, isActive: true , expirationDate: { $gte: Date.now() } });
-        
+        const coupon = await Coupon.findOne({ couponCode: couponCode, isActive: true, expirationDate: { $gte: Date.now() } });
+
         const cart = await Cart.findOne({ userId: userId });
         const address = await Address.findOne({ _id: req.body.address });
         function generateOrderId() {
@@ -271,7 +287,7 @@ const placeOrder = async (req, res) => {
 
 
         const orderItems = cart.product;
-console.log("coupon",coupon)
+        console.log("coupon", coupon)
         // Update product stock for each item in the order
         for (const item of orderItems) {
             const product = await Product.findById(item.productId);
@@ -280,31 +296,49 @@ console.log("coupon",coupon)
                 await product.save();
             }
         }
-        if(!coupon){
+        let productDataToSave
+        console.log("Req buy now id :", req.session)
+        console.log("Req buy now id :", req.session.buyNowProductId)
+        console
+        if (req.session.buyNowProductId) {
+            // productDataToSave = await Product.find({_id:req.session.buyNowProductId})
+            productDataToSave = {
+                productId: req.session.buyNowProductId,
+                quantity: 1
+            }
+            delete req.session.buyNowProductId;
+            await req.session.save();
+        } else {
+            productDataToSave = cart.product
+
+        }
+        console.log("Product data ::", productDataToSave)
+        if (!coupon) {
             const order = new Orders({
                 orderId: newOrderId,
                 userId: userId,
                 paymentMethod: req.body.paymentMethod,
                 totalAmount: req.body.amount,
-                product: cart.product,
+                product: productDataToSave,
+                // product: cart.product,
                 address: address,
             })
             await order.save()
-        }else{
+        } else {
 
-        const order = new Orders({
-            orderId: newOrderId,
-            userId: userId,
-            paymentMethod: req.body.paymentMethod,
-            totalAmount: req.body.amount,
-            product: cart.product,
-            address: address,
-            couponDiscount:coupon.discountAmount
-        });
-        await order.save()
-    }
-        
-  
+            const order = new Orders({
+                orderId: newOrderId,
+                userId: userId,
+                paymentMethod: req.body.paymentMethod,
+                totalAmount: req.body.amount,
+                product: productDataToSave,
+                address: address,
+                couponDiscount: coupon.discountAmount
+            });
+            await order.save()
+        }
+
+
         res.status(200).json({ message: "Order Placed Successfully" })
         res.render("orderSuccess")
     } catch (error) {
@@ -329,7 +363,7 @@ const addCoupon = async (req, res) => {
         }
 
         if (existingCoupon) {
-            return res.render('Coupon', { couponExists: true, couponData }); 
+            return res.render('Coupon', { couponExists: true, couponData });
         }
 
         const coupon = new Coupon({
@@ -367,8 +401,8 @@ const removeCoupon = async (req, res) => {
     try {
         const { couponCode } = req.body; // Assuming the coupon code is passed in the request body
         const userId = req.session.user; // Assuming you have the user's ID in the session
-        console.log(userId,"userID")
-        console.log(couponCode,"Coupon")
+        console.log(userId, "userID")
+        console.log(couponCode, "Coupon")
         // Find the coupon document based on the coupon code
         const updatedCoupon = await Coupon.findOneAndUpdate(
             { couponCode: couponCode },
@@ -396,9 +430,9 @@ const removeCoupon = async (req, res) => {
 
 const applyCoupon = async (req, res) => {
     try {
-        const { couponCode,selectedAmount } = req.body;
+        const { couponCode, selectedAmount } = req.body;
         const userId = req.session.user;
-        const coupon = await Coupon.findOne({ couponCode: couponCode, isActive: true , expirationDate: { $gte: Date.now() } });
+        const coupon = await Coupon.findOne({ couponCode: couponCode, isActive: true, expirationDate: { $gte: Date.now() } });
 
         if (!coupon) {
             return res.json({
@@ -418,7 +452,7 @@ const applyCoupon = async (req, res) => {
             return res.json({
                 success: false,
                 message: 'Selectected Coupon is not applicable for this price'
-                
+
             });
         }
 
@@ -441,7 +475,7 @@ const applyCoupon = async (req, res) => {
     }
 };
 
-   
+
 
 
 

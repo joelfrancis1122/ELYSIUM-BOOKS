@@ -36,6 +36,14 @@
   }
 }
   </style>
+   <style>
+    /* Custom styling for the table */
+    #example {
+      width:1000px;
+      height: auto;
+      /* You can adjust the height as needed */
+    }
+  </style>
 </head>
 
 <body>
@@ -75,7 +83,7 @@
                 <div class="col-md-9">
                   <div class="table-responsive">
                     <% if(locals.categories) { %>
-                      <table class="table table-hover">
+                      <table class="table table-hover" id="example">
                         <thead>
                           <tr>
                             <th class="text-center">
@@ -253,8 +261,15 @@ function confirmUnBlock(categoryId) {
         });
       });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+      <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+     <script>
+      $(document).ready(function () {
+        new DataTable('#example');
 
+      })
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/public/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/public/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/public/admin-assets/js/vendors/select2.min.js"></script>
