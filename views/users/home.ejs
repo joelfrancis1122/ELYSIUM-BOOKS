@@ -53,6 +53,7 @@
         }
      
     </style>
+    
 </head>
 
 <body>
@@ -239,28 +240,29 @@
                         </div>
                     </div>
                 </div> -->
+                <% if (quote) { %>
                     <div class="single-hero-slider single-animation-wrap">
                         <div class="container">
                             <div class="row align-items-center slider-animated-1">
                                 <div class="col-lg-5 col-md-6">
                                     <div class="hero-slider-content-2">
-                                        <h4 class="animated">Upcoming Offer</h4>
-                                        <h2 class="animated fw-900">Big Deals From</h2>
-                                        <h1 class="animated fw-900 text-8">Author</h1>
-                                        <p class="animated">Fiction,Horror,History...</p>
-                                        <a class="animated btn btn-brush btn-brush-1" href="shop-product-right.html">
-                                            Shop Now </a>
+                                        <h4 class="animated fw-900"><%= quote.text %></h4>
+                                        <h6 class="animated fw-900 text-8">- <%= quote.author %></h6>
+
+                                      
                                     </div>
                                 </div>
                                 <div class="col-lg-7 col-md-6">
                                     <div class="single-slider-img single-slider-img-1">
-                                        <img class="animated slider-1-3" src="/public/assets/imgs/slider/slider-3.png"
-                                            alt="">
+                                        <img class="animated slider-1-3" src="/public/photo_2024-04-09_12-38-35.jpg" alt="" style="width:auto;">
+                                        <img class="animated slider-1-3" src="/public/photo_2024-04-09_12-38-25.jpg" alt="" style="margin-right: 340px;">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                <% } %>
+                
 
 
                     <div class="single-hero-slider single-animation-wrap">
@@ -268,11 +270,10 @@
                             <div class="row align-items-center slider-animated-1">
                                 <div class="col-lg-5 col-md-6">
                                     <div class="hero-slider-content-2">
-                                        <h4 class="animated">Upcoming Offer</h4>
-                                        <h2 class="animated fw-900">Big Deals From</h2>
-                                        <h1 class="animated fw-900 text-8">Author</h1>
+                                        <h4 class="animated fw-900" id="quote"><%= quote.text %></h4>
+                                         <h6 class="animated fw-900 text-8">-Midhun Ambadan</h6>
                                         <p class="animated">Fiction,Horror,History...</p>
-                                        <a class="animated btn btn-brush btn-brush-1" href="shop-product-right.html">
+                                        <a class="animated btn btn-brush btn-brush-1" href="/loadShop">
                                             Shop Now </a>
                                     </div>
                                 </div>
@@ -333,7 +334,7 @@
                 </div>
             </section>
             <section class="product-tabs section-padding position-relative wow fadeIn animated">
-                <!-- <div class="bg-square"></div> -->
+                <div class="bg-square"></div>
                 <div class="container">
                     <div class="tab-header">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -492,12 +493,7 @@
                                                                         <%=product[i].Regularprice%>
                                                                     </span>
                                                                 </div>
-                                                                <div class="product-action-1 show">
-                                                                    <a aria-label="Add To Cart"
-                                                                        class="action-btn hover-up"
-                                                                        href="shop-cart.html"><i
-                                                                            class="fi-rs-shopping-bag-add"></i></a>
-                                                                </div>
+                                                                    
                                                             </div>
                                                         </div>
 
@@ -605,7 +601,35 @@
         </section> -->
 
 
+<!-- -----------------------------------QUOTE----------------------------------------------------- -->
+<!-- <div id="carouselExampleIndicators" class="carousel slide">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="/public/2148827214.jpg" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="/public/671822c2f63dd5f65d8fd15c9710420b.jpg" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="..." class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div> -->
 
+  <!-- ----------------------------------------------------------------------------------------------------- -->
             <section class="mb-50">
                 <div class="container">
                     <div class="row">
@@ -663,13 +687,24 @@
                         }
                     } catch (error) {
                         toastr.error('Stock limit exeeded');
-                        console.error('Error adding product to cart:', error);
+                        console.error('Stock limit exeeded:', error);
                     }
                 }
             </script>
             
-            
-            
+            <script>
+                const quote =document.getElementById("quote")
+                const author =document.getElementById("author")
+ const api_url = "https://api.quotable.io/random"
+                async function getquote(url){
+                    const response = await fetch(url);
+                    var data = await response.json()
+                    quote.innerHTML = data.content
+                    author.innerHTML = data.author
+
+                    }
+                    getquote(api_url)
+                </script>
             
             <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>

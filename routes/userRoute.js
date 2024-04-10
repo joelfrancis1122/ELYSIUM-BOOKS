@@ -61,7 +61,7 @@ userRoute.post('/clearCart', Auth.isLogin, cartControllers.clearCart)
 userRoute.get("/orderCancel", Auth.isLogin, userControllers.OrderCancelled)
 userRoute.get("/orderReturn", Auth.isLogin, userControllers.orderReturn)
 userRoute.get("/orderDetail", Auth.isLogin, userControllers.orderDetail)
-userRoute.get("/categorySearch", Auth.isLogin, userControllers.categorySearch)
+// userRoute.get("/categorySearch", Auth.isLogin, userControllers.categorySearch)
 userRoute.post('/applyCoupon', Auth.isLogin, cartControllers.applyCoupon)
 userRoute.post('/onlinepay',Auth.isLogin,cartControllers.onlinePay)
 userRoute.post('/removeCoupon',Auth.isLogin,cartControllers.removeCoupon)
@@ -70,8 +70,10 @@ userRoute.get("/wishlist", Auth.isLogin, userControllers.wishlist)
 userRoute.get("/getWishlist", Auth.isLogin, userControllers.getWishlist)
 userRoute.post("/removeWish", Auth.isLogin, userControllers.removeWish)
 userRoute.get("/orderSuccess", Auth.isLogin, userControllers.orderSuccess)
+userRoute.patch("/saveOrder", Auth.isLogin, cartControllers.saveOrder)
 
 
+userRoute.post("/googleAuth", Auth.isLogin, userControllers.googleAuth)
 
 
 

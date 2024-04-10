@@ -128,7 +128,7 @@
         <input type="email" id="email" placeholder="Enter your email" name="email" value="joelfrancis422@gmail.com" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" required title="Please Check your Email Address">
         <input type="password" id="password" placeholder="Enter your password" value="ASDASDASD" name="password" pattern=".{8,}" required title="Please Check your Password">
         <a class="forget" href="">Forgot password?</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/signup">New user? Register here</a>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <div class="g-signin2" data-onsuccess="onSignIn" onclick="signInWithGoogle()"></div>
         <h3 class="text-center text-danger" id="loginErrorMessage"><%=locals.errmessage ? errmessage : ''%></h3>
         <h3 class="text-center text-success" id="loginSuccessMessage"><%=locals.successMessage ? successMessage : ''%></h3>
         <h3 class="text-center text-success" id="bannedMessage"><%=locals.bannedMessage ? bannedMessage : ''%></h3>
@@ -203,14 +203,62 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script>
+    <!-- <script>
       function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); 
-  console.log('Name: ' + profile.getName());
+console.log("kitty")
   console.log('Email: ' + profile.getEmail());
 }
-    </script>
+    </script> -->
+
+
+   
+<script>
+  function onSignIn(googleUser) {
+      // Retrieve user profile information
+      var profile = googleUser.getBasicProfile();
+
+      // Retrieve email
+      var email = profile.getEmail();
+
+      // Send email and password to the backend
+      signInWithGoogle(email);
+  }
+
+  function signInWithGoogle(email) {
+    // Fetch URL
+    var url = '/googleAuth';
+
+    // Request body
+    var data = {
+        email: email
+    };
+
+    // Fetch options
+    var options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    };
+
+    // Make the Fetch request
+    fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data); // Log response from the backend
+        })
+        .catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
+}
+
+</script>
     <script>  
       function displayToastrOnLoad() {
         toastr.success('<img src="/public/cru.gif" alt="Crying Emoji" style="width: 35px; height: 35px;">', 'Please Login or Signup ', {
@@ -224,6 +272,9 @@
       }
       window.onload = displayToastrOnLoad;
   </script>  
+  <script>
+   
+</script>
 </body>
 </html>
  

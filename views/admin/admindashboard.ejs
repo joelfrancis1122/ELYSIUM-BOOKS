@@ -40,10 +40,6 @@
               <% for (let i = 0; i < orders.length; i++) { %>
                   <% totalRevenue += parseFloat(orders[i].totalAmount); %>
               <% } %>
-          
-
-
-              
               <div class="col-lg-3">
                   <div class="card card-body mb-4">
                       <article class="icontext">
@@ -56,10 +52,6 @@
                       </article>
                   </div>
               </div>
-          
-          
-          
-
           <div class="col-lg-3">
             <div class="card card-body mb-4">
                 <article class="icontext">
@@ -72,17 +64,13 @@
                 </article>
             </div>
         </div>
-
         <%}%>
-
-
         <% let totalQuantity = 0; %>
         <% orders.forEach(order => { %>
             <% order.product.forEach(item => { %>
                 <% totalQuantity += item.quantity; %>
             <% }) %>
         <% }) %>
-        
         <div class="col-lg-3">
             <div class="card card-body mb-4">
                 <article class="icontext">
@@ -90,7 +78,6 @@
                     <div class="text">
                         <h6 class="mb-1 card-title">Total Quantity</h6>
                         <span><%= totalQuantity %></span>
-                        <!-- <span class="text-sm"> In 19 Categories </span> -->
                     </div>
                 </article>
             </div>
@@ -112,27 +99,78 @@
                 </div>
               </div>
               <%}%>
-
-
           </div>
-          <div class="row">
-            <div class="col-xl-8 col-lg-12">
+
+          
+
+            <div class="col-xl-9 col-lg-12">
               <div class="card mb-4">
                 <article class="card-body">
                   <h5 class="card-title">Sale statistics</h5>
                   <canvas id="myChart" height="120px"></canvas>
+                  <canvas id="myChart2" height="120px"></canvas>
                 </article>
               </div>
               <div class="row">
-                <div class="col-lg-5">
-                  <div class="card mb-4">
-                    <article class="card-body">
-                   
-                </div>
-              </div>
+               
               <!-- table-responsive end// -->
             </div>
+
           </div>
+         <% if (bestSellingCategories && bestSellingCategories.length > 0) { %>
+    <div class="col-lg-9">
+        <div class="card mb-4">
+            <article class="card-body">
+                <h5 class="card-title">Best Selling Products</h5>
+                <table id="bestSellingProductsTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Total Sales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% bestSellingProduct.forEach(product => { %>
+                            <tr>
+                                <td><%= product.productName %></td>
+                                <td><%= product.totalSales %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </article>
+        </div>
+        <div class="card mb-4">
+            <article class="card-body">
+                <h5 class="card-title">Best Selling Categories</h5>
+                <table id="bestSellingCategoriesTable" class="table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Total Sales</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% bestSellingCategories.forEach(category => { %>
+                            <tr>
+                                <td><%= category.name %></td> <!-- Updated to use 'name' instead of 'categoryName' -->
+                                <td><%= category.totalSales %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </article>
+        </div>
+    </div>
+<% } %>
+      
+        
+
+
+
+
+    </div>
+
           <div class="pagination-area mt-30 mb-50">
             <nav aria-label="Page navigation example">
               <ul class="pagination justify-content-start">
@@ -165,6 +203,119 @@
     <!-- Main Script -->
     <script src="/public/admin-assets/js/main.js" type="text/javascript"></script>
     <script src="/public/admin-assets/js/custom-chart.js" type="text/javascript"></script>
+    <script>
+     $(document).ready(function() {
+  (function ($) {
+    "use strict";
+
+    // Sale statistics Chart for Sales
+    if ($('#myChart').length) {
+      var ctx1 = document.getElementById('myChart').getContext('2d');
+      var chart1 = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'Sales',
+            tension: 0.3,
+            fill: true,
+            backgroundColor: 'rgba(44, 120, 220, 0.2)',
+            borderColor: 'rgba(44, 120, 220)',
+            data: <%= JSON.stringify(orderCountsByMonth) %>
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              labels: {
+                usePointStyle: true
+              }
+            }
+          }
+        }
+      });
+    }
+     // Sale statistics Chart for Sales
+     if ($('#myChart2').length) {
+      var ctx1 = document.getElementById('myChart2').getContext('2d');
+      var chart1 = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+            label: 'Products',
+            tension: 0.3,
+            fill: true,
+            backgroundColor: 'rgba(44, 120, 220, 0.2)',
+            borderColor: 'rgba(34, 120, 235)',
+            data: <%= JSON.stringify(productCountsByMonth) %>
+          }]
+        },
+        options: {
+          plugins: {
+            legend: {
+              labels: {
+                usePointStyle: true
+              }
+            }
+          }
+        }
+      });
+    }
+
+    if ($('#myChart2').length) {
+        var ctx = document.getElementById("myChart2");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+            labels: ["900", "1200", "1400", "1600"],
+            datasets: [
+                {
+                    label: "US",
+                    backgroundColor: "#5897fb",
+                    barThickness:10,
+                    data: [233,321,783,900]
+                }, 
+                {
+                    label: "Europe",
+                    backgroundColor: "#7bcf86",
+                    barThickness:10,
+                    data: [408,547,675,734]
+                },
+                {
+                    label: "Asian",
+                    backgroundColor: "#ff9076",
+                    barThickness:10,
+                    data: [208,447,575,634]
+                },
+                {
+                    label: "Africa",
+                    backgroundColor: "#d595e5",
+                    barThickness:10,
+                    data: [123,345,122,302]
+                },
+            ]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                        usePointStyle: true,
+                        },
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } //end if
+  })(jQuery);
+});
+  </script>
+  
 </body>
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->

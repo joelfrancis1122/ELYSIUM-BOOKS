@@ -431,13 +431,13 @@ body {
                                                         <% total +=cartData.product[i].productId.saleprice *
                                                             cartData.product[i].quantity; %>
                                                             <% } %>
-                                                                <tr>
-                                                                    <th>Total</th>
-                                                                    <td colspan="2" class="product-subtotal"><span
-                                                                            class="font-xl text-brand fw-900"
-                                                                            id="GrandTotal">$<%= total.toFixed(2) %>
-                                                                                </span></td>
-                                                                </tr>
+                                                                    <tr>
+                                                                        <th>Total</th>
+                                                                        <td colspan="2" class="product-subtotal"><span
+                                                                                class="font-xl text-brand fw-900"
+                                                                                id="GrandTotal">$<%= total.toFixed(2) %>
+                                                                                    </span></td>
+                                                                    </tr>
                                                                 <% }else{%>
                                                                     <tr>
                                                                         <td class="image product-thumbnail">
@@ -470,24 +470,6 @@ body {
                                 </div>
 
 
-
-
-
-
-                                <!-- <div class="coupon-container">
-    <div class="coupon">
-      <div class="coupon-header">
-        <h1>Special Offer</h1>
-      </div>
-      <div class="coupon-content">
-        <p>Use this coupon code to get a discount:</p>
-        <h2 id="coupon-code">ABC123</h2>
-        <button id="apply-btn">Apply Coupon</button>
-      </div>
-    </div>
-  </div>
- -->
-
                                 <div class="panel-body">
                                     <p class="mb-30 font-sm">
                                     <h4>If you have a coupon code, please apply it below.</h4>
@@ -519,13 +501,7 @@ body {
                                         <h5>Payment</h5>
                                     </div>
                                     <div class="payment_option">
-                                        <!-- <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios3" checked="">
-                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse" data-target="#bankTranfer" aria-controls="bankTranfer">Razorpay</label>
-                                        <div class="form-group collapse in" id="bankTranfer">
-                                            <p class="text-muted mt-5">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration. </p>
-                                        </div>
-                                    </div> -->
+                                    
                                         <div class="custome-radio">
                                             <input class="form-check-input" required="" type="radio"
                                                 name="payment_option" value="Razorpay" id="exampleRadios4">
@@ -546,7 +522,8 @@ body {
                                             <div class="form-group collapse in" id="paypal">
                                             </div>
                                         </div>
-                                    </div>
+                                        <p id="codMessage" class="text-danger" style="display: none;">COD is not available for this book.</p>
+
                                 </div>
                                 <button onclick="placeOrder()" class="btn btn-fill-out btn-block mt-30">Place
                                     Order</button>
@@ -695,94 +672,125 @@ body {
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
         <script>
-            function placeOrder() {
-                const couponCode = document.getElementById('couponCode').value;
+          function placeOrder() {
+    const couponCode = document.getElementById('couponCode').value;
 
-                console.log("place order worked");
-                let selectedRadioButton = document.querySelector('input[name="payment_option"]:checked');
-                if (!selectedRadioButton) {
-                    toastr.info("Please select a Payment Method.");
-                    return false; // Prevent the form from being submitted
-                }
-                const selectedRadioButtons = selectedRadioButton.value;
+    console.log("place order worked");
+    let selectedRadioButton = document.querySelector('input[name="payment_option"]:checked');
+    if (!selectedRadioButton) {
+        toastr.info("Please select a Payment Method.");
+        return false; // Prevent the form from being submitted
+    }
+    const selectedRadioButtons = selectedRadioButton.value;
 
-                if (!selectedRadioButtons) {
-                    toastr.info("Please select a Payment Method.");
-                    return false; // Prevent the form from being submitted
-                }
-                const selectedAddress1 = document.querySelector('input[name="selectedAddress"]:checked');
-                if (!selectedAddress1) {
-                    toastr.info("Please select an address.");
-                    return false; // Prevent the form from being submitted
-                }
+    if (!selectedRadioButtons) {
+        toastr.info("Please select a Payment Method.");
+        return false; // Prevent the form from being submitted
+    }
+    const selectedAddress1 = document.querySelector('input[name="selectedAddress"]:checked');
+    if (!selectedAddress1) {
+        toastr.info("Please select an address.");
+        return false; // Prevent the form from being submitted
+    }
 
-                const selectedAddress = selectedAddress1.value;
-                const totalAmountWithSymbol = document.getElementById("GrandTotal").innerText;
-                const totalAmount = parseFloat(totalAmountWithSymbol.replace('$', ''));
-                const orderData = {
-                    paymentMethod: selectedRadioButtons,
-                    paymentStatus: "Received",
-                    amount: totalAmount,
-                    address: selectedAddress,
-                    couponCode: couponCode,
+    const selectedAddress = selectedAddress1.value;
+    const totalAmountWithSymbol = document.getElementById("GrandTotal").innerText;
+    const totalAmount = parseFloat(totalAmountWithSymbol.replace('$', ''));
+    const orderData = {
+        paymentMethod: selectedRadioButtons,
+        paymentStatus: "Failed",
+        amount: totalAmount,
+        address: selectedAddress,
+        couponCode: couponCode,
+    };
+
+    let url = '';
+    if (selectedRadioButtons === 'Razorpay') {
+        // If payment method is Razorpay, make a fetch request to '/onlinepay' endpoint
+
+        url = '/onlinepay';
+        let orderId =''
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+        })
+        .then((response) => response.json())
+        .then(data => {
+    orderId = data.order.orderId;
+    // Initialize Razorpay checkout with received order details
+    const options = {
+        "key": 'rzp_test_bdVGrcCwlFiIwl', // Replace with your Razorpay key ID
+        "amount": data.order2.amount, // Check if the amount is correct based on your totalAmount
+        "currency": 'INR', // Change the currency to match your requirements
+        "name": 'ELYSIUM_BOOKS',
+        "description": 'Purchase Description',
+        "order_id": data.order2.id,
+        "handler": function (response) {
+            console.log(response, "respossadasd")
+            if (response.razorpay_payment_id) {
+                // If payment is successful, update payment status to "Received"
+                orderData.paymentStatus = "Received";
+                // Save the order again with updated payment status
+                fetch(`/saveOrder?id=${orderId}`, { // Pass the orderId as a query parameter
                     
-                };
+                    method: 'PATCH', // Change the method to POST
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({orderId}), // Send updated orderData
+                })
+                .then(() => {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Payment successful!",
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
+                        window.location.href = '/orderSuccess';
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Payment failed!",
+                    text: "Something went wrong with the payment. Please try again or choose a different payment method.",
+                });
+            }
+            removeItem();
+        },
+        "prefill": {
+            "name": 'Joel',
+            "email": 'joel@example.com',
+            "contact": '9999999999',
+        },
+        "theme": {
+            "color": '#11ff00'
+        }
+    };
+    const razorpayInstance = new Razorpay(options);
+    razorpayInstance.open();
+})
 
-                let url = '';
-                if (selectedRadioButtons === 'Razorpay') {
-                    // If payment method is Razorpay, make a fetch request to '/onlinepay' endpoint
-
-                    url = '/onlinepay';
-                    fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(orderData),
-                    })
-                        .then((response) => response.json())
-                        .then(data => {
-                            // Initialize Razorpay checkout with received order details
-                            const options = {
-                                "key": 'rzp_test_bdVGrcCwlFiIwl', // Replace with your Razorpay key ID
-                                "amount": data.order2.amount, // Check if the amount is correct based on your totalAmount
-                                "currency": 'INR', // Change the currency to match your requirements
-                                "name": 'ELYSIUM_BOOKS',
-                                "description": 'Purchase Description',
-                                "order_id": data.order2.id,
-                                "handler": function (response) {
-                                    Swal.fire({
-                                        position: "center",
-                                        icon: "success",
-                                        title: "Payment successful!",
-                                        showConfirmButton: false,
-                                        timer: 2000
-                                    }).then(() => {
-                                        window.location.href = '/orderSuccess';
-                                    });
-                                    removeItem();
-                                },
-
-                                "prefill": {
-                                    "name": 'Joel',
-                                    "email": 'joel@example.com',
-                                    "contact": '9999999999',
-                                },
-                                "theme": {
-                                    "color": '#11ff00'
-                                }
-                            };
-                            const razorpayInstance = new Razorpay(options);
-                            razorpayInstance.open();
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Something went wrong!",
-                            });
-                        });
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+            });
+        });
                 } else {
                     // If payment method is not Razorpay, make a fetch request to '/placeorder' endpoint
                     url = '/placeorder';
@@ -967,6 +975,31 @@ body {
             }
 
         </script>
+  <script>
+    // Function to check if Cash on Delivery should be disabled and show message
+    function checkCODAvailability() {
+        var total = parseFloat(document.getElementById('GrandTotal').innerText.replace('$', ''));
+        var codRadio = document.getElementById('exampleRadios5');
+        var codMessage = document.getElementById('codMessage'); // Get the message element
+        
+        // Check if total is greater than or equal to the threshold
+        if (total >= 10) {
+            codRadio.disabled = true; // Disable COD option
+            codMessage.style.display = 'block'; // Show the message
+        } else {
+            codRadio.disabled = false; // Enable COD option
+            codMessage.style.display = 'none'; // Hide the message
+        }
+    }
+
+    // Call the function initially and whenever the total changes
+    window.onload = function() {
+        checkCODAvailability();
+    };
+</script>
+
+
+    
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">

@@ -18,7 +18,24 @@
   <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
 
 
+<style>
+  .bg-primary-light {
+  background-color: #cce5ff; /* Light blue */
+}
 
+.bg-secondary-light {
+  background-color: #e2e3e5; /* Light gray */
+}
+
+.bg-danger-light {
+  background-color: #f8d7da; /* Light red */
+}
+
+.bg-success-light {
+  background-color: #d4edda; /* Light green */
+}
+
+</style>
 </head>
 
 <body>
@@ -72,48 +89,49 @@
                           <td>
                             <%= order.orderDate.toLocaleString() %>
                           </td>
-                          <td><span class="badge bg-warning text-dark">
-                              <%= order.paymentStatus%>
-                            </span></td>
                           <td>
-                            <span
-                              class="badge bg-<%= order.orderStatus === 'Shipped' ? 'primary' : (order.orderStatus === 'Returned' ? 'secondary' : (order.orderStatus === 'Cancelled' ? 'danger' : (order.orderStatus === 'Delivered' ? 'success' : 'warning'))) %> text-dark">
-                              <%= order.orderStatus %>
+                            <span class="badge <%= order.paymentStatus === 'Received' ? 'bg-success-light' : 'bg-warning-light' %> text-dark">
+                              <%= order.paymentStatus %>
                             </span>
-
+                          </td>
+                          
+                            <td>
+                              <span class="badge <%= order.orderStatus === 'Shipped' ? 'bg-primary-light' : (order.orderStatus === 'Returned' ? 'bg-secondary-light' : (order.orderStatus === 'Cancelled' ? 'bg-danger-light' : (order.orderStatus === 'Delivered' ? 'bg-success-light' : 'bg-warning-light'))) %> text-dark">
+                                <%= order.orderStatus %>
+                              </span>
                           </td>
                           <td>
-                            <div class="dropdown">
-                              <button class="btn btn-sm btn-icon dropdown-toggle" type="button"
-                                id="deliveryStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                Status
-                              </button>
-
-                              <ul class="dropdown-menu dropdown-menu-sm" aria-labelledby="deliveryStatusDropdown">
-                                <li><a class="dropdown-item"
-                                    href="/admin/adminOrderpending?id=<%= order._id %>">Order Placed</a></li>
-                                <li><a class="dropdown-item"
-                                    href="/admin/adminOrderShipped?id=<%= order._id %>">Shipped</a></li>
-                                <li><a class="dropdown-item"
-                                    href="/admin/adminOrderDelivered?id=<%= order._id %>">Delivered</a></li>
-                                <li><a class="dropdown-item"
-                                    href="/admin/adminOrderCancelled?id=<%= order._id %>">Cancelled</a></li>
-                                <li><a class="dropdown-item"
-                                    href="/admin/adminOrderReturned?id=<%= order._id %>">Returned</a></li>
-                              </ul>
-                            </div>
+                              <div class="dropdown">
+                                  <button class="btn btn-sm btn-icon dropdown-toggle" type="button"
+                                      id="deliveryStatusDropdown_<%= order._id %>" data-bs-toggle="dropdown" aria-expanded="false"
+                                      <% if (order.orderStatus === 'Delivered' || order.orderStatus === 'Returned' || order.orderStatus === 'Cancelled') { %>
+                                          disabled
+                                      <% } %>>
+                                    <b>Status</b>  
+                                  </button>
+                          
+                                  <ul class="dropdown-menu dropdown-menu-sm" aria-labelledby="deliveryStatusDropdown_<%= order._id %>">
+                                      <li><a class="dropdown-item"
+                                              href="/admin/adminOrderpending?id=<%= order._id %>">Order Placed</a></li>
+                                      <li><a class="dropdown-item"
+                                              href="/admin/adminOrderShipped?id=<%= order._id %>">Shipped</a></li>
+                                      <li><a class="dropdown-item"
+                                              href="/admin/adminOrderDelivered?id=<%= order._id %>">Delivered</a></li>
+                                      <li><a class="dropdown-item"
+                                              href="/admin/adminOrderCancelled?id=<%= order._id %>">Cancelled</a></li>
+                                      <li><a class="dropdown-item"
+                                              href="/admin/adminOrderReturned?id=<%= order._id %>">Returned</a></li>
+                                  </ul>
+                              </div>
                           </td>
-
-              </div>
-
-              </td>
+                          
               <td class="text-end">
                 <a href="/admin/loadOrderDetails?id=<%=order._id%>" class="btn btn-sm btn-outline-dark">Order Detail</a>
               </td>
               </tr>
               <% }); %>
                 <% }else{ %>
-                  <h3>No orders</h3>
+                  <h3 style="font-size: 28px; font-weight: bold; color: #000000; text-transform: uppercase; border-bottom: 2px solid #007bff; padding-bottom: 5px;">No orders found</h3>
                   <% } %>
 
                     </table>

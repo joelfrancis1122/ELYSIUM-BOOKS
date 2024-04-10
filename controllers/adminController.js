@@ -6,18 +6,113 @@ const Orders = require('../models/orderModel')
 const SubCategory = require('../models/subcategoryModel')
 const cron = require('node-cron');
 
-
 const dashboardLoad = async (req, res) => {
     try {
         const orders = await Orders.find();
-        const order = await Orders.find().populate('product.productId');
-        const categories = await Category.find()
-        res.render('admindashboard', { orders,order,categories }); // Pass orders instead of order
+        const categories = await Category.find();
+        const products = await Product.find();
 
+        // Extracting order counts for each month
+        const orderCountsByMonth = Array.from({ length: 12 }, () => 0);
+        orders.forEach(order => {
+            const monthIndex = order.orderDate.getMonth();
+            orderCountsByMonth[monthIndex]++;
+        });
+
+        // Extracting product counts for each month
+        const productCountsByMonth = Array.from({ length: 12 }, () => 0);
+        products.forEach(product => {
+            const monthIndex = product.CreatedOn.getMonth();
+            productCountsByMonth[monthIndex]++;
+        });
+
+        // Aggregate to find the best selling product
+        const bestSellingProduct = await Orders.aggregate([
+            {
+                $unwind: "$product"
+            },
+            {
+                $group: {
+                    _id: "$product.productId",
+                    totalSales: { $sum: "$product.quantity" }
+                }
+            },
+            {
+                $sort: { totalSales: -1 }
+            },
+            {
+                $limit: 10
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "product"
+                }
+            },
+            {
+                $unwind: "$product"
+            },
+            {
+                $project: {
+                    productName: "$product.Bookname",
+                    totalSales: 1
+                }
+            }
+        ]);
+
+        // Aggregate to find the best selling categories
+        const bestSellingCategories = await Orders.aggregate([
+            {
+                $unwind: "$product"
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "product.productId",
+                    foreignField: "_id",
+                    as: "productInfo"
+                }
+            },
+            {
+                $unwind: "$productInfo"
+            },
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "productInfo.Categories",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            {
+                $unwind: "$category"
+            },
+            {
+                $group: {
+                    _id: "$category._id",
+                    name: { $first: "$category.categoryName" }, // Corrected to use 'categoryName' instead of 'name'
+                    totalSales: { $sum: "$product.quantity" }
+                }
+            },
+            {
+                $sort: { totalSales: -1 }
+            },
+            {
+                $limit: 10
+            }
+        ]);
+        
+
+        res.render('admindashboard', { orders, categories, orderCountsByMonth, productCountsByMonth, bestSellingProduct, bestSellingCategories });
     } catch (error) {
         console.error(error);
     }
 };
+
+
+
 
 
 

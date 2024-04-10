@@ -377,9 +377,10 @@
                         <div class="widget-category mb-30">
                             <h5 class="section-title style-1 mb-30 wow fadeIn animated">Categories</h5>
                             <ul class="category-list">
+                                <!-- <a href="/loadShop?category=" data-all-categories>All categories</a> -->
                                 <% for(let i = 0; i < categories.length; i++) { %>
                                     <li class="category-item">
-                                        <a href="/categorySearch?category=<%= encodeURIComponent(categories[i].categoryName) %>" class="category-link">
+                                        <a href="/loadShop?category=<%= encodeURIComponent(categories[i].categoryName) %>" class="category-link">
                                             <span class="category-icon">
                                                 <i class="fas fa-tags"></i> <!-- You can use any premium icon here -->
                                             </span>

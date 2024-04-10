@@ -18,7 +18,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/public/assets/css/maind134.css?v=3.4">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
@@ -54,7 +55,7 @@
 }
 
 .card-header.bg-gradient-primary {
-  background: linear-gradient(to right, #007bff, #6c5ce7);
+  background-color: #7e7d7d;
 }
 
 .coupon-card {
@@ -103,6 +104,46 @@
   border-color: #28a745;
 }
         
+    </style>
+
+    <style>
+        .transaction-history {
+    font-family: Arial, sans-serif;
+}
+
+.transaction-history h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.transaction-history table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.transaction-history th, .transaction-history td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.transaction-history th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+.transaction-history tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.transaction-history tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.transaction-history tbody td:last-child {
+    text-transform: capitalize;
+}
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -393,7 +434,7 @@
                                                                                     <%= order.orderStatus%>
                                                                                 </span></td>
                                                                                 <td style="padding: 10px;">
-                                                                                    <span class="badge <%= order.paymentStatus === 'Received' ? 'bg-success text-dark' : 'bg-warning text-dark' %>">
+                                                                                    <span class="badge <%= order.paymentStatus === 'Received' ? 'bg-success text-dark' : (order.paymentStatus === 'Failed' ? 'bg-danger text-light' : 'bg-warning text-dark') %>">
                                                                                         <%= order.paymentStatus %>
                                                                                     </span>
                                                                                     
@@ -438,7 +479,7 @@
                                                                             <% } else { %>
                                                                                 <tr>
                                                                                     <td colspan="8">
-                                                                                        <h3>No orders</h3>
+                                                                                        <h3 style="font-size: 28px; font-weight: bold; color: #000000; text-transform: uppercase; border-bottom: 2px solid #007bff; padding-bottom: 5px;">No orders found</h3>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <% } %>
@@ -648,31 +689,60 @@
                                     </div>
 
                                     <% if(wallet){ %>
-                                    <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="account-detail-tab" style="padding: 20px;">
-                                        <div class="card coupon-container" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                            <div class="card-header bg-gradient-primary text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
-                                                <h5 style="margin-bottom: 0; font-size: 24px;">Wallet</h5>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="wallet-info" style="padding-bottom: 15px;">
-                                                    <h6 style="margin-bottom: 0; font-size: 18px;">Available Balance:</h6>
-                                                    <p id="balanceAmount" style="margin-top: 5px; font-size: 24px; font-weight: bold;">$<%= wallet.balance.toFixed(2) %></p>
+                                        <div class="tab-pane fade" id="wallet" role="tabpanel" aria-labelledby="account-detail-tab" style="padding: 20px;
+                                        width: 100%; display: grid; grid-template-columns: 1fr 2fr;">
+                                            <div class="card coupon-container" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 250px;">
+                                                <div class="card-header bg-gradient-primary text-white" style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                                    <h5 style="margin-bottom: 0; font-size: 24px;">Wallet</h5>
                                                 </div>
-                                                <!-- Add Funds Form -->
-                                                <div class="add-funds-form" style="margin-top: 20px;">
-                                                    <form id="addFundsForm" action="/addTowallet" method="post">
-                                                        <div class="form-group">
-                                                            <label for="amount" style="margin-bottom: 5px; font-size: 18px;">Amount:</label>
-                                                            <input type="number" class="form-control" id="amountInput" name="amount" style="border-radius: 20px; font-size: 16px; padding: 10px; border: 1px solid #ced4da;" placeholder="Enter amount">
-                                                        </div>
-                                                        <button type="submit" class="btn btn-primary" style="border-radius: 20px; padding: 10px 30px; font-size: 18px;">Submit</button>
-                                                    </form>
+                                                <div class="card-body" style="max-width: 300px;"> <!-- Adjust the max-width -->
+                                                    <div class="wallet-info" style="padding-bottom: 15px;">
+                                                        <h6 style="margin-bottom: 0; font-size: 18px;">Available Balance:</h6>
+                                                        <p id="balanceAmount" style="margin-top: 5px; font-size: 24px; font-weight: bold;">$<%= wallet.balance.toFixed(2) %></p>
+                                                    </div>
+                                                    <!-- Add Funds Form -->
+                                                    <div class="add-funds-form" style="margin-top: 20px;">
+                                                        <form id="addFundsForm" method="post">
+                                                            <div class="form-group">
+                                                                <label for="amount" style="margin-bottom: 5px; font-size: 18px;">Amount:</label>
+                                                                <input type="number" class="form-control" id="amountInput" name="amount" style="border-radius: 20px; font-size: 16px; padding: 10px; border: 1px solid #ced4da;" placeholder="Enter amount">
+                                                            </div>
+                                                            <button style="background-color: #000000;" type="button" onclick="submitForm()" class="btn btn-primary" style="border-radius: 20px; padding: 10px 30px; font-size: 18px;">Pay</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <%}%>
-
+                                            <%}%>
+                                            <% if (wallet) { %>
+                                                <div class="transaction-history" style="max-height: 400px; overflow-y: auto;">
+                                                    <h2 style="position: sticky; top: 0; background-color: #ffffff; z-index: 1; color: #007bff; font-size: 24px; font-weight: bold; text-align: center; text-transform: uppercase; margin-bottom: 20px;">Transaction History</h2>
+                                                    <table style="width: 100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Transaction ID</th>
+                                                                <th>Date</th>
+                                                                <th>Amount</th>
+                                                                <th>Status</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% for (let i = wallet.history.length - 1; i >= 0; i--) { %>
+                                                                <tr>
+                                                                    <td>#<%= Math.random().toString(36).substr(2, 8).toUpperCase() %></td>
+                                                                    <td><%= wallet.history[i].createdAt.toLocaleString() %></td>
+                                                                    <td style="color:#28a745">$<%= wallet.history[i].amount %></td>
+                                                                    <td style="color:#28a745"><%= wallet.history[i].type %></td>
+                                                                </tr>
+                                                                <!-- Add more rows for each transaction -->
+                                                            <% } %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                
+                                            <% } %>
+                                            
+                                            
+                                
                                       
                                 </div>
                                     </div>
@@ -823,46 +893,50 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
             integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const cancelButtons = document.querySelectorAll('.cancel-order');
-                const returnButtons = document.querySelectorAll('.return-order');
-
-                cancelButtons.forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        const orderId = button.getAttribute('data-order-id');
-                        showConfirmation(() => {
-                            window.location.href = `/orderCancel?id=${orderId}`;
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const cancelButtons = document.querySelectorAll('.cancel-order');
+                    const returnButtons = document.querySelectorAll('.return-order');
+            
+                    cancelButtons.forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            const orderId = button.getAttribute('data-order-id');
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You are about to cancel this order.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, cancel it!',
+                                cancelButtonText: 'No, keep it'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = `/orderCancel?id=${orderId}`;
+                                }
+                            });
+                        });
+                    });
+            
+                    returnButtons.forEach(button => {
+                        button.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            const orderId = button.getAttribute('data-order-id');
+                            Swal.fire({
+                                title: 'Are you sure?',
+                                text: 'You are about to return this order.',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, return it!',
+                                cancelButtonText: 'No, keep it'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = `/orderReturn?id=${orderId}`;
+                                }
+                            });
                         });
                     });
                 });
-
-                returnButtons.forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        event.preventDefault();
-                        const orderId = button.getAttribute('data-order-id');
-                        showConfirmation(() => {
-                            window.location.href = `/orderReturn?id=${orderId}`;
-                        });
-                    });
-                });
-
-                function showConfirmation(callback) {
-                    swal({
-                        title: "Are you sure?",
-                        icon: "warning",
-                        buttons: true,
-                        dangerMode: true,
-                    })
-                        .then((willProceed) => {
-                            if (willProceed) {
-                                callback();
-                            }
-                        });
-                }
-            });
-        </script>
+            </script>
 
         <script>
 
@@ -1020,8 +1094,71 @@
                 // If all validations pass, submit the form
                 this.submit();
             });
-        </script>
+        </script>   
+ <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+<script>
+    function submitForm() {
+        // Get the amount input value
+        const amount = document.getElementById('amountInput').value;
+
+        // Prepare data for the request body
+        const data = {
+            amount: amount
+            // Add more data if needed
+        };
+
+        // Fetch request
+        fetch('/addTowallet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then((response) => response.json())
+        .then(data => {
+            // Initialize Razorpay checkout with received order details
+            const options = {
+                "key": 'rzp_test_bdVGrcCwlFiIwl', // Replace with your Razorpay key ID
+                "amount": data.order.amount, // Use the amount from server response
+                "currency": 'INR', // Change the currency to match your requirements
+                "name": 'ELYSIUM_BOOKS',
+                "description": 'Purchase Description',
+                "order_id": data.order.id, // Use the order ID from server response
+                "handler": function (response) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "Payment successful!",
+                        showConfirmButton: false,
+                        timer: 2000
+                    }).then(() => {
+                        window.location.href = '/loadProfile';
+                    });
+                },
+                "prefill": {
+                    "name": 'Joel',
+                    "email": 'joel@example.com',
+                    "contact": '9999999999',
+                },
+                "theme": {
+                    "color": '#11ff00'
+                }
+            };
+            const razorpayInstance = new Razorpay(options);
+            razorpayInstance.open();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Something went wrong!",
+            });
+        });
+    }
+</script>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -1046,6 +1183,8 @@
         <script src="/public/assets/js/plugins/jquery.vticker-min.js"></script>
         <script src="/public/assets/js/plugins/jquery.theia.sticky.js"></script>
         <!-- Template  JS -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
         <script src="/public/assets/js/maind134.js?v=3.4"></script>
 </body>
 

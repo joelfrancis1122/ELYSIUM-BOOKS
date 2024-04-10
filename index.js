@@ -2,10 +2,11 @@ const mongoose = require("mongoose");
 const nocache = require('nocache');
 const flash = require('express-flash');
 const dotenv = require('dotenv').config()
-
+const Quote = require('inspirational-quotes');
 // const Razorpay = require('razorpay');
 // var instance = new Razorpay({ key_id: 'YOUR_KEY_ID', key_secret: 'YOUR_SECRET' })
 
+console.log(Quote.getQuote()); // returns quote (text and author)
 
 
 

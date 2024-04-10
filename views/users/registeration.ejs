@@ -130,70 +130,63 @@
       <header>Signup</header>
       <form action="/verifySignup" id="form" method="post">
         <input type="text" id="name" placeholder="Enter your name" name="name" />
-        <div class="error" id="nameError"></div>
-        <input type="email" id="email" name="email" placeholder="Enter your email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
-          required />
-        <div class="error" id="emailError"></div>
-        <input type="tel" id="mobile" maxlength="10" placeholder="Enter your mobile" name="mobile" pattern="^\d{10}$"
-          required />
-        <div class="error" id="mobileError"></div>
-        <input type="password" id="password" placeholder="Enter your password" name="password" pattern=".{8,}"
-          required />
-        <div class="error" id="passwordError"></div>
-        <input type="password" id="cpassword" placeholder="Confirm password" name="cpassword" pattern=".{8,}"
-          required />
-        <div class="error" id="cpasswordError"></div>
+        <div class="error" id="nameError" style="color: red;"></div> <!-- Error message placeholder for name -->
+        <input type="email" id="email" name="email" placeholder="Enter your email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" required />
+        <div class="error" id="emailError" style="color: red;"></div> <!-- Error message placeholder for email -->
+        <input type="tel" id="mobile" maxlength="10" placeholder="Enter your mobile" name="mobile" pattern="^\d{10}$" required />
+        <div class="error" id="mobileError" style="color: red;"></div> <!-- Error message placeholder for mobile -->
+        <input type="password" id="password" placeholder="Enter your password" name="password" pattern=".{8,}" required />
+        <div class="error" id="passwordError" style="color: red;"></div> <!-- Error message placeholder for password -->
+        <input type="password" id="cpassword" placeholder="Confirm password" name="cpassword" pattern=".{8,}" required />
+        <div class="error" id="cpasswordError" style="color: red;"></div> <!-- Error message placeholder for confirm password -->
 
         <input type="submit" class="button" value="signup" onclick="return validateForm()" />
         <h3 class="text-center text-danger" id="loginErrorMessage">
-          <%=locals.errmessage ? errmessage : '' %>
+            <%=locals.errmessage ? errmessage : '' %>
         </h3>
         <h3 class="text-center text-success" id="loginSuccessMessage">
-          <%=locals.successMessage ? successMessage : '' %>
+            <%=locals.successMessage ? successMessage : '' %>
         </h3>
-      </form>
+    </form>
     </div>
   </div>
-
   <script>
-    setInterval(() => {
-      document.getElementById("loginErrorMessage").innerText = "";
-      document.getElementById("loginSuccessMessage").innerText = "";
-    }, 100);
-
     function validateForm() {
-      var name = document.getElementById("name").value;
-      // Regular expression to match alphabetic characters with spaces between
-      var password = document.getElementById("password").value;
-      var cpassword = document.getElementById("cpassword").value;
-      var alphabeticWithSpacesRegex = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/;
-      if (!alphabeticWithSpacesRegex.test(name)) {
-        alert(
-          "Name should contain alphabetic characters with spaces only between alphabetic characters."
-        );
-        return false; // Prevent form submission
-      }
-      if (password !== cpassword) {
-        toastr.error(
-          '<img src="/public/cru.gif" alt="Crying Emoji" style="width: 35px; height: 35px;"> Password mismatch',
-          "Try again",
-          {
-            closeButton: true, // Show close button
-            progressBar: true, // Show progress bar
-            positionClass: "toast-top-right", // Position the notification at the top-right corner
-            timeOut: 5000, // Duration before the notification automatically closes (in milliseconds)
-            extendedTimeOut: 2000, // Additional duration if the user hovers over the notification (in milliseconds)
-            preventDuplicates: true, // Prevent duplicate notifications
-            // You can add more options here as needed
-          }
-        );
+        var name = document.getElementById("name").value;
+        var password = document.getElementById("password").value;
+        var cpassword = document.getElementById("cpassword").value;
+        var alphabeticWithSpacesRegex = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/;
+        var isValid = true;
 
-        return false; // Prevent form submission
-      }
-      // If name contains alphabetic characters with spaces only between alphabetic characters, allow form submission
-      return true;
+        // Reset error messages
+        document.getElementById("nameError").innerText = "";
+        document.getElementById("passwordError").innerText = "";
+        document.getElementById("cpasswordError").innerText = "";
+
+        // Validate name
+        if (!alphabeticWithSpacesRegex.test(name)) {
+            document.getElementById("nameError").innerText = "Type alphabetic characters with spaces only between alphabetic characters.";
+            isValid = false;
+        }
+
+        // Validate password mismatch
+        if (password !== cpassword) {
+            document.getElementById("passwordError").innerText = "Password mismatch";
+            document.getElementById("cpasswordError").innerText = "Password mismatch";
+            isValid = false;
+        }
+
+        // Clear error messages after 5 seconds
+        setTimeout(() => {
+            document.getElementById("nameError").innerText = "";
+            document.getElementById("passwordError").innerText = "";
+            document.getElementById("cpasswordError").innerText = "";
+        }, 5000);
+
+        return isValid;
     }
-  </script>
+</script>
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <%if(locals.emailExists){%>

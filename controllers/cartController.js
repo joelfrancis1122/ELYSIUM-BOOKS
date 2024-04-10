@@ -52,13 +52,7 @@ const onlinePay = async (req, res) => {
             productDataToSave = [productDataToSave]; // Convert to array if it's not already
         }
 
-        for (const item of productDataToSave) {
-            const product = await Product.findById(item.productId);
-            if (product) {
-                product.stock -= item.quantity;
-                await product.save();
-            }
-        }
+     
 
         const order = new Orders({
             orderId: newOrderId,
@@ -78,14 +72,85 @@ const onlinePay = async (req, res) => {
             currency: "INR",
             receipt: req.session.user
         });
-
-        res.json({ order2 });
+console.log(order)
+console.log(order2)
+        res.json({ order2 ,order});
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
     }
 };
 
+
+
+const saveOrder = async(req,res)=>{
+    try{
+console.log("workedasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
+
+        const orderId = req.body.orderId
+        const userId = req.session.user;
+
+        const cart = await Cart.findOne({ userId: userId });
+
+
+
+        let productDataToSave;
+
+        if (req.session.buyNowProductId) {
+            productDataToSave = [{
+                productId: req.session.buyNowProductId,
+                quantity: 1
+            }];
+            delete req.session.buyNowProductId;
+            await req.session.save();
+        } else {
+            productDataToSave = cart.product;
+        }
+
+        if (!Array.isArray(productDataToSave)) {
+            productDataToSave = [productDataToSave]; // Convert to array if it's not already
+        }
+
+        for (const item of productDataToSave) {
+            const product = await Product.findById(item.productId);
+            if (product) {
+                product.stock -= item.quantity;
+                await product.save();
+            }
+        }
+
+        for (const item of productDataToSave) {
+            const product = await Product.findById(item.productId);
+            if (product) {
+                product.stock -= item.quantity;
+                await product.save();
+            }
+        }
+        const order = await Orders.findOneAndUpdate(
+            { orderId: orderId }, // Query object to find the order by orderId
+            { $set: { paymentStatus: "Received" } }, // Update to set paymentStatus to "Received"
+            { new: true } // Option to return the modified document
+        );        // const order123 = await Orders.findOne({orderId:id});
+        if(order){
+            console.log("it worked")
+            res.redirect("/orderSuccess")
+        }
+        
+        
+        //     if (!order) {
+        //         // Handle case where order with the given ID is not found
+        //     } else {
+        //         // Order updated successfully
+        //     }
+        
+        
+
+ 
+
+    }catch(error){
+        console.log(error)
+    }
+}
 
 
 const getCart = async (req, res) => {
@@ -299,7 +364,7 @@ const placeOrder = async (req, res) => {
         let productDataToSave
         console.log("Req buy now id :", req.session)
         console.log("Req buy now id :", req.session.buyNowProductId)
-        console
+        
         if (req.session.buyNowProductId) {
             // productDataToSave = await Product.find({_id:req.session.buyNowProductId})
             productDataToSave = {
@@ -510,6 +575,7 @@ module.exports = {
     clearCart,
     applyCoupon,
     onlinePay,
-    removeCoupon
+    removeCoupon,
+    saveOrder
 }
 

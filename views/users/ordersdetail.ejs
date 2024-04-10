@@ -132,7 +132,7 @@
                                     <div class="info"><%= order.productId.Bookname %></div>
                                 </a>
                             </td>
-                            <td><%= order.productId.saleprice %></td>
+                            <td>$<%= order.productId.saleprice %></td>
                             <td><%= order.quantity %></td>
                          
                             
@@ -149,7 +149,7 @@
                       <td colspan="5">
     <article class="float-end">
         <dl class="dlist">
-         <h5>   <dt style="font-weight: bold; color: #333;">Grandtotal:$<%= orderData.totalAmount%></dt></h5 >
+         <h5><dt style="font-weight: bold; color: #333;">Grandtotal:$<%= orderData.totalAmount%></dt></h5 >
         </dl>
     </article>
     <% } %>
