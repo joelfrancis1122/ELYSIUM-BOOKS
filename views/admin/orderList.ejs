@@ -106,7 +106,7 @@
                                       id="deliveryStatusDropdown_<%= order._id %>" data-bs-toggle="dropdown" aria-expanded="false"
                                       <% if (order.orderStatus === 'Delivered' || order.orderStatus === 'Returned' || order.orderStatus === 'Cancelled') { %>
                                           disabled
-                                      <% } %>>
+                                      <% } %>
                                     <b>Status</b>  
                                   </button>
                           
@@ -155,7 +155,7 @@
               <script>
                 document.write(new Date().getFullYear());
               </script>
-              ©,ELYSIUM-BOOKS.
+              ©,BOOK-SAW
             </div>
             <div class="col-sm-6">
               <div class="text-sm-end">All rights reserved</div>
@@ -190,10 +190,8 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
-      $(document).ready(function () {
-        new DataTable('#example');
-
-      })
+     new DataTable('#example', {
+      order: [[0, 'asc']] });
     </script>
 
 

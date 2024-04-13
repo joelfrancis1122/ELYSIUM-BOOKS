@@ -84,6 +84,7 @@
                                   <%= categories[i].Description %>
                                 </b></td>
                               <td>
+                                
                                 <% if (categories[i].is_Active) { %>
                                   <span class="badge rounded-pill alert-success">Active</span>
                                   <% } else { %>
@@ -97,6 +98,12 @@
                                                       
                         
                                 <td>
+                                  <a href="/admin/loadeditSubCategory?id=<%=categories[i]._id%>"
+                                    class="btn btn-sm font-sm btn-light rounded"
+                                    style="background-color: #007bff; color: #fff; margin-left: 5px;">
+                                    <i class="material-icons md-edit"></i>
+                                    Edit
+                                  </a>
 
                                 <% if (categories[i].is_Active) { %>
                                   <a href="#" onclick="confirmBlock('<%= categories[i]._id %>')"
@@ -132,7 +139,7 @@
               <script>
                 document.write(new Date().getFullYear());
               </script>
-              ©,ELYSIUM-BOOKS.
+              ©,BOOK-SAW
             </div>
             <div class="col-sm-6">
               <div class="text-sm-end">All rights reserved</div>
@@ -235,7 +242,7 @@
 
           if (inputValue === "") {
             event.preventDefault(); 
-            toastr.warning("Category name cannot be empty."); 
+            toastr.warning("SubCategory name cannot be empty."); 
           } else if (!inputValue.replace(/\s/g, '').length) {
             event.preventDefault();
             toastr.warning("Category name cannot contain only spaces."); 

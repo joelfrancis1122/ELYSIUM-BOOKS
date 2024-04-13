@@ -2,7 +2,7 @@ const User = require('../models/userModel')
 const Cart = require('../models/cartModel')
 const Product = require('../models/productModel')
 const Wishlist = require('../models/wishlistModel')
-
+const Wallet = require('../models/walletModel')
 const Coupon = require('../models/couponModel')
 const Address = require('../models/addressModel')
 const Orders = require('../models/orderModel')
@@ -15,11 +15,10 @@ let instance = new Razorpay({
 });
 
 
-
 const onlinePay = async (req, res) => {
     try {
         const userId = req.session.user;
-        const cart = await Cart.findOne({ userId: userId });
+        const cart = await Cart.findOne({ userId });
         const address = await Address.findOne({ _id: req.body.address });
 
         function generateOrderId() {
@@ -38,12 +37,16 @@ const onlinePay = async (req, res) => {
         let productDataToSave;
 
         if (req.session.buyNowProductId) {
-            productDataToSave = [{
-                productId: req.session.buyNowProductId,
-                quantity: 1
-            }];
-            delete req.session.buyNowProductId;
-            await req.session.save();
+            const product = await Product.findById(req.session.buyNowProductId);
+            if (product) {
+                productDataToSave = [{
+                    productId: product._id,
+                    quantity: 1,
+                    price: product.saleprice
+                }];
+                delete req.session.buyNowProductId;
+                await req.session.save();
+            }
         } else {
             productDataToSave = cart.product;
         }
@@ -52,29 +55,30 @@ const onlinePay = async (req, res) => {
             productDataToSave = [productDataToSave]; // Convert to array if it's not already
         }
 
-     
-
         const order = new Orders({
             orderId: newOrderId,
-            userId: userId,
+            userId,
             paymentMethod: req.body.paymentMethod,
             paymentStatus: req.body.paymentStatus,
             totalAmount: req.body.amount,
             product: productDataToSave,
-            address: address
+            address
         });
-
+        
         await order.save();
 
-        let amounts = req.body.amount * 84;
+        // Calculate the total amount in INR
+        const amounts = req.body.amount * 84;
         const order2 = await instance.orders.create({
             amount: amounts * 100,
             currency: "INR",
             receipt: req.session.user
         });
-console.log(order)
-console.log(order2)
-        res.json({ order2 ,order});
+
+        console.log(order);
+        console.log(order2);
+
+        res.json({ order2, order });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -82,27 +86,26 @@ console.log(order2)
 };
 
 
-
-const saveOrder = async(req,res)=>{
-    try{
-console.log("workedasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss")
-
-        const orderId = req.body.orderId
+const saveOrder = async(req, res) => {
+    try {
+        const orderId = req.body.orderId;
         const userId = req.session.user;
 
-        const cart = await Cart.findOne({ userId: userId });
-
-
+        const cart = await Cart.findOne({ userId });
 
         let productDataToSave;
 
         if (req.session.buyNowProductId) {
-            productDataToSave = [{
-                productId: req.session.buyNowProductId,
-                quantity: 1
-            }];
-            delete req.session.buyNowProductId;
-            await req.session.save();
+            const product = await Product.findById(req.session.buyNowProductId);
+            if (product) {
+                productDataToSave = [{
+                    productId: product._id,
+                    quantity: 1,
+                    price: product.saleprice
+                }];
+                delete req.session.buyNowProductId;
+                await req.session.save();
+            }
         } else {
             productDataToSave = cart.product;
         }
@@ -111,46 +114,34 @@ console.log("workedassssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
             productDataToSave = [productDataToSave]; // Convert to array if it's not already
         }
 
+        // Loop through each product in productDataToSave
         for (const item of productDataToSave) {
             const product = await Product.findById(item.productId);
             if (product) {
+                // Update stock of the product
                 product.stock -= item.quantity;
                 await product.save();
             }
         }
 
-        for (const item of productDataToSave) {
-            const product = await Product.findById(item.productId);
-            if (product) {
-                product.stock -= item.quantity;
-                await product.save();
-            }
-        }
         const order = await Orders.findOneAndUpdate(
-            { orderId: orderId }, // Query object to find the order by orderId
+            { orderId }, // Query object to find the order by orderId
             { $set: { paymentStatus: "Received" } }, // Update to set paymentStatus to "Received"
             { new: true } // Option to return the modified document
-        );        // const order123 = await Orders.findOne({orderId:id});
-        if(order){
-            console.log("it worked")
-            res.redirect("/orderSuccess")
+        );
+
+        if (order) {
+            console.log("Order payment status updated successfully");
+            res.redirect("/orderSuccess");
+        } else {
+            console.log("Failed to update order payment status");
+            res.status(404).send("Order not found");
         }
-        
-        
-        //     if (!order) {
-        //         // Handle case where order with the given ID is not found
-        //     } else {
-        //         // Order updated successfully
-        //     }
-        
-        
-
- 
-
-    }catch(error){
-        console.log(error)
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
 
 
 const getCart = async (req, res) => {
@@ -168,6 +159,7 @@ const getCart = async (req, res) => {
         console.log(error.message)
     }
 }
+
 
 const addToCart = async (req, res) => {
     try {
@@ -194,7 +186,7 @@ const addToCart = async (req, res) => {
             }
             cart.product[existingProductIndex].quantity = totalQuantity;
         } else {
-            cart.product.push({ productId, quantity: 1 });
+            cart.product.push({ productId, quantity: 1, price: product.saleprice });
         }
 
         await cart.save();
@@ -305,7 +297,7 @@ const loadCheckOut1 = async (req, res) => {
     try {
         let userId = req.session.user;
         let id = req.query.id
-        req.session.buyNowProductId = id
+        req.session.buyNowProductId = id                           //buyNowProductId
         req.session.save()
         console.log("Req buy now id :", req.session)
         console.log("direct product buy id :", id)
@@ -326,16 +318,16 @@ const loadCheckOut1 = async (req, res) => {
     }
 }
 
-
 const placeOrder = async (req, res) => {
     try {
-        console.log("inside placeorder=++++++++++++++++++++")
-        const userId = req.session.user
+        console.log("inside placeorder=++++++++++++++++++++", req.body);
+        const userId = req.session.user;
         const { couponCode } = req.body;
-        const coupon = await Coupon.findOne({ couponCode: couponCode, isActive: true, expirationDate: { $gte: Date.now() } });
+        const coupon = await Coupon.findOne({ couponCode, isActive: true, expirationDate: { $gte: Date.now() } });
 
-        const cart = await Cart.findOne({ userId: userId });
+        const cart = await Cart.findOne({ userId });
         const address = await Address.findOne({ _id: req.body.address });
+
         function generateOrderId() {
             const timestamp = Date.now().toString();
             const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -347,70 +339,99 @@ const placeOrder = async (req, res) => {
             return orderId + timestamp.slice(-6);
         }
 
-
         const newOrderId = generateOrderId();
 
-
         const orderItems = cart.product;
-        console.log("coupon", coupon)
-        // Update product stock for each item in the order
-        for (const item of orderItems) {
-            const product = await Product.findById(item.productId);
-            if (product) {
-                product.stock -= item.quantity; // Subtract order quantity from product stock
-                await product.save();
-            }
-        }
-        let productDataToSave
-        console.log("Req buy now id :", req.session)
-        console.log("Req buy now id :", req.session.buyNowProductId)
-        
-        if (req.session.buyNowProductId) {
-            // productDataToSave = await Product.find({_id:req.session.buyNowProductId})
-            productDataToSave = {
-                productId: req.session.buyNowProductId,
-                quantity: 1
-            }
-            delete req.session.buyNowProductId;
-            await req.session.save();
-        } else {
-            productDataToSave = cart.product
 
+        let paymentStatus = "Pending"; // default payment status
+
+        if (req.body.paymentMethod === "Wallet") {
+            paymentStatus = "Received";
+
+            // Update the wallet balance and history
+            const userWallet = await Wallet.findOne({ userId });
+            if (userWallet && userWallet.balance >= req.body.amount) {
+                userWallet.balance -= req.body.amount;
+                userWallet.history.push({
+                    amount: req.body.amount,
+                    type: 'debit'
+                });
+                await userWallet.save();
+            } else {
+                return res.json({ message: "Insufficient wallet balance" });
+            }
         }
-        console.log("Product data ::", productDataToSave)
+
+
+        let productDataToSave;
+
+        if (req.session.buyNowProductId) {
+            const product = await Product.findById(req.session.buyNowProductId);
+            if (product) {
+                productDataToSave = {
+                    productId: product._id,
+                    quantity: 1,
+                    price: product.saleprice
+                };
+        
+                // Decrease product quantity by 1
+                if (product.stock > 0) {
+                    product.stock -= 1;
+                    await product.save();
+                }
+        
+                delete req.session.buyNowProductId;
+                await req.session.save();
+            }
+        } else {
+            productDataToSave = cart.product;
+        }
+
+        console.log("Product data ::", productDataToSave);
+
+       
+
         if (!coupon) {
             const order = new Orders({
                 orderId: newOrderId,
-                userId: userId,
+                userId,
                 paymentMethod: req.body.paymentMethod,
+                paymentStatus, // set payment status
                 totalAmount: req.body.amount,
                 product: productDataToSave,
-                // product: cart.product,
-                address: address,
-            })
-            await order.save()
+                address,
+            });
+            await order.save();
+            console.log("---------------------------------paymentStatus-----------------------------------------------------", order);
         } else {
-
             const order = new Orders({
                 orderId: newOrderId,
-                userId: userId,
+                userId,
                 paymentMethod: req.body.paymentMethod,
+                paymentStatus, // set payment status
                 totalAmount: req.body.amount,
                 product: productDataToSave,
-                address: address,
+                address,
                 couponDiscount: coupon.discountAmount
             });
-            await order.save()
+            await order.save();
         }
+            // Update product stock for each item in the order
+            for (const item of orderItems) {
+                const product = await Product.findById(item.productId);
+                if (product) {
+                    product.stock -= item.quantity; // Subtract order quantity from product stock
+                    await product.save();
+                }
+            }
 
-
-        res.status(200).json({ message: "Order Placed Successfully" })
-        res.render("orderSuccess")
+        res.status(200).json({ message: "Order Placed Successfully" });
+        // Render order success page
+        // res.render("orderSuccess");
     } catch (error) {
         console.error(error);
     }
 };
-
 
 
 
@@ -557,8 +578,44 @@ const clearCart = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while clearing the cart' });
     }
 };
+const googleAuth = async (req, res) => {
+    try {
+        console.log("sdadadasd");
+        const user = req.body.user;
+        console.log("user ",user);
+        const email = user.email
+        // Check if user already exists
+        let userData;
+        const existingUser = await User.findOne({ email });
 
+        if (existingUser) {
+            // User already exists, set session for existing user
+            req.session.user = existingUser._id;
+            userData = existingUser;
+        } else {
+            // Create a new user
+            const newuser = new User({
+                name: user.displayName,
+                email: user.email,
+                mobile:user.phoneNumber
+            });
 
+            userData = await newuser.save();
+        }
+
+        // If user data is successfully obtained, respond with success message
+        if (userData) {
+            console.log("User data saved successfully");
+            return res.json({ success: true, message: "User data saved successfully" });
+        } else {
+            // If user data retrieval fails, render registration page with error message
+            return res.render("registeration", { errmessage: "." });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+};
 
 
 module.exports = {
@@ -576,6 +633,7 @@ module.exports = {
     applyCoupon,
     onlinePay,
     removeCoupon,
-    saveOrder
+    saveOrder,
+    googleAuth
 }
 

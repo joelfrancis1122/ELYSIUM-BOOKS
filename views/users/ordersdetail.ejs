@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>ELYSIUM-BOOKS</title>
+  <title>BOOKSAW</title>
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,7 +13,7 @@
   <meta property="og:url" content="" />
   <meta property="og:image" content="" />
   <!-- Favicon -->
-  <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png" />
+  <link rel="shortcut icon" type="image/x-icon" href="/public/spellbook.png" />
   <!-- Template CSS -->
   <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
 </head>
@@ -132,13 +132,13 @@
                                     <div class="info"><%= order.productId.Bookname %></div>
                                 </a>
                             </td>
-                            <td>$<%= order.productId.saleprice %></td>
+                            <td>$<%= order.price%></td>
                             <td><%= order.quantity %></td>
                          
                             
-                            <td class="text-end">$<%= (order.quantity * order.productId.saleprice).toFixed(2) %></td>
+                            <td class="text-end">$<%= (order.quantity * order.price).toFixed(2) %></td>
                         </tr>
-                        <% grandTotal += order.quantity * order.productId.saleprice; %>
+                        <% grandTotal += order.quantity * order.price; %>
                         <% } %>
 
                         <% if(orderData ) { %>
@@ -193,7 +193,7 @@
           <script>
             document.write(new Date().getFullYear());
           </script>
-          ©,ELYSIUM-BOOKS.
+          ©,BOOKSAW.
         </div>
         <div class="col-sm-6">
           <div class="text-sm-end">All rights reserved</div>

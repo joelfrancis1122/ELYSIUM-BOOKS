@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const CategorySchema=mongoose.Schema({
-    categoryName:{type:String,required:true,unique:true},
+    categoryName:{type:String,required:true},
     Description:{type:String,required:true},
     offer:{type:Number,default:0},
     expirationDate: { type: Date},

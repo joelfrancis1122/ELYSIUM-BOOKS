@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const userSchema=mongoose.Schema({
-    name:{type:String,required:true},
-    email:{type:String,required:true,unique:true},
-    mobile:{type:String,required:true},
-    password:{type:String,required:true},
+    name:{type:String,required:false},
+    email:{type:String,},
+    mobile:{type:String,required:false},
+    password:{type:String,required:false},
     is_admin:{type:Boolean,required:false,default:false},
     is_active:{type:Boolean,required:false,default:true},
 })

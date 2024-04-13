@@ -71,7 +71,23 @@ userRoute.get("/getWishlist", Auth.isLogin, userControllers.getWishlist)
 userRoute.post("/removeWish", Auth.isLogin, userControllers.removeWish)
 userRoute.get("/orderSuccess", Auth.isLogin, userControllers.orderSuccess)
 userRoute.patch("/saveOrder", Auth.isLogin, cartControllers.saveOrder)
-
+userRoute.post("/googleAuth", cartControllers.googleAuth)
+// const express = require('express')
+const app = express();
+app.get('/orders123', (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Get the current page from the query string
+    const limit = 10; // Number of orders to display per page
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+  
+    const orders = []; // Fetch the orders from your data source
+    const totalOrders = orders.length;
+    const totalPages = Math.ceil(totalOrders / limit);
+  
+    const paginatedOrders = orders.slice(startIndex, endIndex);
+  
+    res.render('orders', { orders: paginatedOrders, currentPage: page, totalPages });
+  });
 
 userRoute.post("/googleAuth", Auth.isLogin, userControllers.googleAuth)
 

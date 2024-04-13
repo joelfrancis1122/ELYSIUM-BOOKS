@@ -10,11 +10,11 @@ const Wishlist = require('../models/wishlistModel')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer')
 const Coupon = require('../models/couponModel')
-const Razorpay = require('razorpay');
 const cron = require('node-cron');
 const Quote = require('inspirational-quotes');
 const randomQuotes = require('random-quotes');
 
+const Razorpay = require('razorpay');
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
 let instance = new Razorpay({
@@ -67,7 +67,7 @@ const loadGuest = async (req, res) => {
             }
         ]).limit(12)
         const quote = Quote.getQuote();
-console.log(quote,"asdasdasdasd")
+// console.log(quote,"asdasdasdasd")
 
 
         res.render('home', { name: null, search: null, product: productData, search: search,quote }); 
@@ -137,7 +137,7 @@ const loadHome = async (req, res) => {
         ]).limit(12);
 
         const quote = Quote.getQuote() 
-        console.log(" afgyaf" , quote)
+        // console.log(" afgyaf" , quote)
 
   
   
@@ -310,7 +310,6 @@ const shopProduct = async (req, res) => {
     }
 }
 
-
 const loadProfile = async (req, res) => {
     try {
         const userId = req.session.user;
@@ -331,13 +330,34 @@ const loadProfile = async (req, res) => {
         const cartLength = cartData ? cartData.product.length : 0;
         const wishlistLength = wishlistData ? wishlistData.product.length : 0;
 
-        res.render('account', { name: userData.name, email: userData.email, addresses: addressData, orders: Order, cartLength, coupons, wallet, wishlistLength });
+        // Pagination
+        const page = parseInt(req.query.page) || 1; // Get the current page from the query string
+        const limit = 5; // Number of orders to display per page
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const totalOrders = Order.length;
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        const paginatedOrders = Order.slice(startIndex, endIndex);
+
+        res.render('account', {
+            name: userData.name,
+            email: userData.email,
+            addresses: addressData,
+            orders: paginatedOrders,
+            cartLength,
+            coupons,
+            wallet,
+            wishlistLength,
+            currentPage: page,
+            totalPages: totalPages
+        });
     } catch (error) {
         console.error(error);
         res.redirect('/');
     }
 }
-
 
 
 
@@ -377,54 +397,73 @@ const loadInvoice =  async(req,res)=>{
         console.error(error)
     }
 }
-
 const loadShop = async (req, res) => {
     try {
-      const categories = await Category.find({ is_Active: true });
-      const userId = req.session.user;
-      let { query: search, category, filter } = req.query;
-      const userData = await User.findOne({ _id: userId });
-      const cartData = await Cart.findOne({ userId: userId });
-      const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId');
-      const cartLength = cartData ? cartData.product.length : 0;
-      const wishlistLength = wishlistData ? wishlistData.product.length : 0;
-  
-      let products;
-      const query = { is_Active: true };
-  
-      if (search) {
-        query.Bookname = { $regex: new RegExp(search, "i") };
-      }
-  
-      if (category) {
-        const categoryObj = await Category.findOne({ categoryName: category, is_Active: true });
-        if (!categoryObj) {
-          return res.status(404).send('Category not found');
+        const categories = await Category.find({ is_Active: true });
+        const userId = req.session.user;
+        let { query: search, category, filter } = req.query;
+        const userData = await User.findOne({ _id: userId });
+        const cartData = await Cart.findOne({ userId: userId });
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId');
+        const cartLength = cartData ? cartData.product.length : 0;
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0;
+
+        let products;
+        const query = { is_Active: true };
+
+        if (search) {
+            query.Bookname = { $regex: new RegExp(search, "i") };
         }
-        query.Categories = categoryObj._id;
-      }
-  
-      if (filter) {
-        if (filter == 'low-high') {
-          products = await Product.find(query).sort({ saleprice: 1 });
-        } else if (filter == 'high-low') {
-          products = await Product.find(query).sort({ saleprice: -1 });
+
+        if (category) {
+            const categoryObj = await Category.findOne({ categoryName: category, is_Active: true });
+            if (!categoryObj) {
+                return res.status(404).send('Category not found');
+            }
+            query.Categories = categoryObj._id;
         }
-      } else {
-        products = await Product.aggregate([
-          { $match: query },
-          { $lookup: { from: 'categories', localField: 'Categories', foreignField: '_id', as: 'Categories' } },
-          { $unwind: '$Categories' },
-          { $match: { 'Categories.is_Active': true } }
-        ]);
-      }
-  
-      res.render('shop', { product: products, categories, name: userData.name, search, cartLength, wishlistLength });
+
+        if (filter) {
+            if (filter == 'low-high') {
+                products = await Product.find(query).sort({ saleprice: 1 });
+            } else if (filter == 'high-low') {
+                products = await Product.find(query).sort({ saleprice: -1 });
+            }
+        } else {
+            products = await Product.aggregate([
+                { $match: query },
+                { $lookup: { from: 'categories', localField: 'Categories', foreignField: '_id', as: 'Categories' } },
+                { $unwind: '$Categories' },
+                { $match: { 'Categories.is_Active': true } }
+            ]);
+        }
+
+        const page = parseInt(req.query.page) || 1; // Get the current page from the query string
+        const limit = 12; // Number of products to display per page
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const totalProducts = products.length;
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const paginatedProducts = products.slice(startIndex, endIndex);
+
+        res.render('shop', {
+            product: paginatedProducts,
+            categories,
+            name: userData.name,
+            search,
+            cartLength,
+            wishlistLength,
+            currentPage: page,
+            totalPages: totalPages
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
+        console.error(error);
+        res.status(500).send("Internal Server Error");
     }
-  };
+};
+
 
 const profileEdit = async (req, res) => {
     try {
@@ -590,21 +629,53 @@ const removeAddress = async (req, res) => {
 
 const OrderCancelled = async (req, res) => {
     try {
-        console.log("333333saaaaaaa333333")
+        console.log("333333saaaaaaa333333");
 
         const orderId = req.query.id;
         const userId = req.session.user;
-        const orderCancelled = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Cancelled' } });
-        const wallet = await Wallet.findOne({ userId: userId });
+
+        // Find the canceled order
         const cancelledOrder = await Orders.findById(orderId);
-        if (cancelledOrder && wallet) {
+        
+        if (!cancelledOrder) {
+            throw new Error('Cancelled order not found');
+        }
+
+        // Increase the product stock for each item in the canceled order
+        const orderItems = cancelledOrder.product;
+
+        for (const item of orderItems) {
+            const product = await Product.findById(item.productId);
+
+            if (product) {
+                product.stock += item.quantity; // Increase product stock
+                await product.save();
+            }
+        }
+
+        // Update order status to 'Cancelled'
+        const orderCancelled = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Cancelled' } });
+        
+        // Check payment method
+        if (cancelledOrder.paymentMethod !== "Cash on delivery") {
+            const wallet = await Wallet.findOne({ userId: userId });
+
+            if (!wallet) {
+                throw new Error('User wallet not found');
+            }
+
             const totalAmount = parseFloat(cancelledOrder.totalAmount);
             wallet.balance += totalAmount;
+            
+            wallet.history.push({
+                amount: totalAmount,
+                type: 'credit'
+            });
+
             await wallet.save();
-            res.redirect('/loadProfile');
-        } else {
-            throw new Error('Cancelled order or user wallet not found');
         }
+
+        res.redirect('/loadProfile');
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -623,10 +694,27 @@ const orderReturn = async (req, res) => {
         const orderReturned = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Returned' } });
         const wallet = await Wallet.findOne({ userId: userId });
         const returnedOrder = await Orders.findById( orderId );
+     
         console.log("333333333333")
+        const orderItems = returnedOrder.product;
+
+        for (const item of orderItems) {
+            const product = await Product.findById(item.productId);
+
+            if (product) {
+                product.stock += item.quantity; // Increase product stock
+                await product.save();
+            }
+        }
         if (returnedOrder && wallet) {
             const totalAmount = parseFloat(returnedOrder.totalAmount);
             wallet.balance += totalAmount;
+            wallet.history.push({
+                amount: totalAmount,
+                type: 'credit'
+            });
+            await wallet.save();
+    
             await wallet.save();
             res.redirect('/loadProfile');
         } else {
@@ -649,84 +737,27 @@ const orderDetail = async (req, res) => {
 }
 
 
-
-// const categorySearch = async (req, res) => {
-//     try {
-//         const categories = await Category.find();
-//         const userId = req.session.user;
-//         const search = req.query.query || "";
-//         const userData = await User.findOne({ _id: userId });
-//         const regex = new RegExp(search, 'i');
-//         const category = req.query.category;
-//         let products;
-//         if (category) {
-//             const categoryObj = await Category.findOne({ categoryName: category });
-//             if (!categoryObj) {
-//                 return res.status(404).send('Category not found');
-//             }
-//             products = await Product.find({ Categories: categoryObj._id, is_Active: true }).populate('Categories');
-//         } else {
-//             if (req.query.filter) {
-//                 if (req.query.filter == 'low-high') {
-//                     products = await Product.find({ is_Active: true }).sort({ saleprice: 1 });
-//                 } else if (req.query.filter == 'high-low') {
-//                     products = await Product.find({ is_Active: true }).sort({ saleprice: -1 });
-//                 }
-//             } else {
-//                 products = await Product.aggregate([
-//                     {
-//                         $match: {
-//                             is_Active: true,
-//                             Bookname: { $regex: new RegExp(search, "i") }
-//                         }
-//                     },
-//                     {
-//                         $lookup: {
-//                             from: 'categories',
-//                             localField: 'Categories',
-//                             foreignField: '_id',
-//                             as: 'Categories'
-//                         }
-//                     },
-//                     {
-//                         $unwind: '$Categories'
-//                     },
-//                     {
-//                         $match: { 'Categories.is_Active': true }
-//                     }
-//                 ]);
-//             }
-//         }
-//         res.render('shop', { product: products, categories, name: userData.name, search: search });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send("Internal Server Error");
-//     }
-// }
-
 const addTowallet = async (req, res) => {
     try {
-        let amount = req.body.amount * 84; 
-
+        let amount = req.body.amount ; 
         const userId = req.session.user;
-
         // Create Razorpay order
         const order = await instance.orders.create({
-            amount: amount * 100, 
-            currency: "INR",
+            amount: amount*100, 
+            currency: "USD",    
             receipt: req.session.user
         });
 
         // Update wallet balance
         let wallet = await Wallet.findOne({ userId });
         if (!wallet) {
-            wallet = new Wallet({ userId, balance: parseFloat(amount) / 84 });
+            wallet = new Wallet({ userId, balance: parseFloat(amount) });
         } else {
-            wallet.balance += parseFloat(amount) / 84;
+            wallet.balance += parseFloat(amount) ;
 
             // Add transaction to history
             wallet.history.push({
-                amount: parseFloat(amount) / 84,
+                amount: parseFloat(amount) ,
                 type: 'credit',
 
                 createdAt: new Date()
@@ -812,7 +843,10 @@ const removeWish = async (req, res) => {
 
 const orderSuccess = async(req,res)=>{
     try{
-res.render("orderSuccess")
+        let userId = req.session.user;
+        const userData = await User.findOne({ _id: userId });
+
+res.render("orderSuccess",{name:userData.name})
     }catch(error){
         console.error(error)
     }

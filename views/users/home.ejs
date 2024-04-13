@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ELYSIUM-BOOKS</title>
+    <title>BOOKSAW</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,7 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/spellbook.png">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/public/assets/css/maind134.css?v=3.4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -64,7 +64,7 @@
             <div class="mobile-header-wrapper-inner">
                 <div class="mobile-header-top">
                     <div class="mobile-header-logo">
-                        <a href="#"><img src="/public/Elysium.png" alt="ldogo"></a>
+                        <a href="#"><img src="/public/main-logo (1).png" alt="ldogo"></a>
                     </div>
                     <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                         <button class="close-style search-close">
@@ -220,36 +220,23 @@
             <section class="home-slider position-relative pt-50">
                 <div class="hero-slider-1 dot-style-1 dot-style-1-position-1">
 
-                    <!-- <div class="single-hero-slider single-animation-wrap">
-                    <div class="container">
-                        <div class="row align-items-center slider-animated-1">
-                            <div class="col-lg-5 col-md-6">
-                                <div class="hero-slider-content-2">
-                                    <h4 class="animated">Trade-in offer</h4>
-                                    <h2 class="animated fw-900">Supper value deals</h2>
-                                    <h1 class="animated fw-900 text-brand">On all Books</h1>
-                                    <p class="animated">Save more with coupons & up to 70% off</p>
-                                    <a class="animated btn btn-brush btn-brush-3" href="shop-product-right.html"> Shop Now </a>
-                                </div>
-                            </div>
-                            <div class="col-lg-7 col-md-6">
-                                <div class="single-slider-img single-slider-img-1">
-                                    <img class="animated slider-1-1" src="/public/assets/imgs/slider/slider-1.png" alt="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
                 <% if (quote) { %>
+                    
                     <div class="single-hero-slider single-animation-wrap">
                         <div class="container">
                             <div class="row align-items-center slider-animated-1">
                                 <div class="col-lg-5 col-md-6">
                                     <div class="hero-slider-content-2">
-                                        <h4 class="animated fw-900"><%= quote.text %></h4>
-                                        <h6 class="animated fw-900 text-8">- <%= quote.author %></h6>
+                                        <h4 class="animated fw-900" id="quote"><%= quote.text %></h4>
+                                        <h6 class="animated fw-900 text-8">-Midhun Ambadan</h6>
+                                        <p class="animated">NonFiction,Story,Crime...</p>
 
-                                      
+                                        <a class="btn btn-futuristic" style="display: inline-block; position: relative; padding: 16px 40px; font-size: 18px; font-weight: 700; text-decoration: none; color: #fff; border-radius: 40px; overflow: hidden; transition: all 0.4s ease-in-out;" href="/loadShop">
+                                            <div class="btn-content" style="position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;">
+                                              <span class="btn-text" style="text-transform: uppercase; letter-spacing: 2px; transition: all 0.4s ease-in-out;">Shop Now</span>
+                                              <span class="btn-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #00d9ff, #00b3ff, #0066ff); opacity: 0; filter: blur(20px); transition: all 0.4s ease-in-out;"></span>
+                                            </div>
+                                          </a>
                                     </div>
                                 </div>
                                 <div class="col-lg-7 col-md-6">
@@ -270,17 +257,21 @@
                             <div class="row align-items-center slider-animated-1">
                                 <div class="col-lg-5 col-md-6">
                                     <div class="hero-slider-content-2">
-                                        <h4 class="animated fw-900" id="quote"><%= quote.text %></h4>
-                                         <h6 class="animated fw-900 text-8">-Midhun Ambadan</h6>
+                                        <h4 class="animated fw-900" id="quote1"><%= quote.text %></h4>
+                                        <h6 class="animated fw-900 text-8">-Ashidha Muneer</h6>
                                         <p class="animated">Fiction,Horror,History...</p>
-                                        <a class="animated btn btn-brush btn-brush-1" href="/loadShop">
-                                            Shop Now </a>
+                                        <a class="btn btn-futuristic" style="display: inline-block; position: relative; padding: 16px 40px; font-size: 18px; font-weight: 700; text-decoration: none; color: #fff; border-radius: 40px; overflow: hidden; transition: all 0.4s ease-in-out;" href="/loadShop">
+                                            <div class="btn-content" style="position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;">
+                                              <span class="btn-text" style="text-transform: uppercase; letter-spacing: 2px; transition: all 0.4s ease-in-out;">Shop Now</span>
+                                              <span class="btn-glow" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #00d9ff, #00b3ff, #0066ff); opacity: 0; filter: blur(20px); transition: all 0.4s ease-in-out;"></span>
+                                            </div>
+                                          </a>
                                     </div>
                                 </div>
                                 <div class="col-lg-7 col-md-6">
                                     <div class="single-slider-img single-slider-img-1">
-                                        <img class="animated slider-1-3" src="/public/assets/imgs/slider/slider-3.png"
-                                            alt="">
+                                        <img class="animated slider-1-3" src="/public/photo_2024-04-09_12-38-29.jpg">
+                                        <img class="animated slider-1-3" src="/public/photo_2024-04-09_12-38-19.jpg"alt="" style="margin-right: 290px;">
                                     </div>
                                 </div>
                             </div>
@@ -296,37 +287,32 @@
                     <div class="row">
                         <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
                             <div class="banner-features wow fadeIn animated hover-up">
-                                <img src="/public/assets/imgs/theme/icons/feature-1.png" alt="">
-                                <h4 class="bg-1">Free Shipping</h4>
+                                <img src="/public/client-image3.png" alt=""  style="height: 95px">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
                             <div class="banner-features wow fadeIn animated hover-up">
-                                <img src="/public/assets/imgs/theme/icons/feature-2.png" alt="">
-                                <h4 class="bg-3">Online Order</h4>
+                                <img src="/public/client-image1.png" alt="" style="height: 95px;">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
                             <div class="banner-features wow fadeIn animated hover-up">
-                                <img src="/public/assets/imgs/theme/icons/feature-3.png" alt="">
-                                <h4 class="bg-2">Save Money</h4>
+                                <img src="/public/client-image2.png" alt="">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
                             <div class="banner-features wow fadeIn animated hover-up">
-                                <img src="/public/assets/imgs/theme/icons/feature-4.png" alt="">
-                                <h4 class="bg-4">Promotions</h4>
+                                <img src="/public/client-image4.png" alt="" style="height: 95px;">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
                             <div class="banner-features wow fadeIn animated hover-up">
-                                <img src="/public/assets/imgs/theme/icons/feature-5.png" alt="">
-                                <h4 class="bg-5">Happy Sell</h4>
+                                <img src="/public/client-image5.png" alt="">
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-4 mb-md-3 mb-lg-0">
                             <div class="banner-features wow fadeIn animated hover-up">
-                                <img src="/public/assets/imgs/theme/icons/feature-6.png" alt="">
+                                <img src="/public/assets/imgs/theme/icons/feature-6.png" alt="" style="height: 70px">
                                 <h4 class="bg-6">24/7 Support</h4>
                             </div>
                         </div>
@@ -338,23 +324,23 @@
                 <div class="container">
                     <div class="tab-header">
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
+                            <!-- <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="nav-tab-one" data-bs-toggle="tab"
                                     data-bs-target="#tab-one" type="button" role="tab" aria-controls="tab-one"
                                     aria-selected="true">Featured</button>
-                            </li>
+                            </li> -->
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="nav-tab-two" data-bs-toggle="tab" data-bs-target="#tab-two"
                                     type="button" role="tab" aria-controls="tab-two"
                                     aria-selected="false">Popular</button>
                             </li>
-                            <li class="nav-item" role="presentation">
+                            <!-- <li class="nav-item" role="presentation">
                                 <button class="nav-link" id="nav-tab-three" data-bs-toggle="tab"
                                     data-bs-target="#tab-three" type="button" role="tab" aria-controls="tab-three"
                                     aria-selected="false">New added</button>
-                            </li>
+                            </li> -->
                         </ul>
-                        <a href="#" class="view-more d-none d-md-flex">View More<i
+                        <a href="/loadShop" class="view-more d-none d-md-flex">View More<i
                                 class="fi-rs-angle-double-small-right"></i></a>
                     </div>
                     <!--End nav-tabs-->
@@ -654,7 +640,7 @@
                 <div class="preloader d-flex align-items-center justify-content-center">
                     <div class="preloader-inner position-relative">
                         <div class="text-center">
-                            <h5 class="mb-10">Now Loading</h5>
+                            <h5 class="mb-10">Loading BookSaw</h5>
                             <div class="loader">
                                 <div class="bar bar1"></div>
                                 <div class="bar bar2"></div>
@@ -694,18 +680,31 @@
             
             <script>
                 const quote =document.getElementById("quote")
+                const quote1 =document.getElementById("quote1")
                 const author =document.getElementById("author")
  const api_url = "https://api.quotable.io/random"
                 async function getquote(url){
                     const response = await fetch(url);
                     var data = await response.json()
                     quote.innerHTML = data.content
+                    quote1.innerHTML = data.content
                     author.innerHTML = data.author
 
                     }
                     getquote(api_url)
                 </script>
             
+
+        
+
+
+
+
+
+           
+
+
+
             <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

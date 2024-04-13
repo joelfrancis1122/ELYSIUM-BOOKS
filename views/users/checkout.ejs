@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ELYSIUM-BOOKS</title>
+    <title>BOOKSAW</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,7 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/spellbook.png">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/public/assets/css/maind134.css?v=3.4">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -111,7 +111,7 @@ body {
             <div class="mobile-header-wrapper-inner">
                 <div class="mobile-header-top">
                     <div class="mobile-header-logo">
-                        <a href="index.html"><img src="/public/assets/imgs/theme/logo.svg" alt="logo"></a>
+                        <a href="index.html"><img src="/public/main-logo (1).png" alt="logo"></a>
                     </div>
                     <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                         <button class="close-style search-close">
@@ -509,10 +509,22 @@ body {
                                                 data-bs-toggle="collapse" data-target="#checkPayment"
                                                 aria-controls="checkPayment">Razorpay</label>
                                             <div class="form-group collapse in" id="checkPayment">
-                                                <p class="text-muted mt-5">Please send your cheque to Store Name, Store
-                                                    Street, Store Town, Store State / County, Store Postcode. </p>
+                                         
                                             </div>
                                         </div>
+
+                                        <div class="custome-radio">
+                                            <input class="form-check-input" required="" type="radio"
+                                                name="payment_option" value="Wallet" id="exampleRadios6">
+                                            <label class="form-check-label" for="exampleRadios6"
+                                                data-bs-toggle="collapse" data-target="#checkPayment"
+                                                aria-controls="checkPayment">Wallet</label>
+                                            <div class="form-group collapse in" id="checkPayment">
+                                         
+                                            </div>
+                                        </div>
+
+
                                         <div class="custome-radio">
                                             <input class="form-check-input" required="" type="radio"
                                                 name="payment_option" value="Cash on delivery" id="exampleRadios5">
@@ -567,7 +579,7 @@ body {
                         <div class="col-lg-4 col-md-6">
                             <div class="widget-about font-md mb-md-5 mb-lg-0">
                                 <div class="logo logo-width-1 wow fadeIn animated">
-                                    <a href="index.html"><img src="/public/assets/imgs/theme/logo.svg" alt="logo"></a>
+                                    <a href="index.html"><img src="/public/main-logo (1).png" alt="logo"></a>
                                 </div>
                                 <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
                                 <p class="wow fadeIn animated">
@@ -635,23 +647,7 @@ body {
                     </div>
                 </div>
             </section>
-            <div class="container pb-20 wow fadeIn animated">
-                <div class="row">
-                    <div class="col-12 mb-20">
-                        <div class="footer-bottom"></div>
-                    </div>
-                    <div class="col-lg-6">
-                        <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong
-                                class="text-brand">ELYSIUM-BOOKS</strong> - HTML Ecommerce Template </p>
-                    </div>
-                    <div class="col-lg-6">
-                        <p class="text-lg-end text-start font-sm text-muted mb-0">
-                            Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights
-                            reserved
-                        </p>
-                    </div>
-                </div>
-            </div>
+          
         </footer>
         <!-- Preloader Start -->
         <div id="preloader-active">
@@ -702,6 +698,7 @@ body {
         amount: totalAmount,
         address: selectedAddress,
         couponCode: couponCode,
+        
     };
 
     let url = '';
@@ -725,7 +722,7 @@ body {
         "key": 'rzp_test_bdVGrcCwlFiIwl', // Replace with your Razorpay key ID
         "amount": data.order2.amount, // Check if the amount is correct based on your totalAmount
         "currency": 'INR', // Change the currency to match your requirements
-        "name": 'ELYSIUM_BOOKS',
+        "name": 'BOOK-SAW',
         "description": 'Purchase Description',
         "order_id": data.order2.id,
         "handler": function (response) {
@@ -736,7 +733,7 @@ body {
                 // Save the order again with updated payment status
                 fetch(`/saveOrder?id=${orderId}`, { // Pass the orderId as a query parameter
                     
-                    method: 'PATCH', // Change the method to POST
+                    method: 'PATCH', 
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -801,27 +798,35 @@ body {
                         },
                         body: JSON.stringify(orderData),
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            Swal.fire({
-                                position: "center",
-                                icon: "success",
-                                title: "Order Placed",
-                                showConfirmButton: false,
-                                timer: 2000
-                            }).then(() => {
-                                window.location.href = '/orderSuccess';
-                            });
-                            removeItem();
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            Swal.fire({
-                                icon: "error",
-                                title: "Oops...",
-                                text: "Something went wrong!",
-                            });
-                        });
+                    .then(response => response.json())
+.then(data => {
+    if (data.message === "Insufficient wallet balance") {
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Insufficient wallet balance!",
+        });
+    } else {
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Order Placed",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = '/orderSuccess';
+        });
+        removeItem();
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+    });
+});
                 }
             }
 

@@ -3,6 +3,7 @@ const nocache = require('nocache');
 const flash = require('express-flash');
 const dotenv = require('dotenv').config()
 const Quote = require('inspirational-quotes');
+const cors = require('cors')
 // const Razorpay = require('razorpay');
 // var instance = new Razorpay({ key_id: 'YOUR_KEY_ID', key_secret: 'YOUR_SECRET' })
 
@@ -57,7 +58,7 @@ mongoose.connect(process.env.MONGODB_URI);
 app.use("/public", express.static(path.join(__dirname, "public")));
 
 app.use(nocache());
-
+app.use(cors())
 
 app.use(flash());
 

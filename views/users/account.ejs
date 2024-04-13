@@ -6,7 +6,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ELYSIUM-BOOKS</title>
+    <title>BOOKSAW</title>
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,7 @@
     <meta property="og:url" content="">
     <meta property="og:image" content="">
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/public/Untitled_design-removebg-preview.png">
+    <link rel="shortcut icon" type="image/x-icon" href="/public/spellbook.png">
     <!-- Template CSS -->
     <link rel="stylesheet" href="/public/assets/css/maind134.css?v=3.4">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -163,7 +163,6 @@
             <div class="mobile-header-wrapper-inner">
                 <div class="mobile-header-top">
                     <div class="mobile-header-logo">
-                        <a href="index.html"><img src="/public/Elysium__1_-removebg-preview.png" alt="logo"></a>
                     </div>
                     <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                         <button class="close-style search-close">
@@ -393,6 +392,9 @@
 
                                             </div>
                                         </div>
+
+
+                                        
                                         <div class="tab-pane fade" id="orders" role="tabpanel"
                                             aria-labelledby="orders-tab">
                                             <div class="card">
@@ -483,14 +485,30 @@
                                                                                     </td>
                                                                                 </tr>
                                                                                 <% } %>
-                                                                </tbody>
-                                                        </table>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <div class="pagination-container">
+                                                                            <% if (currentPage > 1) { %>
+                                                                                <a href="/loadProfile?page=<%= currentPage - 1 %>" class="btn btn-primary btn-sm">Previous</a>
+                                                                            <% } %>
+                                                                        
+                                                                            <% for (let i = 1; i <= totalPages; i++) { %>
+                                                                                <a href="/loadProfile?page=<%= i %>" class="btn btn-primary btn-sm <%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+                                                                            <% } %>
+                                                                        
+                                                                            <% if (currentPage < totalPages) { %>
+                                                                                <a href="/loadProfile?page=<%= currentPage + 1 %>" class="btn btn-primary btn-sm">Next</a>
+                                                                            <% } %>
+                                                                        </div>
                                                     </div>
                                                 </div>
 
 
                                             </div>
                                         </div>
+
+
+
                                         <!-- <div class="tab-pane fade" id="track-orders" role="tabpanel"
                                         aria-labelledby="track-orders-tab">
                                         <div class="card">
@@ -730,8 +748,9 @@
                                                                 <tr>
                                                                     <td>#<%= Math.random().toString(36).substr(2, 8).toUpperCase() %></td>
                                                                     <td><%= wallet.history[i].createdAt.toLocaleString() %></td>
-                                                                    <td style="color:#28a745">$<%= wallet.history[i].amount %></td>
-                                                                    <td style="color:#28a745"><%= wallet.history[i].type %></td>
+                                                                    <td style="color: <%= wallet.history[i].type === 'credit' ? '#28a745' : '#dc3545' %>"><%= wallet.history[i].type === 'credit' ? '+ $' : '- $' %><%= wallet.history[i].amount %></td>
+                                                                     <td style="color: <%= wallet.history[i].type === 'credit' ? '#28a745' : '#dc3545' %>"><%= wallet.history[i].type %></td>
+                                                                    
                                                                 </tr>
                                                                 <!-- Add more rows for each transaction -->
                                                             <% } %>
@@ -787,7 +806,7 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="widget-about font-md mb-md-5 mb-lg-0">
                                 <div class="logo logo-width-1 wow fadeIn animated">
-                                    <a href="index.html"><img src="/public/assets/imgs/theme/logo.svg" alt="logo"></a>
+                                    <a href="index.html"><img src="/public/main-logo (1).png" alt="logo"></a>
                                 </div>
                                 <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
                                 <p class="wow fadeIn animated">
@@ -855,23 +874,7 @@
                     </div>
                 </div>
             </section>
-            <div class="container pb-20 wow fadeIn animated">
-                <div class="row">
-                    <div class="col-12 mb-20">
-                        <div class="footer-bottom"></div>
-                    </div>
-                    <div class="col-lg-6">
-                        <p class="float-md-left font-sm text-muted mb-0">&copy; 2022, <strong
-                                class="text-brand">ELYSIUM-BOOKS</strong></p>
-                    </div>
-                    <div class="col-lg-6">
-                        <p class="text-lg-end text-start font-sm text-muted mb-0">
-                            Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights
-                            reserved
-                        </p>
-                    </div>
-                </div>
-            </div>
+           
         </footer>
         <!-- Preloader Start -->
         <div id="preloader-active">
@@ -1121,9 +1124,9 @@
             // Initialize Razorpay checkout with received order details
             const options = {
                 "key": 'rzp_test_bdVGrcCwlFiIwl', // Replace with your Razorpay key ID
-                "amount": data.order.amount, // Use the amount from server response
-                "currency": 'INR', // Change the currency to match your requirements
-                "name": 'ELYSIUM_BOOKS',
+                "amount": data.order.amount/100, // Use the amount from server response
+                "currency": 'USD', // Change the currency to match your requirements
+                "name": 'BOOK-SAW',
                 "description": 'Purchase Description',
                 "order_id": data.order.id, // Use the order ID from server response
                 "handler": function (response) {

@@ -205,7 +205,8 @@ const addSubCategories = async (req, res) => {
         const catData = await SubCategory.find()
         const existingCategory = await SubCategory.findOne({ subCategoryName: { $regex: new RegExp('^' + subCategoryName + '$', 'i') } });
         if (existingCategory) {
-            return res.render('addcategories', { categoriesExists: true ,categories : catData}); // Pass flag to indicate category exists
+            console.log("catrt//////////////",catData)
+            return res.render('addSubcategories', { categoriesExists: true ,categories : catData}); // Pass flag to indicate category exists
         }
         const categories = new SubCategory({
             subCategoryName: subCategoryName,
@@ -230,23 +231,61 @@ try {
     console.error(error)
 }}
 
-
+const loadeditSubCategory = async(req,res)=>{
+ try{
+    const categories = await SubCategory.findById(req.query.id);
+    req.session.subcateid=req.query.id
+    res.render('editSubcategories',{categories})
+ }catch(error){
+    console.log(error)
+ } 
+}
 
 const editCategory = async(req,res)=>{
     try{
-        const { categoryName,Description} = req.body
-        const existingCategory = await Category.findOne({ categoryName: { $regex: new RegExp('^' + categoryName + '$', 'i') } });
+        const { categoryName,Description,catid} = req.body
+        console.log("req.dsfsfsd fsdfdsf",req.body)
+        const existingCategory = await Category.findOne({_id: { $ne: req.session.cateid }, categoryName: { $regex: new RegExp('^' + categoryName + '$', 'i') } });
         if(existingCategory){
-            return res.json({ success: false, error: 'Category name must be unique' });       
+             res.json({ success: false, error: 'Category name must be unique' });       
          }else{
              res.json({ success: true, error: 'Category name changed successfull' });       
 
              const updated = await Category.findByIdAndUpdate({ _id:  req.session.cateid }, { $set: {  categoryName, Description } })
-             res.redirect("/admin/loadCategories")
+            //  res.redirect("/admin/loadCategories")
              console.log(updated)
          }
     }catch(error){
         console.log(error.message)
+        
+    }
+}
+
+const editSubCategory = async (req, res) => {
+    try {
+        const { subCategoryName, Description, catid } = req.body;
+        console.log(req.body, "sakldhlasdajldslh");
+
+        const existingCategory = await SubCategory.findOne({_id: { $ne: req.session.subcateid }, subCategoryName: { $regex: new RegExp('^' + subCategoryName + '$', 'i') }
+        });
+
+        if (existingCategory) {
+            return res.json({ success: false, error: 'SubCategory name must be unique' });
+        } else {
+            // Update the SubCategory
+            const updated = await SubCategory.findByIdAndUpdate(
+                req.session.subcateid,
+                { $set: { subCategoryName, Description } }
+            );
+
+            console.log(updated, "are you updated");
+
+            // Send success response after updating
+            res.json({ success: true, error: 'SubCategory name changed successfully' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, error: 'SubCategory name must be unique2' });
     }
 }
 
@@ -568,6 +607,8 @@ module.exports = {
     salesreportsearch,
     couponDelete,
     adminOffers,
-    applyAdminOffers
+    applyAdminOffers,
+    loadeditSubCategory,
+    editSubCategory
 
 }

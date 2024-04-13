@@ -39,9 +39,10 @@ adminRoute.get('/loadSubCategories', Auth.isLogin, adminControllers.loadSubCateg
 adminRoute.post('/addCategories', Auth.isLogin, adminControllers.addCategories)
 adminRoute.post('/addSubCategories', Auth.isLogin, adminControllers.addSubCategories)
 
-
 adminRoute.get('/loadeditCategory',Auth.isLogin,adminControllers.loadeditCategory)
+adminRoute.get('/loadeditSubCategory',Auth.isLogin,adminControllers.loadeditSubCategory)
 adminRoute.post('/editCategory',Auth.isLogin,adminControllers.editCategory)
+adminRoute.post('/editSubCategory',Auth.isLogin,adminControllers.editSubCategory)
 
 
 adminRoute.get('/loaduserlist', Auth.isLogin, adminControllers.loaduserlist)
