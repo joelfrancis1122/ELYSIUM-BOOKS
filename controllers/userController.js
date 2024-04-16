@@ -12,7 +12,6 @@ const nodemailer = require('nodemailer')
 const Coupon = require('../models/couponModel')
 const cron = require('node-cron');
 const Quote = require('inspirational-quotes');
-const randomQuotes = require('random-quotes');
 
 const Razorpay = require('razorpay');
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
@@ -67,7 +66,6 @@ const loadGuest = async (req, res) => {
             }
         ]).limit(12)
         const quote = Quote.getQuote();
-// console.log(quote,"asdasdasdasd")
 
 
         res.render('home', { name: null, search: null, product: productData, search: search,quote }); 
