@@ -88,6 +88,124 @@ const loadlogin = async (req, res) => {
 }
 
 
+const forgotPass = async(req,res)=>{
+    try{
+
+        res.render('forgotPass')
+    }catch(error){
+        console.error(error)
+    }
+}
+
+const forgotpassword = async(req,res)=>{
+    try{
+        const email = req.body.email;
+  
+        req.session.forgotemail = email
+
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'joelfrancis422@gmail.com',
+                pass: 'apqo dnri yzpa gvcg'
+            }
+        });
+             
+        // Check if email exists in the database
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).send({ message: 'Email not found' });
+        }
+
+        // Generate a unique token for password reset
+        const token = Math.random().toString(36).substr(2, 8);
+
+        // Update user's resetPasswordToken and resetPasswordExpires in the database
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000;  // 1 hour
+        await user.save();
+
+        // Send password reset email
+        const mailOptions = {
+            from: 'yourEmail@gmail.com',
+            to: email,
+            subject: 'Reset Password',
+            text: `You are receiving this because you (or someone else) have requested to reset your password.\n\n` +
+                `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
+                `http://${req.headers.host}/getResetPassword/${token}\n\n` +
+                `If you did not request this, please ignore this email and your password will remain unchanged.\n`
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+                return res.status(500).send({ message: 'Error sending email' });
+            }
+            console.log('Email sent: ' + info.response);
+            res.status(200).send({ message: 'Reset email sent' });
+        });
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
+
+const getResetPassword =async(req,res)=>{
+    const token = req.params.token;
+
+    try {
+        // Render the reset password view with the token
+        res.render('passReset', { token });
+
+        
+    }catch(error){
+        console.log(error.message)
+    }
+}
+
+
+const resetpassword = async (req, res) => {
+    const { token } = req.params;
+    const { password, confirmPassword } = req.body;
+    console.log(req.session.forgotemail, "--------------------------------------------------------------------------------------")
+    if (password !== confirmPassword) {
+        return res.status(400).send({ message: 'Passwords do not match' });
+    }
+
+    try {
+        // Find the user by email and check the resetPasswordToken
+        const user = await User.findOne({ email: req.session.forgotemail });
+
+        if (!user) {
+            return res.status(400).send({ message: 'Time limit exeeded resend email' });
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Update user's password and reset resetPasswordToken and resetPasswordExpires
+        user.password = hashedPassword;
+        
+        // Save the user
+        await user.save();
+
+        // Destroy the session
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                return res.status(500).send({ message: 'Internal server error' });
+            }
+            console.log("Session destroyed");
+            res.status(200).send({ message: 'Password updated successfully' });
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Server error' });
+    }
+}
+
 const loadHome = async (req, res) => {
     try {
         let search = req.query.query || "";
@@ -161,6 +279,63 @@ const loadLogout = async (req, res) => {
     }
 }
 
+const applyReferral = async (req, res) => {
+    try {
+        const { referralCode } = req.body;
+        const userId = req.session.user;
+
+        // Find the referred user using the referral code
+        const referredUser = await User.findOne({ referralCode: referralCode });
+
+        if (!referredUser) {
+            return res.json({ success: false, message: 'Invalid referral code!' });
+        }
+
+        // Prevent a user from using their own referral code
+        if (referredUser._id.toString() === userId.toString()) {
+            return res.json({ success: false, message: 'You cannot use your own referral code!' });
+        }
+
+        // Check if the referral code has already been used by the user
+        const user = await User.findById(userId);
+        if (user.alreadyReffered) {
+            return res.json({ success: false, message: 'Referral code already used!' });
+        }
+
+        // Mark the user as already referred
+        user.alreadyReffered = true;
+        const userSaved = await user.save();
+
+        console.log("User saved : ", userSaved)
+
+
+        // Add money to the referredUser's wallet
+        const referredUserWallet = await Wallet.findOne({ userId: referredUser._id });
+        referredUserWallet.balance += 100;
+        referredUserWallet.history.push({
+            amount: 100,
+            type: 'credit'
+        });
+        await referredUserWallet.save();
+
+        // Add money to the user's wallet
+        const userWallet = await Wallet.findOne({ userId: userId });
+        userWallet.balance += 100;
+        userWallet.history.push({
+            amount: 100,
+            type: 'credit'
+        });
+        await userWallet.save();
+
+        res.json({ success: true, message: 'Referral code applied successfully!' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
+
 
 
 const verifyLogin = async (req, res) => {
@@ -206,25 +381,34 @@ const signup = async (req, res) => {
 
 const verifySignup = async (req, res) => {
     try {
-        console.log("hai");
-        const matchEmail = await User.findOne({ email: req.body.email })
-        if (matchEmail) {
-            return res.render('registeration', { emailExists: true });
-        }
-        if (req.body.password == req.body.cpassword) {
-            const datafromRegister = {
-                name: req.body.name,
-                email: req.body.email,
-                password: req.body.password,
-                mobile: req.body.mobile
-            }
-            req.session.data = datafromRegister
-            res.redirect("/getOtp")
-        }
+      console.log("hai");
+      const matchEmail = await User.findOne({ email: req.body.email });
+  
+      if (matchEmail) {
+        return res.render('registeration', { emailExists: true });
+      }
+   
+  
+      if (req.body.password === req.body.cpassword) {
+        // Generate a random referral code
+
+     
+        const datafromRegister = {
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          mobile: req.body.mobile,
+        };
+  
+        req.session.data = datafromRegister;
+        res.redirect("/getOtp");
+      }
     } catch (error) {
-        console.error(error)
+      console.error(error);
     }
-}
+  };
+  
+  
 
 
 
@@ -268,11 +452,26 @@ const verifyOtp = async (req, res) => {
         if (req.session.otp === req.body.otp) {
             const { email, name, mobile, password } = req.session.data
             const hashedPassword = await bcrypt.hash(password, 10);
+
+            const generateReferralCode = () => {
+                const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                let code = "";
+                for (let i = 0; i < 6; i++) {
+                  code += characters[Math.floor(Math.random() * characters.length)];
+                }
+                return code;
+              }
+
+              const referralCode = generateReferralCode();
+              console.log("referralCode :" , referralCode)
+        
             const user = new User({
                 name: name,
                 email: email,
                 mobile: mobile,
-                password: hashedPassword
+                password: hashedPassword,
+                referralCode: referralCode,
+
             })
             const userData = await user.save()
             if (userData) {
@@ -314,6 +513,9 @@ const loadProfile = async (req, res) => {
     try {
         const userId = req.session.user;
         const userData = await User.findOne({ _id: userId });
+
+        console.log("User data : ", userData)
+
         const Order = await Orders.find({ userId: userId }).populate('userId').sort({ orderDate: -1 });
 
         const addressData = await Address.find({ userId: userId });
@@ -338,10 +540,10 @@ const loadProfile = async (req, res) => {
 
         const totalOrders = Order.length;
         const totalPages = Math.ceil(totalOrders / limit);
-
         const paginatedOrders = Order.slice(startIndex, endIndex);
 
         res.render('account', {
+            userData,
             name: userData.name,
             email: userData.email,
             addresses: addressData,
@@ -351,7 +553,7 @@ const loadProfile = async (req, res) => {
             wallet,
             wishlistLength,
             currentPage: page,
-            totalPages: totalPages
+            totalPages: totalPages,
         });
     } catch (error) {
         console.error(error);
@@ -361,26 +563,40 @@ const loadProfile = async (req, res) => {
 
 
 
-const loadOrderDetails = async (req,res)=>{
+const loadOrderDetails = async (req, res) => {
     try {
         const userId = req.session.user;
-        const productID = req.query.id
-        const orders = await Orders.findOne({ _id:productID}).populate('product.productId')
-        const orderData = await Orders.findOne({ _id:productID})
+        const productID = req.query.id;
+
+        const orders = await Orders.findOne({ _id: productID }).populate('product.productId');
+        const orderData = await Orders.findOne({ _id: productID });
         const userData = await User.findOne({ orderId: productID });
-        const addressData = await Address.findOne({ userId : userId });
-        const cartData= await Cart.findOne({userId:userId})
-        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId')
+        const addressData = await Address.findOne({ userId: userId });
+        const cartData = await Cart.findOne({ userId: userId });
+        const wishlistData = await Wishlist.findOne({ userId: userId }).populate('product.productId');
 
-        const cartLength = cartData ? cartData.product.length : 0
-        const wishlistLength = wishlistData ? wishlistData.product.length : 0
+        // Fetch coupon discount from the order
+        const couponDiscount = orderData ? orderData.couponDiscount : 0;
 
-        res.render("ordersdetail",{orders,user:userData,address:addressData,cartData,cartLength:cartLength,orderData,wishlistLength})
+        const cartLength = cartData ? cartData.product.length : 0;
+        const wishlistLength = wishlistData ? wishlistData.product.length : 0;
+
+        res.render("ordersdetail", {
+            orders,
+            user: userData,
+            address: addressData,
+            cartData,
+            cartLength: cartLength,
+            orderData,
+            wishlistLength,
+            couponDiscount  // Include couponDiscount in the response
+        });
     } catch (error) {
         // console.error(error)  
-        res.render('error',{error})
+        res.render('error', { error });
     }
 }
+
 
 
 
@@ -397,6 +613,7 @@ const loadInvoice =  async(req,res)=>{
         console.error(error)
     }
 }
+
 const loadShop = async (req, res) => {
     try {
         const categories = await Category.find({ is_Active: true });
@@ -417,29 +634,47 @@ const loadShop = async (req, res) => {
 
         if (category) {
             const categoryObj = await Category.findOne({ categoryName: category, is_Active: true });
+            
             if (!categoryObj) {
-                return res.status(404).send('Category not found');
+                console.warn(`Category not found for: ${category}`);
+            } else {
+                query.Categories = categoryObj._id;
             }
-            query.Categories = categoryObj._id;
         }
 
         if (filter) {
-            if (filter == 'low-high') {
-                products = await Product.find(query).sort({ saleprice: 1 });
-            } else if (filter == 'high-low') {
-                products = await Product.find(query).sort({ saleprice: -1 });
+            switch (filter) {
+                case 'low-high':
+                    if (products) {
+                        products = products.sort({ saleprice: 1 });
+                    } else {
+                        products = await Product.find(query).sort({ saleprice: 1 });
+                    }
+                    break;
+                case 'high-low':
+                    if (products) {
+                        products = products.sort({ saleprice: -1 });
+                    } else {
+                        products = await Product.find(query).sort({ saleprice: -1 });
+                    }
+                    break;
+                default:
+                    console.warn(`Unknown filter type: ${filter}`);
+                    break;
             }
         } else {
-            products = await Product.aggregate([
-                { $match: query },
-                { $lookup: { from: 'categories', localField: 'Categories', foreignField: '_id', as: 'Categories' } },
-                { $unwind: '$Categories' },
-                { $match: { 'Categories.is_Active': true } }
-            ]);
+            if (!products) {
+                products = await Product.aggregate([
+                    { $match: query },
+                    { $lookup: { from: 'categories', localField: 'Categories', foreignField: '_id', as: 'Categories' } },
+                    { $unwind: '$Categories' },
+                    { $match: { 'Categories.is_Active': true } }
+                ]);
+            }
         }
 
-        const page = parseInt(req.query.page) || 1; // Get the current page from the query string
-        const limit = 12; // Number of products to display per page
+        const page = parseInt(req.query.page) || 1;
+        const limit = 12;
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
 
@@ -453,6 +688,7 @@ const loadShop = async (req, res) => {
             categories,
             name: userData.name,
             search,
+            category,  // Ensure 'category' is passed to the template
             cartLength,
             wishlistLength,
             currentPage: page,
@@ -506,6 +742,37 @@ const profileEdit2 = async (req, res) => {
 
 
 
+const editUsername = async (req, res) => {
+    try {
+        const { newUsername, currentPassword } = req.body;
+        const userId = req.session.user;  // Assuming you store userId in session
+        
+        // Find the user by userId
+        const user = await User.findById(userId);
+        
+        // Check if user exists
+        if (!user) {
+            return res.status(404).send({ message: 'User not found' });
+        }
+        
+        // Check if the current password matches
+        const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+        
+        if (!isPasswordValid) {
+            return res.status(400).send({ message: 'Invalid password' });
+        }
+        
+        // Update the username
+        user.name = newUsername;
+        await user.save();
+        
+        res.status(200).send({ message: 'Username updated successfully' });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ message: 'Internal Server Error' });
+    }
+}   
 
 const loadAddAddress = async (req, res) => {
     try {
@@ -727,11 +994,99 @@ const orderReturn = async (req, res) => {
 }
 
 
+const bookCancel = async (req, res) => {
+    try {
+        const bookid = req.query.id;
+        const userId = req.session.user;
+
+        // Find the order containing the specific product
+        const cancelledBook = await Orders.findOne({
+            userId: userId,
+            'product._id': bookid
+        });
+
+        if (!cancelledBook) {
+            throw new Error('Order not found');
+        }
+
+        // Find the specific product within the order
+        const cancelledProduct = cancelledBook.product.find(item => item._id.toString() === bookid);
+
+        if (!cancelledProduct) {
+            throw new Error('Product not found in the order');
+        }
+
+        // Update the product status to 'Cancelled'
+        cancelledProduct.productStatus = 'Cancelled';
+
+        // Save the updated order
+        await cancelledBook.save();
+
+        // Increase the product stock
+        const product = await Product.findById(cancelledProduct.productId);
+
+        if (!product) {
+            throw new Error('Product not found');
+        }
+
+        // Increase the stock by the cancelled quantity
+        product.stock += cancelledProduct.quantity;
+
+        // Save the updated product
+        await product.save();
+
+        // Calculate the cancelled amount considering coupon discount
+        let cancelledAmount = cancelledProduct.price * cancelledProduct.quantity;
+
+        // Decrease the coupon discount from the cancelled amount as a percentage
+        if (cancelledBook.couponDiscount) {
+            const discountAmount = (cancelledAmount * cancelledBook.couponDiscount) / 100;
+            cancelledAmount -= discountAmount;
+        }
+
+        // Subtract the cancelled amount from the total amount
+        cancelledBook.totalAmount = (parseFloat(cancelledBook.totalAmount) - cancelledAmount).toFixed(2);
+
+        // Save the updated order with the new total amount
+        await cancelledBook.save();
+
+        // Check payment method and credit wallet if not Cash on delivery
+        if (cancelledBook.paymentMethod !== "Cash on delivery") {
+            const wallet = await Wallet.findOne({ userId: userId });
+
+            if (!wallet) {
+                throw new Error('User wallet not found');
+            }
+
+            wallet.balance += cancelledAmount;
+            
+            wallet.history.push({
+                amount: cancelledAmount,
+                type: 'credit',
+                createdAt: new Date()
+            });
+
+            await wallet.save();
+        }
+
+        res.redirect('/loadProfile');
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: error.message || 'Failed to cancel product' });
+    }
+}
+
+
+
+
+
 
 const orderDetail = async (req, res) => {
     try {
         res.render('ordersdetail')
-    } catch (error) {
+
+            } catch (error) {
         console.error(error)
     }
 }
@@ -872,6 +1227,44 @@ const googleAuth = async (req, res) => {
 };
 
 
+
+
+// Schedule the cron job to run every day at midnight
+cron.schedule('* * *  *  * *', async () => {
+    
+
+    const orderDetails = await Orders.find()
+    
+    // console.log(" orders details :", orderDetails);
+ 
+    
+    const zeroTotalOrders = await Orders.find({
+        totalAmount: '0.00',
+        orderStatus: { $ne: 'Cancelled' }
+    });
+            
+
+        // console.log("Zero total orders:", zeroTotalOrders);
+
+        if (zeroTotalOrders.length > 0) {
+            // Loop through each order and update the orderStatus to 'Cancelled'
+            for (const order of zeroTotalOrders) {
+                const orderId = order._id;
+                const orderCancelled = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Cancelled' } });
+                if (orderCancelled) {
+                    console.log(`Order with ID ${orderId} has been cancelled.`);
+                } else {
+                    console.log(`Failed to cancel order with ID ${orderId}.`);
+                }
+            }
+        } else {
+            // console.log('No orders with total amount 0 to cancel.');
+        }
+     
+});
+
+
+
 module.exports = {
     loadGuest,
     loadHome,
@@ -907,6 +1300,12 @@ module.exports = {
     wishlist,
     removeWish,
     orderSuccess,
-    googleAuth
-
+    googleAuth,
+    editUsername,
+    forgotPass,
+    forgotpassword,
+    getResetPassword,
+    resetpassword,
+    applyReferral,
+    bookCancel
 }

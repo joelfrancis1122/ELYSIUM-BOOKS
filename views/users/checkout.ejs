@@ -724,6 +724,7 @@ body {
         "currency": 'INR', // Change the currency to match your requirements
         "name": 'BOOK-SAW',
         "description": 'Purchase Description',
+        "image":"/public/spellbook.png",
         "order_id": data.order2.id,
         "handler": function (response) {
             console.log(response, "respossadasd")
@@ -773,8 +774,9 @@ body {
             "contact": '9999999999',
         },
         "theme": {
-            "color": '#11ff00'
-        }
+            "color": '#8B008B'
+                        ,"profile_picture": "/public/spellbook.png"
+        },
     };
     const razorpayInstance = new Razorpay(options);
     razorpayInstance.open();
@@ -981,6 +983,7 @@ body {
 
         </script>
   <script>
+
     // Function to check if Cash on Delivery should be disabled and show message
     function checkCODAvailability() {
         var total = parseFloat(document.getElementById('GrandTotal').innerText.replace('$', ''));

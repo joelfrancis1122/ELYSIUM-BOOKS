@@ -125,7 +125,7 @@
                                                 <tbody>
                                                     <% let grandTotal = 0; %>
                                                     <% for(let order of orders.product) { %>
-                                                    <tr class="item">
+                                                    <tr class="item" <% if (order.productStatus === 'Cancelled') { %>style="text-decoration: line-through;"<% } %>>
                                                         <td class="desc" style="padding: 10px; border-bottom: 1px solid #ddd;"><%= order.productId.Bookname %></td>
                                                         <td class="price" style="padding: 10px; border-bottom: 1px solid #ddd;">$ <%=  order.price %></td>
                                                         <td class="qty" style="padding: 10px; border-bottom: 1px solid #ddd;"><%= order.quantity %></td>
@@ -135,6 +135,7 @@
                                                     <% } %>
                                                 </tbody>
                                             </table>
+                                            
                                             
                                         </div>
                                         <% if(orderData ) { %>

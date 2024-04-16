@@ -241,11 +241,7 @@
         </div>
         <div class="mobile-social-icon">
           <h5 class="mb-15 text-grey-4">Follow Us</h5>
-          <a href="#"><img src="public/assets/imgs/theme/icons/icon-facebook.svg" alt="" /></a>
-          <a href="#"><img src="public/assets/imgs/theme/icons/icon-twitter.svg" alt="" /></a>
-          <a href="#"><img src="public/assets/imgs/theme/icons/icon-instagram.svg" alt="" /></a>
-          <a href="#"><img src="public/assets/imgs/theme/icons/icon-pinterest.svg" alt="" /></a>
-          <a href="#"><img src="public/assets/imgs/theme/icons/icon-youtube.svg" alt="" /></a>
+          <a href="https://www.instagram.com/franceisjoe/"><img src="public/assets/imgs/theme/icons/icon-instagram.svg" alt="" /></a>
         </div>
       </div>
     </div>
@@ -275,10 +271,10 @@
                     <!-- MAIN SLIDES -->
                     <div class="product-image-slider" style="background-color: white">
                       <% for(let i=0 ; i < product.Images.length ; i++) { %>
-                        <figure class="border-radius-10 ml-70">
+                        <figure class="border-radius-10 ml-70" >
                           <a href="/public/uploads/<%=product.Images[i]%>" class="MagicZoom"
                             data-options="zoomWidth: 550">
-                            <img src="/public/uploads/<%=product.Images[i]%>" style="height: 659px;"></a>
+                            <img src="/public/uploads/<%=product.Images[i]%>" style="height: 659px;" id="uploadedPhoto"></a>
                         </figure>
                         <% } %>
                     </div>
@@ -297,16 +293,13 @@
                     <ul class="text-grey-5 d-inline-block">
                       <li><strong class="mr-10">Share this:</strong></li>
                       <li class="social-facebook">
-                        <a href="#"><img src="public/assets/imgs/theme/icons/icon-facebook.svg" alt="" /></a>
                       </li>
                       <li class="social-twitter">
-                        <a href="#"><img src="public/assets/imgs/theme/icons/icon-twitter.svg" alt="" /></a>
                       </li>
                       <li class="social-instagram">
-                        <a href="#"><img src="public/assets/imgs/theme/icons/icon-instagram.svg" alt="" /></a>
+                        <a href="https://www.instagram.com/franceisjoe/"><img src="public/assets/imgs/theme/icons/icon-instagram.svg" alt="" /></a>
                       </li>
                       <li class="social-linkedin">
-                        <a href="#"><img src="public/assets/imgs/theme/icons/icon-pinterest.svg" alt="" /></a>
                       </li>
                     </ul>
                   </div>
@@ -324,7 +317,47 @@
                           <a href="shop-grid-right.html">
                             <%=product.Categories.categoryName%>
                           </a></span>
+                          <button onclick="shareProductOnWhatsApp()" style="margin-left: 50px;"><i class="fa-solid fa-share"></i></button>
                       </div>
+
+
+
+
+
+                      <script>
+                      function shareProductOnWhatsApp() {
+                          // Get the uploaded photo
+                          const photo = document.getElementById('uploadedPhoto').src;
+                          
+                          // Get the current page URL
+                          const pageURL = window.location.href;
+                          
+                          // Define the message to share
+                          const message = `${pageURL}`;
+                          
+                          // URL to open WhatsApp with the predefined message and photo
+                          const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}%0A&image=${encodeURIComponent(photo)}`;
+                          
+                          // Open the URL in a new window
+                          window.open(whatsappURL, '_blank');
+                      }
+                      
+                      // Handle photo upload
+                      document.getElementById('photoInput').addEventListener('change', function() {
+                          const file = this.files[0];
+                          
+                          if (file) {
+                              const reader = new FileReader();
+                              
+                              reader.addEventListener('load', function() {
+                                  // Set the uploaded photo as the source of the img element
+                                  document.getElementById('uploadedPhoto').src = this.result;
+                              });
+                              
+                              reader.readAsDataURL(file);
+                          }
+                      });
+                      </script>
                       <div class="product-rate-cover text-end">
                         <div class="product-rate d-inline-block">
                           <div class="product-rating" style="width: 90%"></div>
@@ -333,6 +366,7 @@
                           (25 reviews)</span>
                       </div>
                     </div>
+                    
                     <div class="clearfix product-price-cover">
                       <div class="product-price primary-color float-left">
                         <ins><span class="text-brand">$<%=product.saleprice%></span></ins>
@@ -407,13 +441,13 @@
                   <a class="nav-link active" id="Description-tab" data-bs-toggle="tab"
                     href="#Description">Description</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                   <a class="nav-link" id="Additional-info-tab" data-bs-toggle="tab" href="#Additional-info">Additional
                     info</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews (3)</a>
-                </li>
+                </li> -->
               </ul>
               <div class="tab-content shop_info_tab entry-main-content">
                 <div class="tab-pane fade show active" id="Description">
@@ -842,11 +876,7 @@
                 Follow Us
               </h5>
               <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                <a href="#"><img src="public/assets/imgs/theme/icons/icon-facebook.svg" alt="" /></a>
-                <a href="#"><img src="public/assets/imgs/theme/icons/icon-twitter.svg" alt="" /></a>
-                <a href="#"><img src="public/assets/imgs/theme/icons/icon-instagram.svg" alt="" /></a>
-                <a href="#"><img src="public/assets/imgs/theme/icons/icon-pinterest.svg" alt="" /></a>
-                <a href="#"><img src="public/assets/imgs/theme/icons/icon-youtube.svg" alt="" /></a>
+                <a href="https://www.instagram.com/franceisjoe/"><img src="public/assets/imgs/theme/icons/icon-instagram.svg" alt="" /></a>
               </div>
             </div>
           </div>

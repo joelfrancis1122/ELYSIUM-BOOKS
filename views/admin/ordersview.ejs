@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>ELYSIUM-BOOKS</title>
+  <title> BOOK-SAW</title>
   <meta http-equiv="x-ua-compatible" content="ie=edge" />
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,7 +13,7 @@
   <meta property="og:url" content="" />
   <meta property="og:image" content="" />
   <!-- Favicon -->
-  <link rel="shortcut icon" type="image/x-icon" href="/public/admin-assets/imgs/theme/favicon.svg" />
+  <link rel="shortcut icon" type="image/x-icon" href="/public/spellbook.png" />
   <!-- Template CSS -->
   <link href="/public/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
 </head>
@@ -111,71 +111,75 @@
             <div class="row">
               <div class="col-lg-12">
                 <div class="table-responsive">
-                  <table class="table">
+                  <% if (orderData && orderData.totalAmount === 0) { %>
+                    <% orders.orderStatus = 'Cancelled'; %>
+                <% } %>
+                
+                <table class="table">
                     <thead>
-                      <tr>
-                        <th width="40%">Book Name</th>
-                        <th width="20%">Unit Price</th>
-                        <th width="20%">Quantity</th>
-                        <th width="20%" class="text-end">Total</th>
-                      </tr>
+                        <tr>
+                            <th width="40%">Book Name</th>
+                            <th width="20%">Unit Price</th>
+                            <th width="20%">Quantity</th>
+                            <th width="20%" class="text-end">Total</th>
+                        </tr>
                     </thead>
                     <tbody>
-                      <% let grandTotal=0; %>
+                        <% let grandTotal = 0; %>
                         <% for(let order of orders.product) { %>
-                          <tr>
-                            <td>
-                              <a class="itemside" href="#">
-                                <div class="left"></div>
-                                <div class="info">
-                                  <%= order.productId.Bookname %>
-                                </div>
-                              </a>
-                            </td>
-                            <td>
-                             $ <%= order.productId.saleprice %>
-                            </td>
-                            <td>
-                              <%= order.quantity %>
-                            </td>
-                            <td class="text-end">
-                             $<%= (order.quantity * order.productId.saleprice).toFixed(2) %>
-                            </td>
-                          </tr>
-                          <% grandTotal +=order.quantity * order.productId.saleprice; %>
-                            <% } %>
-                              <% if(orderData) { %>
-
-                                <tr>
-                                  <td colspan="4">
-                                    <article class="float-end">
-                                      <dl class="dlist">
-                                        <h5>
-                                          <dt style="font-weight: bold; color: #333;">Grand total:
-                                            $<%=orderData.totalAmount %>
-                                          </dt>
-                                        </h5>
-                                        <dd></dd>
-                                      </dl>
-                                    </article>
-                                  </td>
-                                  <% } %>
-                                </tr>
-                                <dl class="dlist">
-                                  <dt class="text-muted">Status:</dt>
-                                  <dd>
-                                    <span class="badge rounded-pill alert-success text-success">
-                                      <%=orders.paymentStatus%>
-                                    </span>
-                                  </dd>
-                                </dl>
-                                </article>
+                            <tr <% if (order.productStatus === 'Cancelled') { %>style="text-decoration: line-through;"<% } %>>
+                                <td>
+                                    <a class="itemside" href="#">
+                                        <div class="left"></div>
+                                        <div class="info">
+                                            <%=order.productId.Bookname%>
+                                        </div>
+                                    </a>
                                 </td>
-                                </tr>
-
-
+                                <td>
+                                    $ <%= order.productId.saleprice %>
+                                </td>
+                                <td>
+                                    <%= order.quantity %>
+                                </td>
+                                <td class="text-end">
+                                    $<%= (order.quantity * order.productId.saleprice).toFixed(2) %>
+                                </td>
+                            </tr>
+                            <% grandTotal += order.quantity * order.productId.saleprice; %>
+                        <% } %>
+                        <% if(orderData) { %>
+                            <tr>
+                                <td colspan="4">
+                                    <article class="float-end">
+                                        <dl class="dlist">
+                                            <h5>
+                                                <dt style="font-weight: bold; color: #333;">Grand total:
+                                                    $<%= orderData.totalAmount %>
+                                                </dt>
+                                            </h5>
+                                            <dd></dd>
+                                        </dl>
+                                    </article>
+                                </td>
+                            </tr>
+                        <% } %>
+                        <tr>
+                            <td colspan="4">
+                                <dl class="dlist">
+                                    <dt class="text-muted">Status:</dt>
+                                    <dd>
+                                        <span class="badge rounded-pill alert-success text-success">
+                                            <%= orders.paymentStatus %>
+                                        </span>
+                                    </dd>
+                                </dl>
+                            </td>
+                        </tr>
                     </tbody>
-                  </table>
+                </table>
+                
+                
                 </div>
                 <!-- table-responsive// -->
               </div>

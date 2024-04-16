@@ -7,7 +7,8 @@ const OrderSchema = mongoose.Schema({
     product: [{
         productId: { type: mongoose.Schema.ObjectId, ref: "Product" },
         price:{type:Number},
-        quantity: { type: Number }
+        quantity: { type: Number },
+        productStatus:{type:String,enum:["Order Placed","Cancelled","Returned"],default:"Order Placed"}
     }],
 
     address: {
@@ -22,7 +23,7 @@ const OrderSchema = mongoose.Schema({
 
     orderId: { type: String },
     orderDate: { type: Date, default: Date.now },
-    totalAmount: { type: String },
+    totalAmount: { type: Number },
     paymentMethod: { type: String },
     paymentStatus: { type: String, enum: ['Pending', 'Received', 'Failed', 'Refund'], default: "Pending" },
     orderStatus: { type: String, enum: ['Order Placed', 'Confirmed', 'Shipped', 'Delivered', 'Cancelled', 'Returned'], default: "Order Placed" },

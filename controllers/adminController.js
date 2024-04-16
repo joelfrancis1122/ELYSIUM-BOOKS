@@ -5,10 +5,12 @@ const Coupon = require('../models/couponModel')
 const Orders = require('../models/orderModel')
 const SubCategory = require('../models/subcategoryModel')
 const cron = require('node-cron');
-
 const dashboardLoad = async (req, res) => {
     try {
         const orders = await Orders.find();
+
+      
+
         const categories = await Category.find();
         const products = await Product.find();
 
@@ -25,6 +27,113 @@ const dashboardLoad = async (req, res) => {
             const monthIndex = product.CreatedOn.getMonth();
             productCountsByMonth[monthIndex]++;
         });
+
+        // Aggregate to get order counts by year
+        const orderCountsByYearData = await Orders.aggregate([
+            {
+                $group: {
+                    _id: { $year: "$orderDate" },
+                    orderCount: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { "_id": 1 }
+            }
+        ]);
+
+        // Transforming orderCountsByYearData into the desired format
+        const orderCountsByYear = [];
+        let currentYearIndex = 0;
+        const currentYear = new Date().getFullYear();
+
+        for (let i = 0; i < orderCountsByYearData.length; i++) {
+            const year = orderCountsByYearData[i]._id;
+            const orderCount = orderCountsByYearData[i].orderCount;
+
+            while (currentYear - 5 + currentYearIndex < year) {
+                orderCountsByYear.push(0);
+                currentYearIndex++;
+            }
+
+            orderCountsByYear.push(orderCount);
+            currentYearIndex++;
+        }
+
+        while (currentYear - 5 + currentYearIndex <= currentYear + 6) {
+            orderCountsByYear.push(0);
+            currentYearIndex++;
+        }
+
+
+        const productCountsByYearData = await Product.aggregate([
+            {
+                $group: {
+                    _id: { $year: "$CreatedOn" },
+                    productCount: { $sum: 1 }
+                }
+            },
+            {
+                $sort: { "_id": 1 }
+            }
+        ]);
+        
+        // Transforming productCountsByYearData into the desired format
+        const productCountsByYear = [];
+        let currentYearIndex1 = 0;
+        const currentYear1 = new Date().getFullYear();
+        
+        for (let i = 0; i < productCountsByYearData.length; i++) {
+            const year = productCountsByYearData[i]._id;
+            const productCount = productCountsByYearData[i].productCount;
+        
+            while (currentYear1 - 5 + currentYearIndex1 < year) {
+                productCountsByYear.push(0);
+                currentYearIndex1++;
+            }
+        
+            productCountsByYear.push(productCount);
+            currentYearIndex1++;
+        }
+        
+        while (currentYear1 - 5 + currentYearIndex1 <= currentYear1 + 6) {
+            productCountsByYear.push(0);
+            currentYearIndex1++;
+        }
+
+
+        const totalAmountByYearData = await Orders.aggregate([
+            {
+                $group: {
+                    _id: { $year: "$orderDate" },
+                    totalAmount: { $sum: { $toDouble: "$totalAmount" } }
+                }
+            },
+            {
+                $sort: { "_id": 1 }
+            }
+        ]);
+        
+        const totalAmountByYear = [];
+        let currentYearIndex2 = 0;
+        const currentYear2 = new Date().getFullYear();
+        
+        for (let i = 0; i < totalAmountByYearData.length; i++) {
+            const year = totalAmountByYearData[i]._id;
+            const totalAmount = totalAmountByYearData[i].totalAmount;
+        
+            while (currentYear2 - 5 + currentYearIndex2 < year) {
+                totalAmountByYear.push(0);
+                currentYearIndex2++;
+            }
+        
+            totalAmountByYear.push(totalAmount);
+            currentYearIndex2++;
+        }
+        
+        while (currentYear2 - 5 + currentYearIndex2 <= currentYear2 + 6) {
+            totalAmountByYear.push(0);
+            currentYearIndex2++;
+        }
 
         // Aggregate to find the best selling product
         const bestSellingProduct = await Orders.aggregate([
@@ -92,7 +201,7 @@ const dashboardLoad = async (req, res) => {
             {
                 $group: {
                     _id: "$category._id",
-                    name: { $first: "$category.categoryName" }, // Corrected to use 'categoryName' instead of 'name'
+                    name: { $first: "$category.categoryName" },
                     totalSales: { $sum: "$product.quantity" }
                 }
             },
@@ -103,15 +212,57 @@ const dashboardLoad = async (req, res) => {
                 $limit: 10
             }
         ]);
+
+
         
 
-        res.render('admindashboard', { orders, categories, orderCountsByMonth, productCountsByMonth, bestSellingProduct, bestSellingCategories });
+
+        const totalAmountByMonth = [];
+let currentMonthIndex = 0;
+const currentYear123 = new Date().getFullYear();
+
+// Initialize total amount by month array
+for (let i = 0; i < 12; i++) {
+    totalAmountByMonth.push(0);
+}
+
+// Populate total amount by month array from orders
+orders.forEach(order => {
+    const monthIndex = order.orderDate.getMonth();
+    const totalAmount = parseFloat(order.totalAmount);
+
+    totalAmountByMonth[monthIndex] += totalAmount;
+});
+
+// Fill in missing months with 0
+for (let i = 0; i < 12; i++) {
+    if (totalAmountByMonth[i] === 0) {
+        totalAmountByMonth[i] = 0;
+    }
+}
+          console.log('-------------------------------------',orderCountsByYear)
+  
+    
+        console.log(orderCountsByMonth, "3333333333333333333333333333333333333333");
+        console.log("---------------------------------------");
+        // console.log(totalAmountByYear, "444444444444444444444444444444444444");
+
+        res.render('admindashboard', { 
+            orders, 
+            categories, 
+            orderCountsByMonth, 
+            productCountsByMonth, 
+            orderCountsByYear, 
+            productCountsByYear, 
+            bestSellingProduct, 
+            bestSellingCategories ,
+            totalAmountByMonth,
+            totalAmountByYear
+        });
     } catch (error) {
         console.error(error);
     }
 };
-
-
 
 
 

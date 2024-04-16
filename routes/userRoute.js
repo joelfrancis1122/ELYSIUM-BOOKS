@@ -18,6 +18,14 @@ userRoute.get('/', Auth.isLogout, userControllers.loadGuest)
 userRoute.get('/login', Auth.isLogout, userControllers.loadlogin)
 userRoute.get('/home', Auth.isLogin, Auth.isBlocked, userControllers.loadHome)
 userRoute.get('/logout', Auth.isLogin, userControllers.loadLogout)
+userRoute.get('/forgotPass', Auth.isLogout, userControllers.forgotPass)
+userRoute.post('/forgotpassword', Auth.isLogout, userControllers.forgotpassword)
+userRoute.get('/getResetPassword/:token',Auth.isLogout, userControllers.getResetPassword);
+userRoute.post('/resetpassword/:token',Auth.isLogout, userControllers.resetpassword);
+userRoute.post('/applyReferral', Auth.isLogin, userControllers.applyReferral)
+
+
+
 
 userRoute.get('/login', Auth.isLogout, userControllers.loadlogin)
 
@@ -33,6 +41,8 @@ userRoute.get("/loadProfile", Auth.isLogin, userControllers.loadProfile)
 userRoute.get('/loadShop', Auth.isLogin, userControllers.loadShop)
 userRoute.get('/profileEdit', Auth.isLogin, userControllers.profileEdit)
 userRoute.post('/profileEdit2', Auth.isLogin, userControllers.profileEdit2)
+userRoute.post('/editUsername', Auth.isLogin, userControllers.editUsername)
+
 userRoute.get('/loadAddAddress', Auth.isLogin, userControllers.loadAddAddress)
 
 userRoute.post('/addAddress', Auth.isLogin, userControllers.addAddress)
@@ -61,6 +71,12 @@ userRoute.post('/clearCart', Auth.isLogin, cartControllers.clearCart)
 userRoute.get("/orderCancel", Auth.isLogin, userControllers.OrderCancelled)
 userRoute.get("/orderReturn", Auth.isLogin, userControllers.orderReturn)
 userRoute.get("/orderDetail", Auth.isLogin, userControllers.orderDetail)
+userRoute.get("/bookCancel", Auth.isLogin, userControllers.bookCancel)
+
+
+
+
+
 // userRoute.get("/categorySearch", Auth.isLogin, userControllers.categorySearch)
 userRoute.post('/applyCoupon', Auth.isLogin, cartControllers.applyCoupon)
 userRoute.post('/onlinepay',Auth.isLogin,cartControllers.onlinePay)

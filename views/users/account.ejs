@@ -371,27 +371,80 @@
                                 </div>
                                 <div class="col-md-8">
                                     <div class="tab-content dashboard-content">
-                                        <div class="tab-pane fade active show" id="dashboard" role="tabpanel"
-                                            aria-labelledby="dashboard-tab">
+                                        <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                                             <div class="card">
-                                                <div class="card-header">
-                                                    <h5 class="mb-0">Hello <%=name%>! </h5>
+                                              <div class="card-header">
+                                                <h5 class="mb-0">Hello <%=name%>!</h5>
+                                              </div>
+                                              <div class="card-body">
+                                                <p>From your account dashboard, you can easily check &amp; view your <a href="#">recent orders</a>, manage your <a href="#">shipping and billing addresses</a>, <a href="#">edit your password and account details</a>, and use your referral code.</p>
+                                                <div class="form-group">
+                                                  <label for="email">Username:</label>
+                                                  <input type="email" id="email" value="<%= name %>" readonly style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
                                                 </div>
-                                                <div class="card-body">
-                                                    <p>From your account dashboard. you can easily check &amp; view your
-                                                        <a href="#">recent orders</a>, manage your <a href="#">shipping
-                                                            and
-                                                            billing addresses</a> and <a href="#">edit your password and
-                                                            account details.</a></p>
+                                                <div class="form-group">
+                                                  <label for="password">Email:</label>
+                                                  <input type="email" id="password" value="<%= email %>" readonly style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
                                                 </div>
-                                                <input type="email" id="email" value="<%= name %>" readonly
-                                                    style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
-                                                <input type="email" id="password" value="<%= email %>" readonly
-                                                    style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057;">
+                                                <div class="form-group">
+                                                  <label for="referralCode">Your Referral Code:</label>
+                                                  <input type="text" id="referralCode" value="<%=userData.referralCode%>" readonly class="form-control" style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; width: 100%; box-sizing: border-box; font-size: 16px; color: #495057; cursor:pointer;" onclick="copyToClipboard('<%=userData.referralCode%>')">
+                                                </div>
+                                                <% if(!userData.alreadyReffered) { %>
 
-
+                                                <div class="form-group">
+                                                  <label for="inputReferralCode">Enter Another Referral Code:</label>
+                                                  <div class="input-group">
+                                                    <div class="input-group" id="referralInputContainer">
+                                                        <input type="text" class="form-control" id="inputReferralCode" placeholder="Enter Referral Code" style="background-color: #f8f9fa; border: 1px solid #ced4da; border-radius: 5px; padding: 12px; width: 100px; box-sizing: border-box; font-size: 16px; color: #495057;">
+                                                        <button class="btn btn-primary" id="applyReferralBtn" onclick="applyReferralCode()">Apply</button>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                                    <% } %>
+
+                                                    
+                                              </div>
+                                            </div>
+                                          </div>
+                                          
+                                          <script>
+                                            function copyToClipboard(text) {
+                                              navigator.clipboard.writeText(text);
+                                              toastr.success("Referral code copied to clipboard!");
+                                            }
+                                          
+                                            function applyReferralCode() {
+                                            const inputReferralCode = document.getElementById("inputReferralCode").value;
+                                            
+
+                                        // Make a fetch request to the backend
+                                        fetch('/applyReferral', {
+                                            method: 'POST',
+                                            headers: {
+                                            'Content-Type': 'application/json'
+                                            },
+                                            body: JSON.stringify({ referralCode: inputReferralCode })
+                                        })
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            if (data.success) {
+                                            // Referral code applied successfully
+                                            console.log('Referral code applied:', inputReferralCode);
+                                            toastr.success('Referral code applied successfully!');
+                                            } else {
+                                            // Error applying referral code
+                                            console.error('Error applying referral code:', data.error);
+                                            toastr.error('You cannot use your own code: ');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            // Error making the fetch request
+                                            console.error('Error applying referral code:', error);
+                                            toastr.error('Error applying referral code: ' + error.message);
+                                        });
+                                        }
+                                          </script>
 
 
                                         
@@ -431,10 +484,20 @@
                                                                                     <%= order.paymentMethod %>
                                                                                 </p>
                                                                             </td>
-                                                                            <td style="padding: 10px;"><span
-                                                                                    class="badge bg-info">
-                                                                                    <%= order.orderStatus%>
-                                                                                </span></td>
+                                                                            <td style="padding: 10px;">
+                                                                                <% if (order.paymentStatus !== 'failed') { %>
+                                                                                    <% if (order.orderStatus === 'Cancelled') { %>
+                                                                                        <span class="badge bg-danger">
+                                                                                            <%= order.orderStatus %>
+                                                                                        </span>
+                                                                                    <% } else { %>
+                                                                                        <span class="badge bg-info">
+                                                                                            <%= order.orderStatus %>
+                                                                                        </span>
+                                                                                    <% } %>
+                                                                                <% } %>
+                                                                            </td>
+                                                                            
                                                                                 <td style="padding: 10px;">
                                                                                     <span class="badge <%= order.paymentStatus === 'Received' ? 'bg-success text-dark' : (order.paymentStatus === 'Failed' ? 'bg-danger text-light' : 'bg-warning text-dark') %>">
                                                                                         <%= order.paymentStatus %>
@@ -453,7 +516,7 @@
                                                                             <td style="padding: 10px;">
                                                                                 <% if
                                                                                     (order.orderStatus==='Order Placed'
-                                                                                    || order.orderStatus==='Pending' ) {
+                                                                                    && order.paymentStatus==='Received'||order.paymentStatus=== 'Pending'&& order.orderStatus!=='Cancelled') {
                                                                                     %>
                                                                                     <a class="btn btn-warning btn-sm cancel-order"
                                                                                         href="/orderCancel?id=<%=order._id%>"
@@ -654,20 +717,35 @@
 
 
                                         </div>
-                                        <div class="tab-pane fade" id="account-detail" role="tabpanel"
-                                            aria-labelledby="account-detail-tab">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h5>Account Details</h5>
-                                                    <p>change password</p>
+                                        <div class="tab-pane fade" id="account-detail" role="tabpanel" aria-labelledby="account-detail-tab">
+                                            <div class="card" style="border: 1px solid #dee2e6; border-radius: 0.25rem;">
+                                                <div class="card-header" style="background-color: #f8f9fa; border-bottom: 1px solid #dee2e6;">
+                                                    <h5 style="margin-bottom: 0;">Account Details</h5>
+                                                    <p style="font-size: 14px; color: #6c757d;">change password</p>
                                                 </div>
                                                 <div class="card-body">
-
-                                                    <a href="/profileEdit">CHANGE YOUR PASSWORD</a>
+                                                    <a href="/profileEdit" style="text-decoration: none; color: #007bff; font-size: 16px;">CHANGE YOUR PASSWORD</a>
                                                 </div>
-
+                                                <div style="padding: 20px;">
+                                                    <form action="#" method="post">
+                                                        <div class="mb-3">
+                                                            <label for="newUsername" class="form-label" style="font-size: 16px; color: #495057;">New Username</label>
+                                                            <input type="text" class="form-control" id="newUsername" name="newUsername" required style="border: 1px solid #ced4da; border-radius: 5px; padding: 12px; font-size: 16px;" pattern="^[a-zA-Z]+$">
+                                                        </div>
+                                                    
+                                                        <div class="mb-3">
+                                                            <label for="currentPassword" class="form-label" style="font-size: 16px; color: #495057;">Current Password</label>
+                                                            <input type="password" class="form-control" id="currentPassword" name="currentPassword" required style="border: 1px solid #ced4da; border-radius: 5px; padding: 12px; font-size: 16px;">
+                                                        </div>
+                                                    
+                                                        <button type="button" onclick="updateUsername()" class="btn btn-primary" style="background-color: #007bff; border: none; border-radius: 5px; padding: 12px 24px; font-size: 16px;">Update Username</button>
+                                                    </form>
+                                                    
+                                                    
+                                                </div>
                                             </div>
                                         </div>
+                                        
 
                                         <div class="tab-pane fade" id="coupon" role="tabpanel"
                                         aria-labelledby="account-detail-tab">
@@ -1159,6 +1237,43 @@
                 title: "Oops...",
                 text: "Something went wrong!",
             });
+        });
+    }
+</script>
+<script>
+    function updateUsername() {
+        const newUsername = document.getElementById('newUsername').value;
+        const currentPassword = document.getElementById('currentPassword').value;
+
+        // Regex pattern to check for alphabetical characters only
+        const pattern = /^[a-zA-Z]+$/;
+
+        // Check if newUsername contains only alphabets
+        if (!pattern.test(newUsername)) {
+            toastr.error('Username should contain only alphabets');
+            return; // Stop further execution
+        }
+
+        fetch('/editUsername', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ newUsername, currentPassword }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Username updated successfully') {
+                toastr.success(data.message);
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                toastr.error(data.message || 'An error occurred');
+            }
+        })
+        .catch(error => {
+            toastr.error('An error occurred');
         });
     }
 </script>

@@ -14,13 +14,13 @@ let instance = new Razorpay({
     key_secret: RAZORPAY_SECRET_KEY,
 });
 
-
 const onlinePay = async (req, res) => {
     try {
         const userId = req.session.user;
+        
         const cart = await Cart.findOne({ userId });
         const address = await Address.findOne({ _id: req.body.address });
-
+        
         function generateOrderId() {
             const timestamp = Date.now().toString();
             const randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -33,7 +33,7 @@ const onlinePay = async (req, res) => {
         }
 
         const newOrderId = generateOrderId();
-
+        
         let productDataToSave;
 
         if (req.session.buyNowProductId) {
@@ -50,9 +50,21 @@ const onlinePay = async (req, res) => {
         } else {
             productDataToSave = cart.product;
         }
-
+        
         if (!Array.isArray(productDataToSave)) {
             productDataToSave = [productDataToSave]; // Convert to array if it's not already
+        }
+        
+        let couponDiscount = 0;  // Default coupon discount is 0
+
+        const { couponCode } = req.body;
+        // Check if couponCode is provided
+        if (couponCode) {
+            const coupon = await Coupon.findOne({ couponCode: req.body.couponCode });
+            console.log('couponDiscount', coupon);
+            if (coupon) {
+                couponDiscount = coupon.discountAmount;
+            }
         }
 
         const order = new Orders({
@@ -61,12 +73,13 @@ const onlinePay = async (req, res) => {
             paymentMethod: req.body.paymentMethod,
             paymentStatus: req.body.paymentStatus,
             totalAmount: req.body.amount,
+            couponDiscount: couponDiscount, // Save coupon discount in order
             product: productDataToSave,
             address
         });
         
         await order.save();
-
+        
         // Calculate the total amount in INR
         const amounts = req.body.amount * 84;
         const order2 = await instance.orders.create({
@@ -362,6 +375,11 @@ const placeOrder = async (req, res) => {
             }
         }
 
+        let couponDiscount = 0; // default coupon discount
+
+        if (coupon) {
+            couponDiscount = coupon.discountAmount;
+        }
 
         let productDataToSave;
 
@@ -389,49 +407,34 @@ const placeOrder = async (req, res) => {
 
         console.log("Product data ::", productDataToSave);
 
-       
+        const order = new Orders({
+            orderId: newOrderId,
+            userId,
+            paymentMethod: req.body.paymentMethod,
+            paymentStatus, // set payment status
+            totalAmount: req.body.amount,
+            product: productDataToSave,
+            address,
+            couponDiscount
+        });
 
-        if (!coupon) {
-            const order = new Orders({
-                orderId: newOrderId,
-                userId,
-                paymentMethod: req.body.paymentMethod,
-                paymentStatus, // set payment status
-                totalAmount: req.body.amount,
-                product: productDataToSave,
-                address,
-            });
-            await order.save();
-            console.log("---------------------------------paymentStatus-----------------------------------------------------", order);
-        } else {
-            const order = new Orders({
-                orderId: newOrderId,
-                userId,
-                paymentMethod: req.body.paymentMethod,
-                paymentStatus, // set payment status
-                totalAmount: req.body.amount,
-                product: productDataToSave,
-                address,
-                couponDiscount: coupon.discountAmount
-            });
-            await order.save();
-        }
-            // Update product stock for each item in the order
-            for (const item of orderItems) {
-                const product = await Product.findById(item.productId);
-                if (product) {
-                    product.stock -= item.quantity; // Subtract order quantity from product stock
-                    await product.save();
-                }
+        await order.save();
+
+        // Update product stock for each item in the order
+        for (const item of orderItems) {
+            const product = await Product.findById(item.productId);
+            if (product) {
+                product.stock -= item.quantity; // Subtract order quantity from product stock
+                await product.save();
             }
+        }
 
         res.status(200).json({ message: "Order Placed Successfully" });
-        // Render order success page
-        // res.render("orderSuccess");
     } catch (error) {
         console.error(error);
     }
 };
+
 
 
 

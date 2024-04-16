@@ -85,8 +85,6 @@ body {
                           <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                           <div class="text">
                               <h6 class="mb-1 card-title">Revenue</h6>
-                              
-                              <span><%=productCountsByYear[0]._id%></span>
                               <span>$<%= totalRevenue.toFixed(2) %></span>
                               <!-- <span class="text-sm"> Shipping fees are not included </span> -->
                           </div>
@@ -165,14 +163,13 @@ body {
           
         
           <div class="container">
-          <div class="filter-container" style="margin-bottom: 20px; font-family: Arial, sans-serif;">
-    <label for="timeFilter" style="margin-right: 10px; font-size: 18px; font-weight: bold; color: #333;">Time Filter:</label>
-    <select id="timeFilter" onchange="updateChart()" style="padding: 8px 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; transition: border-color 0.3s;">
-        <option value="monthly" selected style="font-size: 16px;">Monthly</option>
-        <option value="yearly" style="font-size: 16px;">Yearly</option>
-    </select>
-</div>
-
+            <div class="filter-container">
+                <label for="timeFilter">Time Filter:</label>
+                <select id="timeFilter" onchange="updateChart()">
+                    <option value="monthly" selected>Monthly</option>
+                    <option value="yearly">Yearly</option>
+                </select>
+            </div>
             <div class="chart-container">
                 <canvas id="myChart" class="chart-canvas"></canvas>
             </div>
@@ -274,149 +271,78 @@ body {
   // Initial data
   const orderCountsByMonth = <%= JSON.stringify(orderCountsByMonth) %>;
     const productCountsByMonth = <%= JSON.stringify(productCountsByMonth) %>;
-    const productCountsByYear = <%= JSON.stringify(productCountsByYear) %>;
-    const orderCountsByYear = <%= JSON.stringify(orderCountsByYear) %>;
-    const totalAmountByMonth = <%= JSON.stringify(totalAmountByMonth) %>;
-    const totalAmountByYear = <%= JSON.stringify(totalAmountByYear) %>;
-    
 
 
   // Initialize chart
   const ctx = document.getElementById('myChart').getContext('2d');
-let salesChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [{
-            label: 'Order Counts',
-            data: orderCountsByMonth,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 3,
-            pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-            pointBorderColor: 'rgba(255, 255, 255, 1)',
-            pointBorderWidth: 2,
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            fill: {
-                target: 'origin',
-                above: 'rgba(75, 192, 192, 0.4)',
-                below: 'rgba(75, 192, 192, 0)',
-            },
-        },
-        {
-            label: 'Product Counts',
-            data: productCountsByMonth,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 3,
-            pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-            pointBorderColor: 'rgba(255, 255, 255, 1)',
-            pointBorderWidth: 2,
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            fill: {
-                target: 'origin',
-                above: 'rgba(255, 99, 132, 0.4)',
-                below: 'rgba(255, 99, 132, 0)',
-            },
-        },
-        {
-            label: 'Total Amount',
-            data: totalAmountByMonth,  // Assuming you have totalAmountByMonth array
-            borderColor: 'rgba(255, 205, 86, 1)',  // Yellow color for total amount
-            borderWidth: 3,
-            pointBackgroundColor: 'rgba(255, 205, 86, 1)',
-            pointBorderColor: 'rgba(255, 255, 255, 1)',
-            pointBorderWidth: 2,
-            pointRadius: 5,
-            pointHoverRadius: 7,
-            fill: {
-                target: 'origin',
-                above: 'rgba(255, 205, 86, 0.4)',
-                below: 'rgba(255, 205, 86, 0)',
-            },
-        }],
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    stepSize: 2,
-                    max: 20,
-                    font: {
-                        size: 14,
-                    },
-                },
-                grid: {
-                    display: true,
-                    color: 'rgba(0, 0, 0, 0.05)',
-                    borderWidth: 1,
-                    borderDash: [5, 5],
-                },
-            },
-            x: {
-                grid: {
-                    display: false,
-                },
-            },
-        },
-        plugins: {
-            title: {
-                display: true,
-                text: 'Sales Statistics',
-                font: {
-                    size: 24,
-                    weight: 'bold',
-                },
-            },
-            legend: {
-                display: true,
-                position: 'bottom',
-                labels: {
-                    font: {
-                        size: 16,
-                    },
-                },
-            },
-            tooltip: {
-                enabled: true,
-                mode: 'nearest',
-                intersect: false,
-            },
-        },
-    },
-});
+  let salesChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+          datasets: [{
+              label: 'Order Counts',
+              data: orderCountsByMonth,
+              backgroundColor: 'rgba(75, 192, 192, 0.6)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1,
+          },
+          {
+              label: 'Product Counts',
+              data: productCountsByMonth,
+              backgroundColor: 'rgba(255, 99, 132, 0.6)',
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderWidth: 1,
+          }],
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  ticks: {
+                      stepSize: 10,
+                  },
+              },
+          },
+          plugins: {
+              title: {
+                  display: true,
+                  text: 'Sales Statistics',
+                  font: {
+                      size: 18,
+                      weight: 'bold',
+                  },
+              },
+          },
+      },
+  });
 
+  function updateChart() {
+      const timeFilter = document.getElementById('timeFilter').value;
+      let newData;
 
-function updateChart() {
-    const timeFilter = document.getElementById('timeFilter').value;
-    let newData;
+      if (timeFilter === 'monthly') {
+          newData = {
+              orderCounts: orderCountsByMonth,
+              productCounts: productCountsByMonth,
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+          };
+      } else if (timeFilter === 'yearly') {
+          newData = {
+              orderCounts: computeYearlyData(orderCountsByMonth),
+              productCounts: computeYearlyData(productCountsByMonth),
+              labels: computeYearlyLabels()
+          };
+      }
 
-    if (timeFilter === 'monthly') {
-        newData = {
-            orderCounts: orderCountsByMonth,
-            productCounts: productCountsByMonth,
-            totalAmount: totalAmountByMonth,  
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        };
-    } else if (timeFilter === 'yearly') {
-        newData = {
-            orderCounts: orderCountsByYear,
-            productCounts: productCountsByYear,
-            totalAmount: totalAmountByYear,  
-            labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030']
-        };
-    }
+      salesChart.data.datasets[0].data = newData.orderCounts;
+      salesChart.data.datasets[1].data = newData.productCounts;
+      salesChart.data.labels = newData.labels;
 
-    salesChart.data.datasets[0].data = newData.orderCounts;
-    salesChart.data.datasets[1].data = newData.productCounts;
-    salesChart.data.datasets[2].data = newData.totalAmount;  
-    salesChart.data.labels = newData.labels;
+      salesChart.update();
+  }
 
-    salesChart.update();
-}
   function computeYearlyData(monthlyData) {
     let yearlyData = [];
     let sum = 0;
@@ -426,7 +352,7 @@ function updateChart() {
         sum += monthlyData[i];
         monthCount++;
 
-        if (monthCount === 12 || i === monthlyData.length - 1) { 
+        if (monthCount === 12 || i === monthlyData.length - 1) { // Check if it's the end of the year or last month
             yearlyData.push(sum);
             sum = 0;
             monthCount = 0;
@@ -440,14 +366,18 @@ function updateChart() {
       let currentYear = new Date().getFullYear();
       let labels = [];
 
-      for (let i = currentYear - 5; i <= currentYear + 6; i++) {
+      // Include previous 5 years and next 5 years
+      for (let i = currentYear - 5; i <= currentYear + 5; i++) {
           labels.push(i.toString());
       }
 
       return labels;
   }
 </script>  
-
+<script>
+      const orderCountsByYear = <%= JSON.stringify(orderCountsByYear) %>;
+    const productCountsByYear = <%= JSON.stringify(productCountsByYear) %>;
+</script>
 </body> 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
