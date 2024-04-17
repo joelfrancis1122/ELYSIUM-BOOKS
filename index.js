@@ -63,16 +63,8 @@ app.use(cors())
 app.use(flash());
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json()) 
+app.use(express.json())
 app.set("view engine", "ejs");
-
-// app.use(
-//   session({
-//     secret: "12dwvgjad234",
-//     resave: false,
-//     saveUninitialized: true,
-//   })
-// );
 
 
 
