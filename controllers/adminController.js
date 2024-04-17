@@ -296,16 +296,18 @@ console.error(error);
 
 
 //=======================categories================================\\
+
 const loadCategories = async(req,res)=>{
     try {
         const catData = await Category.find()
            if(catData){
-          res.render('addCategories',{categories : catData})
+          res.render('addcategories',{categories : catData})
            }
     } catch (error) {
         console.log(error.message);
     }
 }
+
 
 const loadSubCategories = async(req,res)=>{
     try {
