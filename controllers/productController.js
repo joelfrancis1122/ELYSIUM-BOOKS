@@ -135,7 +135,7 @@ const editProduct = async (req, res) => {
 
         const productUpdateddata = await editProduct.save();
         
-        if (productUpdateddata) {
+        if (productUpdateddata) {               
             res.redirect('/admin/productslist');
         } else {
             console.log("Error updating product.");
