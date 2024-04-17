@@ -107,7 +107,9 @@ const editProduct = async (req, res) => {
                 try {
                     await sharp(file.path)
                         .resize({ width: 386, height: 595 })
-                        .toFile(`C:/Users/joelf/OneDrive/Desktop/ELYSIUM/public/uploads/${filename}`)
+                        // .toFile(`C:/Users/joelf/OneDrive/Desktop/ELYSIUM/public/uploads/${filename}`)
+                        .toFile(`/home/ubuntu/ELYSIUM-BOOKS/ELYSIUM-BOOKS/public/uploads/${filename}`);
+
                     editProduct.Images.push(filename);
                     fs.unlink(file.path, (err) => {
                         if (err) {
