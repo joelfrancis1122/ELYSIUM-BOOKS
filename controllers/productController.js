@@ -20,25 +20,22 @@ const loadaddproduct = async (req, res) => {
     }
 }
 
-
-
 const addProduct = async (req, res) => {
     try {
-        const { Bookname, Description, Categories, Regularprice, stock, saleprice,subCategories } = req.body;
+        const { Bookname, Description, Categories, Regularprice, stock, saleprice, subCategories } = req.body;
         const imageUrls = [];
-       
-
+        
         for (const file of req.files) {
             const filename = `${uuidv4()}.jpg`;
             try {
+                const imageUrl = `${filename}`;
+                const path = require('path');
+                const outputPath = path.join(__dirname, '../public/uploads', filename);
+                
                 await sharp(file.path)
                     .resize({ width: 386, height: 595 })
-                    // .toFile(`/ELYSIUM-BOOKS/ELYSIUM-BOOKS/public/uploads/${filename}`);
-                    const imageUrl = `${filename}`;
-                    const path = require('path');
+                    .toFile(outputPath);
 
-                    const outputPath = path.join(__dirname, '../public/admin/images/product', filename)
-                        .toFile(outputPath);
                 imageUrls.push(imageUrl);
                 fs.unlink(file.path, (err) => {
                     if (err) {
@@ -57,13 +54,15 @@ const addProduct = async (req, res) => {
             Bookname: Bookname,
             Description: Description,
             Categories: Categories,
-            subCategories :subCategories,
+            subCategories: subCategories,
             Regularprice: Regularprice,
             stock: stock,
             saleprice: saleprice,
             Images: imageUrls
         });
+
         const productData = await product.save();
+        
         if (productData) {
             res.redirect('/admin/productslist');
         } else {
