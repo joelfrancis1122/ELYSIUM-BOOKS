@@ -5,6 +5,7 @@ const SubCategory = require('../models/subcategoryModel')
 const { v4: uuidv4 } = require("uuid")
 const sharp = require('sharp')
 const fs = require('fs')
+const path = require('path')
 
 
 
@@ -32,8 +33,12 @@ const addProduct = async (req, res) => {
             try {
                 await sharp(file.path)
                     .resize({ width: 386, height: 595 })
-                    .toFile(`/ELYSIUM-BOOKS/ELYSIUM-BOOKS/public/uploads/${filename}`);
+                    // .toFile(`/ELYSIUM-BOOKS/ELYSIUM-BOOKS/public/uploads/${filename}`);
                     const imageUrl = `${filename}`;
+                    const path = require('path');
+
+                    const outputPath = path.join(__dirname, '../public/admin/images/product', filename)
+                        .toFile(outputPath);
                 imageUrls.push(imageUrl);
                 fs.unlink(file.path, (err) => {
                     if (err) {
@@ -88,12 +93,12 @@ const loadeditProduct = async (req, res) => {
 }
 
 
-
 const editProduct = async (req, res) => {
     try {
-        const { Bookname, Description, Regularprice, saleprice, stock, Categories ,subCategories} = req.body;
+        const { Bookname, Description, Regularprice, saleprice, stock, Categories, subCategories } = req.body;
         const images = req.files;
         const editProduct = await Product.findOne({ _id: req.session.editProductId });
+        
         editProduct.Bookname = Bookname;
         editProduct.Description = Description;
         editProduct.Regularprice = Regularprice;
@@ -101,16 +106,19 @@ const editProduct = async (req, res) => {
         editProduct.stock = stock;
         editProduct.Categories = Categories;
         editProduct.subCategories = subCategories;
+
         if (images && images.length > 0) {
             for (const file of images) {
                 const filename = `${uuidv4()}.jpg`;
+                const outputPath = path.join(__dirname, '../public/uploads', filename);
+                
                 try {
                     await sharp(file.path)
                         .resize({ width: 386, height: 595 })
-                        // .toFile(`C:/Users/joelf/OneDrive/Desktop/ELYSIUM/public/uploads/${filename}`)
-                        .toFile(`/ELYSIUM-BOOKS/ELYSIUM-BOOKS/public/uploads/${filename}`);
+                        .toFile(outputPath);
 
                     editProduct.Images.push(filename);
+                    
                     fs.unlink(file.path, (err) => {
                         if (err) {
                             console.error(`Error deleting file: ${err}`);
@@ -124,10 +132,12 @@ const editProduct = async (req, res) => {
                 }
             }
         }
+
         const productUpdateddata = await editProduct.save();
+        
         if (productUpdateddata) {
             res.redirect('/admin/productslist');
-``        } else {
+        } else {
             console.log("Error updating product.");
             res.status(500).send("Error updating product.");
         }
