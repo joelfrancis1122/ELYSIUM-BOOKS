@@ -237,7 +237,22 @@
             });
         });
     </script> -->
-
+    <script>
+        function validateImages(input) {
+            const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.webp)$/i;
+        const files = input.files;
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!allowedExtensions.test(file.name)) {
+                toastr.error('Please select only image files (JPEG, JPG, PNG,.webp).');
+                input.value = ''; //
+                return false; // entry ila
+            }
+        }
+        return true;
+    }
+    
+    </script>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -385,6 +400,10 @@ function handleImageSelection(event) {
   const imagePreviewContainer = document.getElementById('imagePreviewContainer');
   const fileInput = document.getElementById('imageInput');
   imagePreviewContainer.innerHTML = ''; // Clear previous previews
+
+  if (!validateImages(fileInput)) {
+        return; // Stop further processing if validation fails
+    }
 
   const files = Array.from(event.target.files);
 

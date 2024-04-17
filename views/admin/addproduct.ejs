@@ -142,17 +142,17 @@
 
 
 
-                  <div class="card-body">
-  <div class="input-upload">
-    <div id="previewContainer" class="mt-3">
-      <ul id="imageList" class="list-unstyled d-flex flex-wrap">
-        <!-- Image previews will be added here -->
-      </ul>
+                    <div class="card-body">
+    <div class="input-upload">
+        <div id="previewContainer" class="mt-3">
+        <ul id="imageList" class="list-unstyled d-flex flex-wrap">
+            <!-- Image previews will be added here -->
+        </ul>
+        </div>
+        <div id="previewContainer" class="mt-3"></div>
+        <div id="imagePreviewContainer" class="mt-3"></div>                                                    
+        <input id="imageInput" class="form-control" name="Images" type="file" accept="image/*" multiple onchange="handleImageSelection(event)">  </div>
     </div>
-    <div id="previewContainer" class="mt-3"></div>
-    <div id="imagePreviewContainer" class="mt-3"></div>                                                    
-    <input id="imageInput" class="form-control" name="Images" type="file" accept="image/*" multiple onchange="handleImageSelection(event)">  </div>
-</div>
 
 
 
@@ -295,48 +295,55 @@
 
 </script>
 <script>
-    function handleImageSelection(event) {
-        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-        const fileInput = document.getElementById('imageInput');
-        imagePreviewContainer.innerHTML = ''; // Clear previous previews
-
-        const files = Array.from(event.target.files);
-
-        for (const file of files) {
-            const imagePreview = document.createElement('div');
-            imagePreview.classList.add('image-preview', 'position-relative');
-
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(file);
-            img.alt = file.name;
-            img.classList.add('img-thumbnail', 'mb-2');
-            img.style.maxWidth = '100px';
-
-            const fileName = document.createElement('p');
-            fileName.textContent = file.name;
-            fileName.classList.add('text-muted', 'mb-0');
-
-            const removeButton = document.createElement('button');
-            removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'position-absolute', 'bottom-0', 'start-50', 'translate-middle-x', 'mb-2');
-            removeButton.innerHTML = 'Remove';
-            removeButton.onclick = () => {
-                const fileIndex = Array.from(fileInput.files).indexOf(file);
-                if (fileIndex !== -1) {
-                    const dt = new DataTransfer();
-                    const files = Array.from(fileInput.files);
-                    files.splice(fileIndex, 1);
-                    files.forEach((file) => dt.items.add(file));
-                    fileInput.files = dt.files;
-                }
-                imagePreview.remove();
-            };
-
-            imagePreview.appendChild(img);
-            imagePreview.appendChild(fileName);
-            imagePreview.appendChild(removeButton);
-            imagePreviewContainer.appendChild(imagePreview);
-        }
+   function handleImageSelection(event) {
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const fileInput = document.getElementById('imageInput');
+    
+    // Validate the selected images
+    if (!validateImages(fileInput)) {
+        return; // Stop further processing if validation fails
     }
+
+    imagePreviewContainer.innerHTML = ''; // Clear previous previews
+
+    const files = Array.from(event.target.files);
+
+    for (const file of files) {
+        const imagePreview = document.createElement('div');
+        imagePreview.classList.add('image-preview', 'position-relative');
+
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        img.alt = file.name;
+        img.classList.add('img-thumbnail', 'mb-2');
+        img.style.maxWidth = '100px';
+
+        const fileName = document.createElement('p');
+        fileName.textContent = file.name;
+        fileName.classList.add('text-muted', 'mb-0');
+
+        const removeButton = document.createElement('button');
+        removeButton.classList.add('btn', 'btn-danger', 'btn-sm', 'position-absolute', 'bottom-0', 'start-50', 'translate-middle-x', 'mb-2');
+        removeButton.innerHTML = 'Remove';
+        removeButton.onclick = () => {
+            const fileIndex = Array.from(fileInput.files).indexOf(file);
+            if (fileIndex !== -1) {
+                const dt = new DataTransfer();
+                const files = Array.from(fileInput.files);
+                files.splice(fileIndex, 1);
+                files.forEach((file) => dt.items.add(file));
+                fileInput.files = dt.files;
+            }
+            imagePreview.remove();
+        };
+
+        imagePreview.appendChild(img);
+        imagePreview.appendChild(fileName);
+        imagePreview.appendChild(removeButton);
+        imagePreviewContainer.appendChild(imagePreview);
+    }
+}
+
 </script>
 
     <script src="/public/admin-assets/j
