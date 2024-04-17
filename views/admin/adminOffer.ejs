@@ -246,7 +246,7 @@ border-color: #007bff; /* Change border color on focus */
                       <span class="close">&times;</span>
                       <form id="discountForm">
                         <label for="discount">Discount Percentage:</label>
-                        <input type="text" id="discount" name="discount" required><br>
+                        <input type="number" id="discount" name="discount" min="20" max="90" required><br>
                         <label for="expiry">Expiry Date:</label>
                         <input type="date" id="expiry" name="expiry"  required><br>
                         <input type="submit" value="Submit">
