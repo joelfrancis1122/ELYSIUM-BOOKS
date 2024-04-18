@@ -155,41 +155,62 @@
                                 <td class="align-middle" style="padding: 20px; text-align: right; font-weight: 600; color: #007bff;"><%= product.quantity %></td>
                                 <td class="align-middle" style="padding: 20px; text-align: right; font-weight: 600; color: #007bff;">$<%= (product.quantity * product.price).toFixed(2) %></td>
                                 <td class="align-middle" style="padding: 20px; text-align: right;">
-                                    <% if (product.productStatus !== 'Cancelled'&&orderData.orderStatus!== "Returned"&&orderData.orderStatus!=="Cancelled" &&orderData.orderStatus!=="Delivered")  { %>
+                                  <% if (product.productStatus !== 'Cancelled' && orderData.orderStatus !== "Returned" && orderData.orderStatus !== "Cancelled" && orderData.orderStatus !== "Delivered") { %>
                                       <a class="btn btn-danger btn-sm" onclick="cancelBook('<%= product._id %>')" style="margin-right: 10px;">
-                                        <i class="fas fa-times"></i> Cancel
-                                    </a>
-                                    
-                                    <script>
-                                        function cancelBook(productId) {
-                                            Swal.fire({
-                                                title: 'Are you sure?',
-                                                text: 'Do you want to cancel this book?',
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonColor: '#3085d6',
-                                                cancelButtonColor: '#d33',
-                                                confirmButtonText: 'Yes, cancel it!',
-                                                cancelButtonText: 'No, keep it'
-                                            }).then((result) => {
-                                                if (result.isConfirmed) {
-                                                    window.location.href = '/bookCancel?id=' + productId;
-                                                }
-                                            });
-                                        }
-                                    </script>
-                                    
-                                    <% } else if(product.productStatus=="Cancelled") { %>
+                                          <i class="fas fa-times"></i> Cancel
+                                      </a>
+                                      <script>
+                                          function cancelBook(productId) {
+                                              Swal.fire({
+                                                  title: 'Are you sure?',
+                                                  text: 'Do you want to cancel this book?',
+                                                  icon: 'warning',
+                                                  showCancelButton: true,
+                                                  confirmButtonColor: '#3085d6',
+                                                  cancelButtonColor: '#d33',
+                                                  confirmButtonText: 'Yes, cancel it!',
+                                                  cancelButtonText: 'No, keep it'
+                                              }).then((result) => {
+                                                  if (result.isConfirmed) {
+                                                      window.location.href = '/bookCancel?id=' + productId;
+                                                  }
+                                              });
+                                          }
+                                      </script>
+                                  <% } else if(product.productStatus == "Cancelled") { %>
                                       <a class="btn btn-secondary btn-sm" style="background-color: #f0f0f0; color: #8c8c8c; border-color: #d1d1d1; font-weight: 600; font-size: 14px; padding: 6px 12px;">
-                                        <i class="fas fa-times" style="color: #8c8c8c; font-size: 16px; margin-right: 5px;"></i>
-                                        <span style="font-weight: 600; font-size: 14px; color: #8c8c8c;">Cancelled</span>
-                                    </a>
-                                    
-                                      
-                                    <% }else{ %>
-
-                                      <%}%>
-                                </td>
+                                          <i class="fas fa-times" style="color: #8c8c8c; font-size: 16px; margin-right: 5px;"></i>
+                                          <span style="font-weight: 600; font-size: 14px; color: #8c8c8c;">Cancelled</span>
+                                      </a>
+                                  <% } else if(orderData.orderStatus == "Delivered"&&product.productStatus != "Returned") { %>
+                                      <a class="btn btn-warning btn-sm" onclick="returnBook('<%= product._id %>')" style="margin-right: 10px;">
+                                          <i class="fas fa-undo"></i> Return
+                                      </a>
+                                      <script>
+                                          function returnBook(productId) {
+                                              Swal.fire({
+                                                  title: 'Are you sure?',
+                                                  text: 'Do you want to return this book?',
+                                                  icon: 'warning',
+                                                  showCancelButton: true,
+                                                  confirmButtonColor: '#3085d6',
+                                                  cancelButtonColor: '#d33',
+                                                  confirmButtonText: 'Yes, return it!',
+                                                  cancelButtonText: 'No, keep it'
+                                              }).then((result) => {
+                                                  if (result.isConfirmed) {
+                                                      window.location.href = '/bookReturn?id=' + productId;
+                                                  }
+                                              });
+                                          }
+                                      </script> 
+                                  <% } else if(product.productStatus == "Returned") { %>
+                                      <button class="btn btn-secondary btn-sm" disabled>
+                                          <i class="fas fa-undo"></i> Returned
+                                      </button>
+                                  <% } %>
+                              </td>
+                              
                             </tr>
                             <% grandTotal += product.quantity * product.price; %>
                         <% } %>

@@ -1006,15 +1006,19 @@ const orderReturn = async (req, res) => {
         }
         if (returnedOrder && wallet) {
             const totalAmount = parseFloat(returnedOrder.totalAmount);
-            wallet.balance += totalAmount;
-            wallet.history.push({
-                amount: totalAmount,
-                type: 'credit'
-            });
-            await wallet.save();
-    
-            await wallet.save();
+
+            // Check if totalAmount is not zero
+            if (totalAmount !== 0) {
+                wallet.balance += totalAmount;
+                wallet.history.push({
+                    amount: totalAmount,
+                    type: 'credit'
+                });
+                await wallet.save();
+            }
+            
             res.redirect('/loadProfile');
+            
         } else {
             throw new Error('Returned order or user wallet not found');
         }
@@ -1076,7 +1080,55 @@ const bookCancel = async (req, res) => {
 
 
 
+const bookReturn = async (req, res) => {
+    try {
+        const bookid = req.query.id;
+        const userId = req.session.user;
+        const returnedBook = await Orders.findOne({
+            userId: userId,
+            'product._id': bookid
+        });
+        if (!returnedBook) {
+            throw new Error('Order not found');
+        }
+        const returnedProduct = returnedBook.product.find(item => item._id.toString() === bookid);
+        if (!returnedProduct) {
+            throw new Error('Product not found in the order');
+        }
+        returnedProduct.productStatus = 'Returned';
+        await returnedBook.save();
+        const product = await Product.findById(returnedProduct.productId);
+        product.stock += returnedProduct.quantity;
+        await product.save();
+        let returnedAmount = returnedProduct.price * returnedProduct.quantity;
+        if (returnedBook.couponDiscount) {
+            const discountAmount = (returnedAmount * returnedBook.couponDiscount) / 100;
+            returnedAmount -= discountAmount;
+        }
+        returnedBook.totalAmount = (parseFloat(returnedBook.totalAmount) - returnedAmount).toFixed(2);
+        await returnedBook.save();
+            // Add amount back to wallet if not Cash on delivery
+            const wallet = await Wallet.findOne({ userId: userId });
+            if (!wallet) {
+                throw new Error('User wallet not found');
+            }
 
+            wallet.balance += returnedAmount;
+            wallet.history.push({
+                amount: returnedAmount,
+                type: 'credit',
+                createdAt: new Date()
+            });
+
+            await wallet.save();
+
+        res.redirect('/loadProfile');
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: error.message || 'Failed to return product' });
+    }
+}
 
 
 const orderDetail = async (req, res) => {
@@ -1226,25 +1278,13 @@ const googleAuth = async (req, res) => {
 
 
 
-// Schedule the cron job to run every day at midnight
 cron.schedule('* * *  *  * *', async () => {
-    
-
     const orderDetails = await Orders.find()
-    
-    // console.log(" orders details :", orderDetails);
- 
-    
     const zeroTotalOrders = await Orders.find({
         totalAmount: '0.00',
-        orderStatus: { $ne: 'Cancelled' }
+        orderStatus: { $ne: 'Cancelled',ne:"Returned" }
     });
-            
-
-        // console.log("Zero total orders:", zeroTotalOrders);
-
         if (zeroTotalOrders.length > 0) {
-            // Loop through each order and update the orderStatus to 'Cancelled'
             for (const order of zeroTotalOrders) {
                 const orderId = order._id;
                 const orderCancelled = await Orders.findByIdAndUpdate(orderId, { $set: { orderStatus: 'Cancelled' } });
@@ -1255,7 +1295,6 @@ cron.schedule('* * *  *  * *', async () => {
                 }
             }
         } else {
-            // console.log('No orders with total amount 0 to cancel.');
         }
      
 });
@@ -1304,6 +1343,7 @@ module.exports = {
     resetpassword,
     applyReferral,
     bookCancel,
+    bookReturn
     // getContact,
     // contactMe
 }

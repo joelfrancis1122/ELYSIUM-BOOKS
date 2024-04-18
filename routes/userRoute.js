@@ -75,6 +75,7 @@ userRoute.get("/orderCancel", Auth.isLogin, userControllers.OrderCancelled)
 userRoute.get("/orderReturn", Auth.isLogin, userControllers.orderReturn)
 userRoute.get("/orderDetail", Auth.isLogin, userControllers.orderDetail)
 userRoute.get("/bookCancel", Auth.isLogin, userControllers.bookCancel)
+userRoute.get("/bookReturn", Auth.isLogin, userControllers.bookReturn)
 
 
 
