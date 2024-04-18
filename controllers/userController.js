@@ -5,6 +5,7 @@ const Category = require('../models/categoryModel')
 const Address = require('../models/addressModel')
 const Wallet = require('../models/walletModel')
 const Cart = require('../models/cartModel')
+// const Enquiry = require('../models/enquiryModel')
 const Orders = require('../models/orderModel')
 const Wishlist = require('../models/wishlistModel')
 const bcrypt = require('bcrypt');
@@ -13,6 +14,7 @@ const Coupon = require('../models/couponModel')
 const cron = require('node-cron');
 const Quote = require('inspirational-quotes');
 
+
 const Razorpay = require('razorpay');
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
@@ -20,7 +22,6 @@ let instance = new Razorpay({
     key_id: RAZORPAY_ID_KEY,
     key_secret: RAZORPAY_SECRET_KEY,
 });
-
 
 
 
@@ -84,6 +85,37 @@ const loadlogin = async (req, res) => {
         console.error(error)
     }
 }
+
+const getContact = async(req,res)=>{
+    try{
+        res.render('/home')
+        // res.render('contact')
+    }catch(error){
+        console.log(error)
+    }
+}
+
+// const contactMe = async (req,res)=>{
+//     try{
+//     const{name,email,phone,message}=req.body
+
+//     const enquiry = new Enquiry({
+//         name: name,
+//         email: email,
+//         phone: phone,
+//         message: message,
+
+//     })
+    
+//     const enquirydata = await enquiry.save()
+//     if(enquirydata){
+//         console.log("i got message from the user")
+//     }
+
+//     }catch(error){
+//         console.error(error)
+//     }
+// }
 
 
 const forgotPass = async(req,res)=>{
@@ -471,6 +503,7 @@ const verifyOtp = async (req, res) => {
                 referralCode: referralCode,
 
             })
+
             const userData = await user.save()
             if (userData) {
                 req.session.user = userData._id;
@@ -996,8 +1029,6 @@ const bookCancel = async (req, res) => {
     try {
         const bookid = req.query.id;
         const userId = req.session.user;
-
-        // Find the order containing the specific product
         const cancelledBook = await Orders.findOne({
             userId: userId,
             'product._id': bookid
@@ -1006,69 +1037,37 @@ const bookCancel = async (req, res) => {
         if (!cancelledBook) {
             throw new Error('Order not found');
         }
-
         // Find the specific product within the order
         const cancelledProduct = cancelledBook.product.find(item => item._id.toString() === bookid);
-
         if (!cancelledProduct) {
             throw new Error('Product not found in the order');
         }
-
-        // Update the product status to 'Cancelled'
         cancelledProduct.productStatus = 'Cancelled';
-
-        // Save the updated order
         await cancelledBook.save();
-
-        // Increase the product stock
         const product = await Product.findById(cancelledProduct.productId);
-
-        if (!product) {
-            throw new Error('Product not found');
-        }
-
-        // Increase the stock by the cancelled quantity
         product.stock += cancelledProduct.quantity;
-
-        // Save the updated product
         await product.save();
-
-        // Calculate the cancelled amount considering coupon discount
         let cancelledAmount = cancelledProduct.price * cancelledProduct.quantity;
-
-        // Decrease the coupon discount from the cancelled amount as a percentage
         if (cancelledBook.couponDiscount) {
             const discountAmount = (cancelledAmount * cancelledBook.couponDiscount) / 100;
             cancelledAmount -= discountAmount;
         }
-
-        // Subtract the cancelled amount from the total amount
         cancelledBook.totalAmount = (parseFloat(cancelledBook.totalAmount) - cancelledAmount).toFixed(2);
-
-        // Save the updated order with the new total amount
         await cancelledBook.save();
-
-        // Check payment method and credit wallet if not Cash on delivery
         if (cancelledBook.paymentMethod !== "Cash on delivery") {
             const wallet = await Wallet.findOne({ userId: userId });
-
             if (!wallet) {
                 throw new Error('User wallet not found');
             }
-
             wallet.balance += cancelledAmount;
-            
             wallet.history.push({
                 amount: cancelledAmount,
                 type: 'credit',
                 createdAt: new Date()
             });
-
             await wallet.save();
         }
-
         res.redirect('/loadProfile');
-
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: error.message || 'Failed to cancel product' });
@@ -1290,7 +1289,6 @@ module.exports = {
     OrderCancelled,
     orderReturn,
     orderDetail,
-    // categorySearch,
     loadOrderDetails,
     loadInvoice,
     addTowallet,
@@ -1305,5 +1303,7 @@ module.exports = {
     getResetPassword,
     resetpassword,
     applyReferral,
-    bookCancel
+    bookCancel,
+    // getContact,
+    // contactMe
 }

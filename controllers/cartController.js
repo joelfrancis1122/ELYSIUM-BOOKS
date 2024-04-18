@@ -138,9 +138,9 @@ const saveOrder = async(req, res) => {
         }
 
         const order = await Orders.findOneAndUpdate(
-            { orderId }, // Query object to find the order by orderId
-            { $set: { paymentStatus: "Received" } }, // Update to set paymentStatus to "Received"
-            { new: true } // Option to return the modified document
+            { orderId },
+            { $set: { paymentStatus: "Received" } }, 
+            { new: true } 
         );
 
         if (order) {
@@ -179,18 +179,18 @@ const addToCart = async (req, res) => {
         const productId = req.query.id;
         const userId = req.session.user;
 
-        // Check if the product exists and is in stock
+    
         const product = await Product.findById(productId);
         if (!product || product.stock === 0) {
             return res.status(404).json({ success: false, error: 'Product is out of stock' });
         }
 
         let cart = await Cart.findOne({ userId });
-        if (!cart) {
+        if (!cart) { 
             cart = new Cart({ userId, product: [] });
         }
 
-        // Check if the product is already in the cart and quantity exceeds stock
+        
         const existingProductIndex = cart.product.findIndex(item => item.productId.toString() === productId);
         if (existingProductIndex !== -1) {
             const totalQuantity = cart.product[existingProductIndex].quantity + 1;

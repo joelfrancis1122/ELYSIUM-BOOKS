@@ -26,6 +26,9 @@ userRoute.post('/applyReferral', Auth.isLogin, userControllers.applyReferral)
 
 
 
+// userRoute.get('/getContact',Auth.isLogin, userControllers.getContact);
+
+
 
 userRoute.get('/login', Auth.isLogout, userControllers.loadlogin)
 
@@ -91,17 +94,14 @@ userRoute.post("/googleAuth", cartControllers.googleAuth)
 // const express = require('express')
 const app = express();
 app.get('/orders123', (req, res) => {
-    const page = parseInt(req.query.page) || 1; // Get the current page from the query string
-    const limit = 10; // Number of orders to display per page
+    const page = parseInt(req.query.page) || 1; 
+    const limit = 10; 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-  
-    const orders = []; // Fetch the orders from your data source
+      const orders = [];
     const totalOrders = orders.length;
     const totalPages = Math.ceil(totalOrders / limit);
-  
     const paginatedOrders = orders.slice(startIndex, endIndex);
-  
     res.render('orders', { orders: paginatedOrders, currentPage: page, totalPages });
   });
 

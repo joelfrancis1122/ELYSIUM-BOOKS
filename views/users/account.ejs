@@ -1206,6 +1206,8 @@
                 "currency": 'USD', // Change the currency to match your requirements
                 "name": 'BOOK-SAW',
                 "description": 'Purchase Description',
+                "image":"/public/spellbook.png",
+
                 "order_id": data.order.id, // Use the order ID from server response
                 "handler": function (response) {
                     Swal.fire({
@@ -1224,7 +1226,7 @@
                     "contact": '9999999999',
                 },
                 "theme": {
-                    "color": '#11ff00'
+                    "color": '#8B008B'
                 }
             };
             const razorpayInstance = new Razorpay(options);

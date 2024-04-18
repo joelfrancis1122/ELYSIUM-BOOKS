@@ -13,22 +13,16 @@ const dashboardLoad = async (req, res) => {
 
         const categories = await Category.find();
         const products = await Product.find();
-
-        // Extracting order counts for each month
         const orderCountsByMonth = Array.from({ length: 12 }, () => 0);
         orders.forEach(order => {
             const monthIndex = order.orderDate.getMonth();
             orderCountsByMonth[monthIndex]++;
         });
-
-        // Extracting product counts for each month
         const productCountsByMonth = Array.from({ length: 12 }, () => 0);
         products.forEach(product => {
             const monthIndex = product.CreatedOn.getMonth();
             productCountsByMonth[monthIndex]++;
         });
-
-        // Aggregate to get order counts by year
         const orderCountsByYearData = await Orders.aggregate([
             {
                 $group: {
@@ -40,8 +34,6 @@ const dashboardLoad = async (req, res) => {
                 $sort: { "_id": 1 }
             }
         ]);
-
-        // Transforming orderCountsByYearData into the desired format
         const orderCountsByYear = [];
         let currentYearIndex = 0;
         const currentYear = new Date().getFullYear();
@@ -76,8 +68,6 @@ const dashboardLoad = async (req, res) => {
                 $sort: { "_id": 1 }
             }
         ]);
-        
-        // Transforming productCountsByYearData into the desired format
         const productCountsByYear = [];
         let currentYearIndex1 = 0;
         const currentYear1 = new Date().getFullYear();
@@ -134,8 +124,6 @@ const dashboardLoad = async (req, res) => {
             totalAmountByYear.push(0);
             currentYearIndex2++;
         }
-
-        // Aggregate to find the best selling product
         const bestSellingProduct = await Orders.aggregate([
             {
                 $unwind: "$product"
@@ -171,7 +159,6 @@ const dashboardLoad = async (req, res) => {
             }
         ]);
 
-        // Aggregate to find the best selling categories
         const bestSellingCategories = await Orders.aggregate([
             {
                 $unwind: "$product"
@@ -221,12 +208,10 @@ const dashboardLoad = async (req, res) => {
 let currentMonthIndex = 0;
 const currentYear123 = new Date().getFullYear();
 
-// Initialize total amount by month array
 for (let i = 0; i < 12; i++) {
     totalAmountByMonth.push(0);
 }
 
-// Populate total amount by month array from orders
 orders.forEach(order => {
     const monthIndex = order.orderDate.getMonth();
     const totalAmount = parseFloat(order.totalAmount);
@@ -234,7 +219,6 @@ orders.forEach(order => {
     totalAmountByMonth[monthIndex] += totalAmount;
 });
 
-// Fill in missing months with 0
 for (let i = 0; i < 12; i++) {
     if (totalAmountByMonth[i] === 0) {
         totalAmountByMonth[i] = 0;
@@ -327,7 +311,7 @@ const addCategories = async (req, res) => {
         const catData = await Category.find()
         const existingCategory = await Category.findOne({ categoryName: { $regex: new RegExp('^' + categoryName + '$', 'i') } });
         if (existingCategory) {
-            return res.render('addcategories', { categoriesExists: true ,categories : catData}); // Pass flag to indicate category exists
+            return res.render('addcategories', { categoriesExists: true ,categories : catData}); 
         }else if(!existingCategory){
             
             
@@ -337,7 +321,7 @@ const addCategories = async (req, res) => {
                 Description: Description,
             });
             const categoryData = await categories.save();
-            return res.render('addcategories', { categoriesExistss:true ,categories : catData}); // Pass flag to indicate category exists
+            return res.render('addcategories', { categoriesExistss:true ,categories : catData}); 
 
             
          
@@ -359,7 +343,7 @@ const addSubCategories = async (req, res) => {
         const existingCategory = await SubCategory.findOne({ subCategoryName: { $regex: new RegExp('^' + subCategoryName + '$', 'i') } });
         if (existingCategory) {
             console.log("catrt//////////////",catData)
-            return res.render('addSubcategories', { categoriesExists: true ,categories : catData}); // Pass flag to indicate category exists
+            return res.render('addSubcategories', { categoriesExists: true ,categories : catData}); 
         }
         const categories = new SubCategory({
             subCategoryName: subCategoryName,
