@@ -484,18 +484,19 @@
                                                                                     <%= order.paymentMethod %>
                                                                                 </p>
                                                                             </td>
-                                                                            <td style="padding: 10px;">
-                                                                                <% if (order.paymentStatus !== 'failed') { %>
-                                                                                    <% if (order.orderStatus === 'Cancelled') { %>
+                                                                            <td style="padding: 10px;"> 
+                                                                                    <% if (order.orderStatus === 'Cancelled'&& order.paymentStatus !== 'Failed') { %>
                                                                                         <span class="badge bg-danger">
                                                                                             <%= order.orderStatus %>
                                                                                         </span>
                                                                                     <% } else { %>
-                                                                                        <span class="badge bg-info">
-                                                                                            <%= order.orderStatus %>
-                                                                                        </span>
+                                                                                        <span class="badge bg-info"></span>
+                                                                                            <% if (order.orderStatus === 'OrderPlaced') { %>
+                                                                                                <%= order.orderStatus %>
+                                                                                            <% }else{ %>
+                                                                                                
+                                                                                                     <%}%>                                                                               </span>
                                                                                     <% } %>
-                                                                                <% } %>
                                                                             </td>
                                                                             
                                                                                 <td style="padding: 10px;">
